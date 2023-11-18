@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import {
   ArrowLeftIcon,
   ChatAltIcon,
@@ -49,7 +50,7 @@ function App() {
           <span className="hidden sm:inline">Start new</span>
         </Button>
 
-        <Logo />
+        {/* <Logo /> */}
         <Button
           className="hidden sm:flex"
           icon={<InformationCircleIcon className="w-6 h-6" />}
@@ -87,7 +88,7 @@ function App() {
             </div>
 
             <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
-              <span className="text-gray-500">Or try with a test image:</span>
+              <span className="text-gray-500">试一试:</span>
               <div className="flex space-x-2 sm:space-x-4 px-4">
                 {['bag', 'jacket', 'table', 'shoe', 'paris'].map(image => (
                   <div
@@ -148,7 +149,7 @@ function App() {
         </Modal>
       )}
 
-      <footer
+      {/* <footer
         className={[
           'absolute bottom-0 pl-7 pb-5 px-5 w-full flex justify-between',
           'pointer-events-none',
@@ -177,7 +178,7 @@ function App() {
         >
           Report issue
         </Button>
-      </footer>
+      </footer> */}
     </div>
   )
 }

@@ -140,8 +140,7 @@ export default function Editor(props: EditorProps) {
       try {
         const start = Date.now()
         firebase?.logEvent('inpaint_start')
-        const { token } = await firebase.getAppCheckToken()
-        const res = await inpaint(file, maskCanvas.toDataURL(), token)
+        const res = await inpaint(file, maskCanvas.toDataURL())
         if (!res) {
           throw new Error('empty response')
         }
