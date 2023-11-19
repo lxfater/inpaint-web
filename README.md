@@ -5,7 +5,11 @@ A free and open-source inpainting tool powered by webgpu and wasm on the browser
 基于Webgpu技术和wasm技术的免费开源inpainting工具, 纯浏览器端实现。
 
 ## Demo
-https://github.com/lxfater/inpaint-web/raw/main/media/github.mp4
+
+
+https://github.com/lxfater/inpaint-web/assets/22794120/bcad4812-02ae-48bb-9e84-94dfeb7234f5
+
+
 
 
 
