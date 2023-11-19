@@ -264,19 +264,19 @@ function mergeImg(
     // 导出为数据 URL
     return canvas.toDataURL()
   }
-  for (let c = 0; c < C; c++) {
-    for (let h = 0; h < H; h++) {
-      for (let w = 0; w < W; w++) {
-        const realMark =
-          originalMarkMat.data[c * H * W + h * W + w] === 255 ? 0 : 1
-        const value = outImgMat.data[c * H * W + h * W + w]
-        temp[c * H * W + h * W + w] =
-          originalMat.data[c * H * W + h * W + w] * realMark +
-          value * (1 - realMark)
-      }
-    }
+  for (let i = 0; i < originalMarkMat.data.length; i++) {
+    const realMark = originalMarkMat.data[i] === 255 ? 0 : 1
+    const value = outImgMat.data[i]
+    temp[i] = originalMat.data[i] * realMark + value * (1 - realMark)
   }
-  return imageDataToDataURL(new ImageData(new Uint8ClampedArray(temp), W, H))
+  originalMat.delete()
+  originalMarkMat.delete()
+
+  const url = imageDataToDataURL(
+    new ImageData(new Uint8ClampedArray(temp), W, H)
+  )
+
+  return url
 }
 let model = null
 export default async function inpaint(imageFile: File, maskBase64: string) {
@@ -286,6 +286,7 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
     })
   }
   // 核心代码在这里
+  console.time('preProcess')
   const fileUrl = URL.createObjectURL(imageFile)
   const markUrl = maskBase64
 
@@ -295,7 +296,8 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
   const img = await processImage(originalImg, size, cv.INTER_CUBIC)
   const mark = await processMark(originalMark, size, cv.INTER_NEAREST)
   const input = mergeMarkToImg(mark, img)
-
+  console.timeEnd('preProcess')
+  console.time('run')
   const Tensor = new ort.Tensor('float32', input, [1, 4, size, size])
   const Feed: {
     [key: string]: any
@@ -303,6 +305,7 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
   Feed[model.inputNames[0]] = Tensor
   const results = await model.run(Feed)
   const outsTensor = results[model.outputNames[0]]
+  console.timeEnd('run')
 
   const chwToHwcData = postProcess(outsTensor.data, size, size)
   const imageData = new ImageData(
@@ -314,6 +317,9 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
   const dsize = new cv.Size(originalImg.width, originalImg.height)
   const outImgMat = cv.matFromImageData(imageData)
   cv.resize(outImgMat, dst, dsize, 0, 0, cv.INTER_CUBIC)
-
-  return mergeImg(dst, originalImg, originalMark)
+  console.time('postProcess')
+  const result = mergeImg(dst, originalImg, originalMark)
+  console.timeEnd('postProcess')
+  dst.delete()
+  return result
 }
