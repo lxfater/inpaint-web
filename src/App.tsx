@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import {
   ArrowLeftIcon,
@@ -17,18 +18,27 @@ function App() {
   const [file, setFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
+  const [showDownload, setShowDownload] = useState(true)
   const modalRef = useRef(null)
-  ensureModel()
+  console.log('run')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   async function checkGpu() {
     setShowAlert(
       // @ts-ignore
       !navigator?.gpu && !(await navigator.gpu?.requestAdapter())
     )
+    return !showAlert
   }
   useEffect(() => {
-    checkGpu()
-  }, [checkGpu])
+    async function download() {
+      if (await checkGpu()) {
+        await ensureModel()
+
+        setShowDownload(false)
+      }
+    }
+    download()
+  }, [])
   useClickAway(modalRef, () => {
     setShowAbout(false)
   })
@@ -144,6 +154,21 @@ function App() {
               {' '}
               This project only runs in environments that support WEBGPU,
               meaning you need to install the latest version of Chrome.{' '}
+            </p>
+          </div>
+        </Modal>
+      )}
+      {showDownload && (
+        <Modal>
+          <div ref={modalRef} className="text-xl space-y-5">
+            <p>
+              {' '}
+              需要下载一次30MB大小模型文件,耐心等待。。。 首次使用比较慢。。。
+            </p>
+            <p>
+              {' '}
+              Need to download a 30MB model file, please wait patiently... The
+              first use might be slow...{' '}
             </p>
           </div>
         </Modal>
