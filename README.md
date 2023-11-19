@@ -4,7 +4,7 @@ A free and open-source inpainting tool powered by webgpu and wasm
 
 基于Webgpu技术和wasm技术的免费开源inpainting工具
 
-# Demo
+## Demo
 
 
 
