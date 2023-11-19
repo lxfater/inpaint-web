@@ -1,32 +1,27 @@
-# [CleanUp.pictures](https://cleanup.pictures)
+# [Inpaint-web](https://github.com/lxfater/inpaint-web)
 
-This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a free web application that lets you quickly cleanup or remove objects in any image.
+A free and open-source inpainting tool powered by webgpu and wasm
 
-![preview](./docs/preview.jpg)
+基于Webgpu技术和wasm技术的免费开源inpainting工具
 
-[CleanUp.pictures](https://cleanup.pictures) consists in 3 main blocks:
+# Demo
 
-- A frontend built with [React](https://reactjs.org/) / [Typescript](https://www.typescriptlang.org/) / [TailwindCSS](https://tailwindcss.com/)
-- A Nodejs Firebase function to proxy the fetch requests on a secure HTTPS endpoint with [AppCheck/reCAPTCHA v3](https://firebase.google.com/docs/app-check)
-- An inpainting service running [LaMa](https://github.com/saic-mdal/lama) on GPU via [Cloud Run for Anthos](https://cloud.google.com/anthos/run)
+
 
 ## Setup
 
-1. Function: `cd functions && npm i`
-2. Frontend: `yarn`
-
-Then edit the [.env](.env) file to match your firebase & backend settings.
+`npm install`
 
 ## Development
 
-1. Function: `cd functions && npm run serve`
-2. Frontend: `yarn dev`
+`npm run dev`
 
-## Deployment
-
-1. Function: `firebase deploy --only functions`
-2. Frontend: `yarn build && firebase deploy --only hosting`
 
 ## Acknowledgements
+Frontend code are modified from [cleanup.pictures](https://github.com/initml/cleanup.pictures), You can experience their
+great online services [here](https://cleanup.pictures/).
 
-CleanUp.pictures wouldn't be possible without [LaMa: Resolution-robust Large Mask Inpainting with Fourier Convolutions](https://github.com/saic-mdal/lama) by Samsung Research.
+Model: https://github.com/Picsart-AI-Research/MI-GAN
+
+
+
