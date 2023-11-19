@@ -6,12 +6,8 @@ import {
 } from '@heroicons/react/outline'
 import React, { useRef, useState } from 'react'
 import { useClickAway } from 'react-use'
-import { useFirebase } from './adapters/firebase'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
-import Link from './components/Link'
-import Logo from './components/Logo'
-import MadeWidthBadge from './components/MadeWidthBadge'
 import Modal from './components/Modal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
@@ -20,18 +16,11 @@ function App() {
   const [file, setFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
-  const firebase = useFirebase()
 
   useClickAway(modalRef, () => {
     setShowAbout(false)
   })
-
-  if (!firebase) {
-    return <></>
-  }
-
   async function startWithDemoImage(img: string) {
-    firebase?.logEvent('set_demo_file', { demo_image: img })
     const imgBlob = await fetch(`/exemples/${img}.jpeg`).then(r => r.blob())
     setFile(new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' }))
   }
@@ -43,7 +32,6 @@ function App() {
           className={[file ? '' : 'opacity-0 hidden sm:flex'].join(' ')}
           icon={<ArrowLeftIcon className="w-6 h-6" />}
           onClick={() => {
-            firebase.logEvent('start_new')
             setFile(undefined)
           }}
         >
@@ -55,7 +43,6 @@ function App() {
           className="hidden sm:flex"
           icon={<InformationCircleIcon className="w-6 h-6" />}
           onClick={() => {
-            firebase.logEvent('show_modal')
             setShowAbout(true)
           }}
         >
@@ -71,17 +58,7 @@ function App() {
             <div className="h-72 sm:w-1/2 max-w-5xl">
               <FileSelect
                 onSelection={async f => {
-                  const {
-                    file: resizedFile,
-                    resized,
-                    originalWidth,
-                    originalHeight,
-                  } = await resizeImageFile(f, 1024)
-                  firebase.logEvent('set_file', {
-                    resized,
-                    originalWidth,
-                    originalHeight,
-                  })
+                  const { file: resizedFile } = await resizeImageFile(f, 1024)
                   setFile(resizedFile)
                 }}
               />
@@ -118,37 +95,6 @@ function App() {
           </div>
         </Modal>
       )}
-
-      {/* <footer
-        className={[
-          'absolute bottom-0 pl-7 pb-5 px-5 w-full flex justify-between',
-          'pointer-events-none',
-          // Hide footer when editing on mobile
-          file ? 'hidden lg:flex' : '',
-        ].join(' ')}
-      >
-        <a
-          className="pointer-events-auto"
-          href="https://clipdrop.co?utm_source=cleanup_pictures"
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => {
-            firebase.logEvent('click_clipdrop_badge')
-          }}
-        >
-          <MadeWidthBadge />
-        </a>
-
-        <Button
-          className="pointer-events-auto"
-          icon={<ChatAltIcon className="w-6 h-6" />}
-          onClick={() =>
-            window.open('mailto:contact@cleanup.pictures', '_blank')
-          }
-        >
-          Report issue
-        </Button>
-      </footer> */}
     </div>
   )
 }

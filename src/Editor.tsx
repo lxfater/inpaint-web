@@ -1,7 +1,6 @@
 import { DownloadIcon, EyeIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { useFirebase } from './adapters/firebase'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
 import Slider from './components/Slider'
@@ -52,7 +51,6 @@ export default function Editor(props: EditorProps) {
   const [showOriginal, setShowOriginal] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
   const [showSeparator, setShowSeparator] = useState(false)
-  const firebase = useFirebase()
   const [scale, setScale] = useState(1)
   const windowSize = useWindowSize()
 
@@ -89,10 +87,6 @@ export default function Editor(props: EditorProps) {
       return
     }
     if (isOriginalLoaded) {
-      firebase?.logEvent('image_loaded', {
-        width: original.naturalWidth,
-        height: original.naturalHeight,
-      })
       context.canvas.width = original.naturalWidth
       context.canvas.height = original.naturalHeight
       const rW = windowSize.width / original.naturalWidth
@@ -104,13 +98,10 @@ export default function Editor(props: EditorProps) {
       }
       draw()
     }
-  }, [context?.canvas, draw, original, isOriginalLoaded, firebase, windowSize])
+  }, [context?.canvas, draw, original, isOriginalLoaded, windowSize])
 
   // Handle mouse interactions
   useEffect(() => {
-    if (!firebase) {
-      return
-    }
     const canvas = context?.canvas
     if (!canvas) {
       return
@@ -139,20 +130,20 @@ export default function Editor(props: EditorProps) {
       refreshCanvasMask()
       try {
         const start = Date.now()
-        firebase?.logEvent('inpaint_start')
+        console.log('inpaint_start')
         const res = await inpaint(file, maskCanvas.toDataURL())
         if (!res) {
           throw new Error('empty response')
         }
         // TODO: fix the render if it failed loading
         await loadImage(render, res)
-        firebase?.logEvent('inpaint_processed', {
+        console.log('inpaint_processed', {
           duration: Date.now() - start,
           width: original.naturalWidth,
           height: original.naturalHeight,
         })
       } catch (e: any) {
-        firebase?.logEvent('inpaint_failed', {
+        console.log('inpaint_failed', {
           error: e,
         })
         // eslint-disable-next-line
@@ -215,14 +206,12 @@ export default function Editor(props: EditorProps) {
     maskCanvas,
     original.src,
     render,
-    firebase,
     original.naturalHeight,
     original.naturalWidth,
     scale,
   ])
 
   function download() {
-    firebase?.logEvent('download')
     const base64 = context?.canvas.toDataURL(file.type)
     if (!base64) {
       throw new Error('could not get canvas data')
