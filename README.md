@@ -1,8 +1,8 @@
 # [Inpaint-web](https://github.com/lxfater/inpaint-web)
 
-A free and open-source inpainting tool powered by webgpu and wasm
+A free and open-source inpainting tool powered by webgpu and wasm on the browser.
 
-基于Webgpu技术和wasm技术的免费开源inpainting工具
+基于Webgpu技术和wasm技术的免费开源inpainting工具, 纯浏览器端实现。
 
 ## Demo
 
