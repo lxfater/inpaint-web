@@ -6,7 +6,7 @@ A free and open-source inpainting tool powered by webgpu and wasm
 
 ## Demo
 
-
+https://inpaintweb.lxfater.com/
 
 ## Setup
 
