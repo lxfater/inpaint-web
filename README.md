@@ -9,7 +9,28 @@ https://github.com/lxfater/inpaint-web/raw/main/media/github.mp4
 
 
 
+
 Demo link:https://inpaintweb.lxfater.com/
+
+
+## Project Roadmap
+### en
+- [ ] Image Modification History
+- [ ] Historical File Storage
+- [ ] Optimize Model
+- [ ] Integrate Post-Processing into the Model
+- [ ] Integrate Models like Lama and Optimize Speed
+- [ ] Integrate Segment Anything for Quick Selection and Removal in Images
+- [ ] Integrate Stable Diffusion for Image Replacement
+
+### cn
+- [ ] 图像修改历史
+- [ ] 历史文件存储
+- [ ] 优化模型
+- [ ] 后处理集成于模型中
+- [ ] 接入lama等模型，并优化速度
+- [ ] 接入Segment Anything，实现快速选择和去除图像
+- [ ] 接入stable diffusion，实现图像替换
 
 ## Setup
 
