@@ -114,37 +114,7 @@ function App() {
       {showAbout && (
         <Modal>
           <div ref={modalRef} className="text-xl space-y-5">
-            <p>
-              Some photobomber ruined your selfie? There’s a ketchup stain on
-              your shirt? You want to replace some text or graphic?
-            </p>
-
-            <p>
-              <Link href="https://cleanup.pictures">CleanUp.pictures</Link> is a
-              free web application that lets you cleanup your photos with a
-              quick & simple interface.
-            </p>
-
-            <p>
-              It uses <Link href="https://arxiv.org/abs/2109.07161">LaMa</Link>,
-              an open-source model from Samsung’s AI Lab to automatically &
-              acurately redraw the areas that you delete.
-            </p>
-
-            <p>
-              <Link href="https://cleanup.pictures">CleanUp.pictures</Link> has
-              been built by the engineering team at{' '}
-              <Link href="https://clipdrop.co">ClipDrop</Link> and it&apos;s{' '}
-              <Link href="https://github.com/initml/cleanup.pictures">
-                open-source
-              </Link>{' '}
-              under the Apache License 2.0.
-            </p>
-
-            <p>
-              If you have any question please{' '}
-              <Link href="mailto:contact@clipdrop.co">contact us!</Link>
-            </p>
+            <p> about </p>
           </div>
         </Modal>
       )}

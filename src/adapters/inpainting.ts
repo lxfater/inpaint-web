@@ -3,7 +3,6 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat, Size } from 'opencv-ts'
 import * as ort from 'onnxruntime-web/webgpu'
-import { dataURItoBlob } from '../utils'
 
 ort.env.wasm.wasmPaths = {
   'ort-wasm.wasm': '/ort-wasm.wasm',
@@ -241,6 +240,44 @@ function resizeImageData(
     img.src = tmpCanvas.toDataURL()
   })
 }
+function mergeImg(
+  outImgMat: Mat,
+  originalImg: HTMLImageElement,
+  originalMark: HTMLImageElement
+) {
+  const originalMat = cv.imread(originalImg)
+  const originalMarkMat = cv.imread(originalMark)
+  const H = originalImg.height
+  const W = originalImg.width
+  const C = 4
+  const temp = []
+  function imageDataToDataURL(imageData) {
+    // 创建 canvas
+    const canvas = document.createElement('canvas')
+    canvas.width = imageData.width
+    canvas.height = imageData.height
+
+    // 绘制 imageData 到 canvas
+    const ctx = canvas.getContext('2d')
+    ctx.putImageData(imageData, 0, 0)
+
+    // 导出为数据 URL
+    return canvas.toDataURL()
+  }
+  for (let c = 0; c < C; c++) {
+    for (let h = 0; h < H; h++) {
+      for (let w = 0; w < W; w++) {
+        const realMark =
+          originalMarkMat.data[c * H * W + h * W + w] === 255 ? 0 : 1
+        const value = outImgMat.data[c * H * W + h * W + w]
+        temp[c * H * W + h * W + w] =
+          originalMat.data[c * H * W + h * W + w] * realMark +
+          value * (1 - realMark)
+      }
+    }
+  }
+  return imageDataToDataURL(new ImageData(new Uint8ClampedArray(temp), W, H))
+}
 let model = null
 export default async function inpaint(imageFile: File, maskBase64: string) {
   if (!model) {
@@ -267,12 +304,16 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
   const results = await model.run(Feed)
   const outsTensor = results[model.outputNames[0]]
 
-  const fuse = fuseImg(img, outsTensor.data, mark)
-  const chwToHwcData = postProcess(fuse, size, size)
+  const chwToHwcData = postProcess(outsTensor.data, size, size)
   const imageData = new ImageData(
     new Uint8ClampedArray(chwToHwcData),
     size,
     size
   )
-  return resizeImageData(imageData, originalImg.width, originalImg.height)
+  const dst = new cv.Mat()
+  const dsize = new cv.Size(originalImg.width, originalImg.height)
+  const outImgMat = cv.matFromImageData(imageData)
+  cv.resize(outImgMat, dst, dsize, 0, 0, cv.INTER_CUBIC)
+
+  return mergeImg(dst, originalImg, originalMark)
 }
