@@ -11,12 +11,13 @@ import FileSelect from './components/FileSelect'
 import Modal from './components/Modal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
+import { ensureModel } from './adapters/cache'
 
 function App() {
   const [file, setFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
-
+  ensureModel()
   useClickAway(modalRef, () => {
     setShowAbout(false)
   })

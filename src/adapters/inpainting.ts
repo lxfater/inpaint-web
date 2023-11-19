@@ -1,8 +1,9 @@
-// @ts-nocheck
 /* eslint-disable camelcase */
+// @ts-nocheck
 /* eslint-disable no-plusplus */
 import cv, { Mat, Size } from 'opencv-ts'
 import * as ort from 'onnxruntime-web/webgpu'
+import { ensureModel } from './cache'
 
 ort.env.wasm.wasmPaths = {
   'ort-wasm.wasm': '/ort-wasm.wasm',
@@ -59,7 +60,6 @@ function markProcess(img: Mat) {
     for (let h = 0; h < H; h++) {
       for (let w = 0; w < W; w++) {
         chwArray[c * H * W + h * W + w] = channelData[h * W + w] === 255 ? 0 : 1
-        // chwArray[c * H * W + h * W + w] = channelData[h * W + w] / 255
       }
     }
   }
@@ -278,13 +278,11 @@ function mergeImg(
 
   return url
 }
-let model = null
 export default async function inpaint(imageFile: File, maskBase64: string) {
-  if (!model) {
-    model = await ort.InferenceSession.create('/migan.onnx', {
-      executionProviders: ['webgpu'],
-    })
-  }
+  const modelBuffer = await ensureModel()
+  const model = await ort.InferenceSession.create(modelBuffer, {
+    executionProviders: ['webgpu'],
+  })
   // 核心代码在这里
   console.time('preProcess')
   const fileUrl = URL.createObjectURL(imageFile)
