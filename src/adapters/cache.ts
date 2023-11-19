@@ -22,7 +22,9 @@ export async function ensureModel() {
   if (await modelExists()) {
     return loadModel()
   }
-  const response = await fetch('/migan.onnx')
+  const response = await fetch(
+    'https://cdn.jsdelivr.net/gh/lxfater/inpaint-web@main/model/migan.onnx'
+  )
   const buffer = await response.arrayBuffer()
   await saveModel(buffer)
   return buffer
