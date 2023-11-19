@@ -7,14 +7,10 @@
       content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"
     />
     <title>Inpaint-web</title>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.2/dist/ort.webgpu.min.js"></script>
   </head>
   <body class="h-screen">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" class="h-full"></div>
-    <script>
-      if (location.hostname === 'localhost') {
-        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true
-      }
-    </script>
   </body>
 </html>
