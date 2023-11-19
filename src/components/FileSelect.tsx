@@ -127,7 +127,10 @@ export default function FileSelect(props: FileSelectProps) {
           }}
           accept="image/png, image/jpeg"
         />
-        <p>点击 或者 拖拽到这里</p>
+        <p>
+          点击 或者 拖拽到这里
+          <br /> Click or drag here{' '}
+        </p>
       </div>
     </label>
   )

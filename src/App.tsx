@@ -4,7 +4,7 @@ import {
   ChatAltIcon,
   InformationCircleIcon,
 } from '@heroicons/react/outline'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useClickAway } from 'react-use'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
@@ -16,8 +16,19 @@ import { ensureModel } from './adapters/cache'
 function App() {
   const [file, setFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
   const modalRef = useRef(null)
   ensureModel()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  async function checkGpu() {
+    setShowAlert(
+      // @ts-ignore
+      !navigator?.gpu && !(await navigator.gpu?.requestAdapter())
+    )
+  }
+  useEffect(() => {
+    checkGpu()
+  }, [checkGpu])
   useClickAway(modalRef, () => {
     setShowAbout(false)
   })
@@ -39,7 +50,7 @@ function App() {
           <span className="hidden sm:inline">Start new</span>
         </Button>
 
-        {/* <Logo /> */}
+        <div style={{ fontSize: '36px' }}>Inpaint-web</div>
         <Button
           className="hidden sm:flex"
           icon={<InformationCircleIcon className="w-6 h-6" />}
@@ -47,7 +58,7 @@ function App() {
             setShowAbout(true)
           }}
         >
-          About
+          <p>反馈/feedback</p>
         </Button>
       </header>
 
@@ -66,7 +77,11 @@ function App() {
             </div>
 
             <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
-              <span className="text-gray-500">试一试:</span>
+              <span className="text-gray-500">
+                试一试:
+                <br />
+                Try it:
+              </span>
               <div className="flex space-x-2 sm:space-x-4 px-4">
                 {['bag', 'jacket', 'table', 'shoe', 'paris'].map(image => (
                   <div
@@ -92,7 +107,44 @@ function App() {
       {showAbout && (
         <Modal>
           <div ref={modalRef} className="text-xl space-y-5">
-            <p> about </p>
+            <p>
+              {' '}
+              任何问题到:{' '}
+              <a
+                href="https://github.com/lxfater/inpaint-web"
+                style={{ color: 'blue' }}
+              >
+                Inpaint-web
+              </a>{' '}
+              反馈
+            </p>
+            <p>
+              {' '}
+              For any questions, please go to:{' '}
+              <a
+                href="https://github.com/lxfater/inpaint-web"
+                style={{ color: 'blue' }}
+              >
+                Inpaint-web
+              </a>{' '}
+              to provide feedback.
+            </p>
+          </div>
+        </Modal>
+      )}
+
+      {showAlert && (
+        <Modal>
+          <div ref={modalRef} className="text-xl space-y-5">
+            <p>
+              {' '}
+              本项目仅在支持WEBGPU的环境下运行, 也就是说你要安装最新版本的Chrome
+            </p>
+            <p>
+              {' '}
+              This project only runs in environments that support WEBGPU,
+              meaning you need to install the latest version of Chrome.{' '}
+            </p>
           </div>
         </Modal>
       )}

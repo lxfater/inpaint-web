@@ -1,18 +1,17 @@
 /* eslint-disable camelcase */
 // @ts-nocheck
 /* eslint-disable no-plusplus */
-import cv, { Mat, Size } from 'opencv-ts'
+import cv, { Mat } from 'opencv-ts'
 import * as ort from 'onnxruntime-web/webgpu'
 import { ensureModel } from './cache'
 
-ort.env.wasm.wasmPaths = {
-  'ort-wasm.wasm': '/ort-wasm.wasm',
-  'ort-wasm-threaded.wasm': '/ort-wasm-threaded.wasm',
-  'ort-wasm-simd.wasm': '/ort-wasm-simd.jsep.wasm',
-  'ort-wasm-simd-threaded.wasm': '/ort-wasm-simd-threaded.wasm',
-  'ort-wasm-simd-threaded.jsep.wasm': '/ort-wasm-simd-threaded.jsep.wasm',
-  'ort-wasm-simd.jsep.wasm': '/ort-wasm-simd.jsep.wasm',
-}
+// ort.env.debug = true
+// ort.env.logLevel = 'verbose'
+// ort.env.webgpu.profilingMode = 'default'
+
+ort.env.wasm.wasmPaths =
+  'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.2/dist/'
+
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
