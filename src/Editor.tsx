@@ -1,10 +1,11 @@
 import { DownloadIcon, EyeIcon } from '@heroicons/react/outline'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
+import Progress from './components/Progress'
 
 interface EditorProps {
   file: File
@@ -52,6 +53,9 @@ export default function Editor(props: EditorProps) {
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
   const [showSeparator, setShowSeparator] = useState(false)
   const [scale, setScale] = useState(1)
+  const [generateProgress, setGenerateProgress] = useState(0)
+  const [timer, setTimer] = useState(0)
+  const modalRef = useRef(null)
 
   const windowSize = useWindowSize()
 
@@ -127,6 +131,17 @@ export default function Editor(props: EditorProps) {
         return
       }
       setIsInpaintingLoading(true)
+      setGenerateProgress(0)
+      setTimer(
+        window.setInterval(() => {
+          setGenerateProgress(p => {
+            if (p < 90) return p + 20 * Math.random()
+            if (p >= 90 && p < 100) return p + 1 * Math.random()
+            window.setTimeout(() => setIsInpaintingLoading(false), 500)
+            return p
+          })
+        }, 1000)
+      )
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
       refreshCanvasMask()
@@ -156,7 +171,8 @@ export default function Editor(props: EditorProps) {
         // eslint-disable-next-line
         alert(e.message ? e.message : e.toString())
       }
-      setIsInpaintingLoading(false)
+      setGenerateProgress(100)
+      if (timer) clearInterval(timer)
       draw()
     }
     window.addEventListener('mousemove', onMouseMove)
@@ -306,6 +322,16 @@ export default function Editor(props: EditorProps) {
             }}
           />
         </div>
+
+        {isInpaintingLoading && (
+          <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
+            <div ref={modalRef} className="text-xl space-y-5 p-20">
+              <p>正在处理中，请耐心等待。。。</p>
+              <p>It is being processed, please be patient...</p>
+              <Progress percent={generateProgress} />
+            </div>
+          </div>
+        )}
       </div>
 
       {showBrush && (

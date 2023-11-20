@@ -102,6 +102,8 @@ function App() {
               <a
                 href="https://github.com/lxfater/inpaint-web"
                 style={{ color: 'blue' }}
+                rel="noreferrer"
+                target="_blank"
               >
                 Inpaint-web
               </a>{' '}
@@ -113,6 +115,8 @@ function App() {
               <a
                 href="https://github.com/lxfater/inpaint-web"
                 style={{ color: 'blue' }}
+                rel="noreferrer"
+                target="_blank"
               >
                 Inpaint-web
               </a>{' '}
