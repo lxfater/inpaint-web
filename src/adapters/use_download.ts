@@ -31,7 +31,7 @@ const useDownload = () => {
       )
       const fullSize = response.headers.get('content-length')
       const reader = response.body!.getReader()
-      const total = []
+      const total: Uint8Array[] = []
       let downloaded = 0
 
       while (true) {
@@ -41,8 +41,11 @@ const useDownload = () => {
           break
         }
 
-        downloaded += value.length
-        total.push(value)
+        downloaded += value?.length || 0
+
+        if (value) {
+          total.push(value)
+        }
 
         setDownloadProgress((downloaded / Number(fullSize)) * 100)
       }
