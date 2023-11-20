@@ -6,7 +6,12 @@
     "prettier",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks",
+    "prettier"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -22,7 +27,10 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".ts", ".tsx"]
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
       }
     ],
     "prettier/prettier": [
@@ -35,12 +43,16 @@
     ],
     "consistent-return": "off",
     "no-use-before-define": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off",
     "import/extensions": "off",
     "react/prop-types": 0,
     "react/require-default-props": "off",
     "no-shadow": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
