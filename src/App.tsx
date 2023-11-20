@@ -51,7 +51,7 @@ function App() {
         </Button>
       </header>
 
-      <main className="h-full flex flex-1 flex-col items-center justify-center overflow-hidden">
+      <main className="relative h-full flex flex-1 flex-col items-center justify-center overflow-hidden">
         {file ? (
           <Editor file={file} />
         ) : (
