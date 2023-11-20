@@ -40,12 +40,12 @@ export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
   const [original, isOriginalLoaded] = useImage(file)
-  const [render] = useState(new Image())
+  const [renders, setRenders] = useState<HTMLImageElement[]>([])
   const [context, setContext] = useState<CanvasRenderingContext2D>()
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
     return document.createElement('canvas')
   })
-  const [lines] = useState<Line[]>([{ pts: [], src: '' }])
+  const [lines, setLines] = useState<Line[]>([{ pts: [], src: '' }])
   const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
   const [showBrush, setShowBrush] = useState(false)
   const [showOriginal, setShowOriginal] = useState(false)
@@ -60,14 +60,15 @@ export default function Editor(props: EditorProps) {
       return
     }
     context.clearRect(0, 0, context.canvas.width, context.canvas.height)
-    if (render.src) {
-      context.drawImage(render, 0, 0)
+    const currRender = renders[renders.length - 1]
+    if (currRender?.src) {
+      context.drawImage(currRender, 0, 0)
     } else {
       context.drawImage(original, 0, 0)
     }
     const currentLine = lines[lines.length - 1]
     drawLines(context, [currentLine])
-  }, [context, lines, original, render])
+  }, [context, lines, original, renders])
 
   const refreshCanvasMask = useCallback(() => {
     if (!context?.canvas.width || !context?.canvas.height) {
@@ -136,10 +137,13 @@ export default function Editor(props: EditorProps) {
         if (!res) {
           throw new Error('empty response')
         }
-
-        lines[lines.length - 1].src = render.src || original.src
         // TODO: fix the render if it failed loading
-        await loadImage(render, res)
+        const newRender = new Image()
+        await loadImage(newRender, res)
+        renders.push(newRender)
+        lines.push({ pts: [], src: '' } as Line)
+        setRenders([...renders])
+        setLines([...lines])
         console.log('inpaint_processed', {
           duration: Date.now() - start,
           width: original.naturalWidth,
@@ -152,8 +156,6 @@ export default function Editor(props: EditorProps) {
         // eslint-disable-next-line
         alert(e.message ? e.message : e.toString())
       }
-
-      lines.push({ pts: [], src: '' } as Line)
       setIsInpaintingLoading(false)
       draw()
     }
@@ -208,10 +210,10 @@ export default function Editor(props: EditorProps) {
     refreshCanvasMask,
     maskCanvas,
     original.src,
-    render,
     original.naturalHeight,
     original.naturalWidth,
     scale,
+    renders,
   ])
 
   function download() {
@@ -223,19 +225,32 @@ export default function Editor(props: EditorProps) {
     downloadImage(base64, name)
   }
 
-  async function undo() {
-    if (!context) {
-      return
+  const undo = useCallback(async () => {
+    const l = lines
+    l.pop()
+    l.pop()
+    setLines([...l, { pts: [], src: '' }])
+    const r = renders
+    r.pop()
+    setRenders([...r])
+  }, [lines, renders])
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (!renders.length) {
+        return
+      }
+      const isCmdZ = (event.metaKey || event.ctrlKey) && event.key === 'z'
+      if (isCmdZ) {
+        event.preventDefault()
+        undo()
+      }
     }
-    const index = lines.length - 2
-    const line = lines.at(index)
-    if (!line || !line.src) {
-      return
+    window.addEventListener('keydown', handler)
+    return () => {
+      window.removeEventListener('keydown', handler)
     }
-    await loadImage(render, line.src)
-    context.drawImage(render, 0, 0)
-    lines.splice(index, 1)
-  }
+  }, [renders, undo])
 
   return (
     <div
@@ -315,7 +330,7 @@ export default function Editor(props: EditorProps) {
             : 'relative justify-between',
         ].join(' ')}
       >
-        {lines.length > 1 && (
+        {renders.length > 0 && (
           <Button
             primary
             onClick={undo}
