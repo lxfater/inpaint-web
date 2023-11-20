@@ -310,7 +310,7 @@ export default function Editor(props: EditorProps) {
 
       {showBrush && (
         <div
-          className="hidden sm:block absolute rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
+          className="hidden sm:block fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
           style={{
             width: `${brushSize}px`,
             height: `${brushSize}px`,
