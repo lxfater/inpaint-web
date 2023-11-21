@@ -260,8 +260,8 @@ export default function Editor(props: EditorProps) {
       ].join(' ')}
     >
       <div
-        className={[scale !== 1 ? 'absolute top-0' : 'relative'].join(' ')}
-        style={{ transform: `scale(${scale})` }}
+        className={[scale !== 1 ? 'absolute top-0 ' : 'relative'].join(' ')}
+        style={{ transform: `scale(${scale})`, transformOrigin: 'top' }}
       >
         <canvas
           className="rounded-sm"
