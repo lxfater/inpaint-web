@@ -54,11 +54,11 @@ Demo link:https://inpaintweb.lxfater.com/
 ## About me
 ### English Content
 For updates and discussions in English, follow me on Twitter:
-[![Twitter Follow](https://img.shields.io/twitter/follow/yourusername?style=social)](https://twitter.com/rules4thing)
+[![Twitter Follow](https://img.shields.io/twitter/follow/rules4thing?style=social)](https://twitter.com/rules4thing)
 
 ### 中文内容
 获取中文更新和讨论，请关注我的Twitter:
-[![Twitter Follow](https://img.shields.io/twitter/follow/chinese_username?style=social)](https://twitter.com/lxfater)
+[![Twitter Follow](https://img.shields.io/twitter/follow/lxfater?style=social)](https://twitter.com/lxfater)
 
 ## Acknowledgements
 
