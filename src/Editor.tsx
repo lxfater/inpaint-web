@@ -56,6 +56,7 @@ export default function Editor(props: EditorProps) {
   const [generateProgress, setGenerateProgress] = useState(0)
   const [timer, setTimer] = useState(0)
   const modalRef = useRef(null)
+  const [separatorLeft, setSepartorLeft] = useState(0)
 
   const windowSize = useWindowSize()
 
@@ -131,17 +132,6 @@ export default function Editor(props: EditorProps) {
         return
       }
       setIsInpaintingLoading(true)
-      setGenerateProgress(0)
-      setTimer(
-        window.setInterval(() => {
-          setGenerateProgress(p => {
-            if (p < 90) return p + 20 * Math.random()
-            if (p >= 90 && p < 100) return p + 1 * Math.random()
-            window.setTimeout(() => setIsInpaintingLoading(false), 500)
-            return p
-          })
-        }, 1000)
-      )
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
       refreshCanvasMask()
@@ -171,8 +161,7 @@ export default function Editor(props: EditorProps) {
         // eslint-disable-next-line
         alert(e.message ? e.message : e.toString())
       }
-      setGenerateProgress(100)
-      if (timer) clearInterval(timer)
+      setIsInpaintingLoading(false)
       draw()
     }
     window.addEventListener('mousemove', onMouseMove)
@@ -250,6 +239,14 @@ export default function Editor(props: EditorProps) {
     r.pop()
     setRenders([...r])
   }, [lines, renders])
+
+  const switchShowOriginal = () => {
+    setShowOriginal(!showOriginal)
+
+    if (!showOriginal) {
+      console.log('1')
+    }
+  }
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
@@ -344,7 +341,7 @@ export default function Editor(props: EditorProps) {
         {History}
       </div>
       <div
-        className={[scale !== 1 ? 'absolute top-0 ' : 'relative'].join(' ')}
+        className={[scale !== 1 ? 'absolute top-0' : 'relative'].join(' ')}
         style={{
           transform: `scale(${scale})`,
           transformOrigin: 'top',
@@ -367,8 +364,8 @@ export default function Editor(props: EditorProps) {
           className={[
             'absolute top-0 right-0 pointer-events-none',
             'overflow-hidden',
-            'border-primary',
-            showSeparator ? 'border-l-4' : '',
+            // 'border-primary',
+            // showOriginal ? 'border-l-4' : '',
             // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
           ].join(' ')}
           style={{
@@ -381,6 +378,20 @@ export default function Editor(props: EditorProps) {
             transitionDuration: '300ms',
           }}
         >
+          <div
+            className={[
+              'absolute top-0 right-0 pointer-events-none z-10',
+              'bg-primary',
+              'w-2',
+            ].join(' ')}
+            style={{
+              left: '0',
+              height: original.naturalHeight,
+              transitionProperty: 'width, height',
+              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              transitionDuration: '300ms',
+            }}
+          />
           <img
             className="absolute right-0"
             src={original.src}
@@ -394,7 +405,6 @@ export default function Editor(props: EditorProps) {
             }}
           />
         </div>
-
         {isInpaintingLoading && (
           <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
             <div ref={modalRef} className="text-xl space-y-5 p-20">
@@ -458,16 +468,21 @@ export default function Editor(props: EditorProps) {
           value={brushSize}
           onChange={setBrushSize}
         />
+
         <Button
+          primary={showOriginal}
           icon={<EyeIcon className="w-6 h-6" />}
-          onDown={() => {
-            setShowSeparator(true)
-            setShowOriginal(true)
-          }}
           onUp={() => {
-            setShowOriginal(false)
-            setTimeout(() => setShowSeparator(false), 300)
+            switchShowOriginal()
           }}
+          // onDown={() => {
+          //   setShowSeparator(true)
+          //   setShowOriginal(true)
+          // }}
+          // onUp={() => {
+          //   setShowOriginal(false)
+          //   setTimeout(() => setShowSeparator(false), 300)
+          // }}
         >
           Original
         </Button>
