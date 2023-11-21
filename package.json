@@ -11,6 +11,8 @@
     "react-use": "^17.3.1"
   },
   "scripts": {
+    "prepare": "husky install",
+    "format": "prettier --write .",
     "dev": "run-p watch:css react-scripts:start",
     "build": "run-s build:css react-scripts:build",
     "test": "react-scripts test",
@@ -19,6 +21,12 @@
     "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch",
     "react-scripts:start": "delay 5 && react-scripts start",
     "react-scripts:build": "react-scripts build"
+  },
+  "lint-staged": {
+    "*.{vue,js,ts,jsx,tsx,css,sass,scss,md}": [
+      "prettier --write",
+      "echo '统一格式化完成🌸'"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -55,6 +63,7 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
     "npm-run-all": "4.x",
     "postcss": "8.x",
     "postcss-cli": "8.x",
