@@ -1,6 +1,7 @@
 import { DownloadIcon, EyeIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
 import Slider from './components/Slider'
@@ -46,6 +47,7 @@ export default function Editor(props: EditorProps) {
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
     return document.createElement('canvas')
   })
+  const [panned, setPanned] = useState<boolean>(false)
   const [lines, setLines] = useState<Line[]>([{ pts: [], src: '' }])
   const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
   const [showBrush, setShowBrush] = useState(false)
@@ -196,7 +198,6 @@ export default function Editor(props: EditorProps) {
       currLine.size = brushSize
       canvas.addEventListener('mousemove', onMouseDrag)
       window.addEventListener('mouseup', onPointerUp)
-      // onPaint(e)
     }
 
     canvas.addEventListener('touchstart', onPointerStart)
@@ -281,51 +282,51 @@ export default function Editor(props: EditorProps) {
     setRenders([...r])
   }
 
-  const History = renders.map((render, index) => {
-    return (
-      <div
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-        }}
-      >
-        <img
-          key={index}
-          src={render.src}
-          alt="render"
-          className="rounded-sm"
-          style={{
-            height: '90px',
-          }}
-        />
-        <div
-          className="hover:opacity-100 opacity-0 cursor-pointer rounded-sm"
-          style={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onClick={() => backTo(index)}
-        >
-          <div
-            style={{
-              color: '#fff',
-              fontSize: '18px',
-              textAlign: 'center',
-            }}
-          >
-            回到这
-          </div>
-        </div>
-      </div>
-    )
-  })
+  // const History = renders.map((render, index) => {
+  //   return (
+  //     <div
+  //       style={{
+  //         position: 'relative',
+  //         display: 'inline-block',
+  //       }}
+  //     >
+  //       <img
+  //         key={index}
+  //         src={render.src}
+  //         alt="render"
+  //         className="rounded-sm"
+  //         style={{
+  //           height: '90px',
+  //         }}
+  //       />
+  //       <div
+  //         className="hover:opacity-100 opacity-0 cursor-pointer rounded-sm"
+  //         style={{
+  //           position: 'absolute',
+  //           top: '0',
+  //           left: '0',
+  //           width: '100%',
+  //           height: '100%',
+  //           backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  //           display: 'flex',
+  //           alignItems: 'center',
+  //           justifyContent: 'center',
+  //         }}
+  //         onClick={() => backTo(index)}
+  //       >
+  //         <div
+  //           style={{
+  //             color: '#fff',
+  //             fontSize: '18px',
+  //             textAlign: 'center',
+  //           }}
+  //         >
+  //           回到这
+  //         </div>
+  //       </div>
+  //     </div>
+  //   )
+  // })
 
   return (
     <div
@@ -333,8 +334,94 @@ export default function Editor(props: EditorProps) {
         'flex flex-col items-center',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
+      style={{
+        height: '100%',
+        width: '100%',
+      }}
     >
-      <div
+      <TransformWrapper
+        wheel={{ step: 0.05 }}
+        centerZoomedOut
+        alignmentAnimation={{ disabled: true }}
+        doubleClick={{ disabled: true }}
+        limitToBounds={false}
+        initialScale={scale}
+        minScale={0.5}
+        onZoom={ref => {
+          setScale(ref.state.scale)
+        }}
+        panning={{ disabled: true, velocityDisabled: true }}
+      >
+        <TransformComponent>
+          <>
+            <canvas
+              className="rounded-sm"
+              style={showBrush ? { cursor: 'none' } : {}}
+              ref={r => {
+                if (r && !context) {
+                  const ctx = r.getContext('2d')
+                  if (ctx) {
+                    setContext(ctx)
+                  }
+                }
+              }}
+            />
+            <div
+              className={[
+                'absolute top-0 right-0 pointer-events-none',
+                'overflow-hidden',
+                'border-primary',
+                showSeparator ? 'border-l-4' : '',
+                // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
+              ].join(' ')}
+              style={{
+                width: showOriginal
+                  ? `${Math.round(original.naturalWidth)}px`
+                  : '0px',
+                height: original.naturalHeight,
+                transitionProperty: 'width, height',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                transitionDuration: '300ms',
+              }}
+            >
+              <img
+                className="absolute right-0"
+                src={original.src}
+                alt="original"
+                width={`${original.naturalWidth}px`}
+                height={`${original.naturalHeight}px`}
+                style={{
+                  width: `${original.naturalWidth}px`,
+                  height: `${original.naturalHeight}px`,
+                  maxWidth: 'none',
+                }}
+              />
+            </div>
+          </>
+        </TransformComponent>
+      </TransformWrapper>
+      {showBrush && (
+        <div
+          className="hidden sm:block fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
+          style={{
+            width: `${brushSize * scale}px`,
+            height: `${brushSize * scale}px`,
+            left: `${x}px`,
+            top: `${y}px`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      )}
+      {isInpaintingLoading && (
+        <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
+          <div ref={modalRef} className="text-xl space-y-5 p-20">
+            <p>正在处理中，请耐心等待。。。</p>
+            <p>It is being processed, please be patient...</p>
+            <Progress percent={generateProgress} />
+          </div>
+        </div>
+      )}
+      {/* <div
         className={[
           'flex items-left w-full max-w-4xl py-0',
           'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
@@ -342,92 +429,8 @@ export default function Editor(props: EditorProps) {
         ].join(' ')}
       >
         {History}
-      </div>
-      <div
-        className={[scale !== 1 ? 'absolute top-0 ' : 'relative'].join(' ')}
-        style={{
-          transform: `scale(${scale})`,
-          transformOrigin: 'top',
-          marginTop: '100px',
-        }}
-      >
-        <canvas
-          className="rounded-sm"
-          style={showBrush ? { cursor: 'none' } : {}}
-          ref={r => {
-            if (r && !context) {
-              const ctx = r.getContext('2d')
-              if (ctx) {
-                setContext(ctx)
-              }
-            }
-          }}
-        />
-        <div
-          className={[
-            'absolute top-0 right-0 pointer-events-none',
-            'overflow-hidden',
-            'border-primary',
-            showSeparator ? 'border-l-4' : '',
-            // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
-          ].join(' ')}
-          style={{
-            width: showOriginal
-              ? `${Math.round(original.naturalWidth)}px`
-              : '0px',
-            height: original.naturalHeight,
-            transitionProperty: 'width, height',
-            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-            transitionDuration: '300ms',
-          }}
-        >
-          <img
-            className="absolute right-0"
-            src={original.src}
-            alt="original"
-            width={`${original.naturalWidth}px`}
-            height={`${original.naturalHeight}px`}
-            style={{
-              width: `${original.naturalWidth}px`,
-              height: `${original.naturalHeight}px`,
-              maxWidth: 'none',
-            }}
-          />
-        </div>
-
-        {isInpaintingLoading && (
-          <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
-            <div ref={modalRef} className="text-xl space-y-5 p-20">
-              <p>正在处理中，请耐心等待。。。</p>
-              <p>It is being processed, please be patient...</p>
-              <Progress percent={generateProgress} />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {showBrush && (
-        <div
-          className="hidden sm:block fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
-          style={{
-            width: `${brushSize}px`,
-            height: `${brushSize}px`,
-            left: `${x}px`,
-            top: `${y}px`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-      )}
-
-      <div
-        className={[
-          'flex items-center w-full max-w-4xl py-6',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
-          scale !== 1
-            ? 'absolute bottom-0 justify-center'
-            : 'relative justify-between',
-        ].join(' ')}
-      >
+      </div> */}
+      <div className="editor-toolkit-panel">
         {renders.length > 0 && (
           <Button
             primary
