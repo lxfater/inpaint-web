@@ -1,5 +1,5 @@
 import { DownloadIcon, EyeIcon } from '@heroicons/react/outline'
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
@@ -96,7 +96,7 @@ export default function Editor(props: EditorProps) {
       context.canvas.width = original.naturalWidth
       context.canvas.height = original.naturalHeight
       const rW = windowSize.width / original.naturalWidth
-      const rH = (windowSize.height - 200) / original.naturalHeight
+      const rH = (windowSize.height - 300) / original.naturalHeight
       if (rW < 1 || rH < 1) {
         setScale(Math.min(rW, rH))
       } else {
@@ -268,6 +268,54 @@ export default function Editor(props: EditorProps) {
     }
   }, [renders, undo])
 
+  const backTo = (index: number) => {
+    const l = lines
+    while (l.length > index + 1) {
+      l.pop()
+    }
+    setLines([...l, { pts: [], src: '' }])
+    const r = renders
+    while (r.length > index + 1) {
+      r.pop()
+    }
+    setRenders([...r])
+  }
+
+  const History = renders.map((render, index) => {
+    return (
+      <div style={{
+        position: 'relative',
+        display: 'inline-block'
+      }}>
+        <img key={index} src={render.src} alt="render" className="rounded-sm" 
+          style={{
+            height: '90px'
+          }}
+        />
+        <div className='hover:opacity-100 opacity-0 cursor-pointer rounded-sm' 
+          style={{
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+          onClick={() => backTo(index)}
+          >
+          <div style={{
+            color: '#fff',
+            fontSize: '18px',
+            textAlign: 'center',
+          }}>回到这</div>
+        </div>
+      </div>
+    )
+  })
+
   return (
     <div
       className={[
@@ -275,9 +323,18 @@ export default function Editor(props: EditorProps) {
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
+      <div className={[
+          'flex items-left w-full max-w-4xl py-0',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          scale !== 1
+            ? 'absolute top-0 justify-center'
+            : 'relative',
+        ].join(' ')}>
+        {History}
+      </div>
       <div
         className={[scale !== 1 ? 'absolute top-0 ' : 'relative'].join(' ')}
-        style={{ transform: `scale(${scale})`, transformOrigin: 'top' }}
+        style={{ transform: `scale(${scale})`, transformOrigin: 'top', marginTop: '100px' }}
       >
         <canvas
           className="rounded-sm"
