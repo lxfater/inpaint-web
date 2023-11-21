@@ -48,6 +48,12 @@ Demo link:https://inpaintweb.lxfater.com/
 
 [![Star History Chart](https://api.star-history.com/svg?repos=lxfater/inpaint-web&type=Date)](https://star-history.com/#lxfater/inpaint-web&Date)
 
+## Contributors
+
+<a href="https://github.com/lxfater/inpaint-web/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lxfater/inpaint-web" />
+</a>
+
 ## Acknowledgements
 Frontend code are modified from [cleanup.pictures](https://github.com/initml/cleanup.pictures), You can experience their
 great online services [here](https://cleanup.pictures/).
