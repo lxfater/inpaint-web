@@ -2,11 +2,12 @@ import { DownloadIcon, EyeIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import inpaint from './adapters/inpainting'
-import Button from './components/Button'
-import Slider from './components/Slider'
-import { downloadImage, loadImage, useImage } from './utils'
-import Progress from './components/Progress'
+import inpaint from '../../adapters/inpainting'
+import Button from '../Button'
+import Slider from '../Slider'
+import { downloadImage, loadImage, useImage } from '../../utils'
+import Progress from '../Progress'
+import './Editor.scss'
 
 interface EditorProps {
   file: File

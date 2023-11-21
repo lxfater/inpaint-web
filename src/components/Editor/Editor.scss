@@ -1,0 +1,9 @@
+.editor-toolkit-panel {
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  gap: 10px;
+}
