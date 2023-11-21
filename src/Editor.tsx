@@ -324,11 +324,11 @@ export default function Editor(props: EditorProps) {
       ].join(' ')}
     >
       <div className={[
-          'flex items-center w-full max-w-4xl py-0',
+          'flex items-left w-full max-w-4xl py-0',
           'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
           scale !== 1
             ? 'absolute top-0 justify-center'
-            : 'relative justify-between',
+            : 'relative',
         ].join(' ')}>
         {History}
       </div>
