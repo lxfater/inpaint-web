@@ -310,7 +310,7 @@ export default function Editor(props: EditorProps) {
             color: '#fff',
             fontSize: '18px',
             textAlign: 'center',
-          }}>回到到这</div>
+          }}>回到这</div>
         </div>
       </div>
     )
