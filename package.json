@@ -70,6 +70,7 @@
     "postcss-preset-env": "6.x",
     "prettier": "^2.4.1",
     "react-scripts": "^5.0.1",
+    "tailwind-scrollbar": "^2.0.0",
     "tailwindcss": "2.x",
     "typescript": "4.x"
   }

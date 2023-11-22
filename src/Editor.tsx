@@ -62,6 +62,7 @@ export default function Editor(props: EditorProps) {
   const [useSeparator, setUseSeparator] = useState(false)
   const [originalImg, setOriginalImg] = useState<HTMLDivElement>()
   const [separatorLeft, setSeparatorLeft] = useState(0)
+  const historyListRef = useRef<HTMLDivElement>(null)
 
   const windowSize = useWindowSize()
 
@@ -181,6 +182,7 @@ export default function Editor(props: EditorProps) {
 
       setGenerateProgress(100)
       if (timer) clearInterval(timer)
+      historyListRef.current?.scrollTo(historyListRef.current.offsetWidth, 0)
       setIsInpaintingLoading(false)
       draw()
     }
@@ -336,6 +338,7 @@ export default function Editor(props: EditorProps) {
         style={{
           position: 'relative',
           display: 'inline-block',
+          flexShrink: 0,
         }}
       >
         <img
@@ -385,20 +388,24 @@ export default function Editor(props: EditorProps) {
       ].join(' ')}
     >
       <div
+        ref={historyListRef}
         className={[
           'flex items-left w-full max-w-4xl py-0',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5 overflow-auto pb-1',
+          'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary scrollbar-rounded-lg overflow-x-scroll',
           scale !== 1 ? 'absolute top-0 justify-center' : 'relative',
         ].join(' ')}
       >
         {History}
       </div>
       <div
-        className={[scale !== 1 ? 'absolute top-0' : 'relative'].join(' ')}
+        className={[
+          scale !== 1 ? 'absolute top-0' : 'relative',
+          scale !== 1 ? 'mt-28' : 'mt-6',
+        ].join(' ')}
         style={{
           transform: `scale(${scale})`,
           transformOrigin: 'top',
-          marginTop: '100px',
         }}
       >
         <canvas

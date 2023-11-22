@@ -1,3 +1,5 @@
+const tailwindScrollbar = require('tailwind-scrollbar')
+
 module.exports = {
   mode: 'jit',
   theme: {
@@ -11,7 +13,7 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [],
+  plugins: [tailwindScrollbar],
   purge: {
     // Filenames to scan for classes
     content: [
