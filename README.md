@@ -40,10 +40,6 @@ Demo link:https://inpaintweb.lxfater.com/
 
 `npm run dev`
 
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=lxfater/inpaint-web&type=Date)](https://star-history.com/#lxfater/inpaint-web&Date)
-
 
 ## Contributors
 
@@ -67,9 +63,10 @@ great online services [here](https://cleanup.pictures/).
 
 Model: https://github.com/Picsart-AI-Research/MI-GAN
 
+
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=lxfater/inpaint-web.git&type=Date)](https://star-history.com/#lxfater/inpaint-web.git&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=lxfater/inpaint-web&type=Date)](https://star-history.com/#lxfater/inpaint-web&Date)
 
 
 
