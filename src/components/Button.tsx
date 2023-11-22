@@ -5,13 +5,17 @@ interface ButtonProps {
   className?: string
   icon?: ReactNode
   primary?: boolean
+  style?: {
+    [key: string]: string
+  }
   onClick?: () => void
   onDown?: () => void
   onUp?: () => void
 }
 
 export default function Button(props: ButtonProps) {
-  const { children, className, icon, primary, onClick, onDown, onUp } = props
+  const { children, className, icon, primary, onClick, onDown, onUp, style } =
+    props
   const [active, setActive] = useState(false)
   let background = ''
   if (primary) {
@@ -42,6 +46,7 @@ export default function Button(props: ButtonProps) {
         background,
         className,
       ].join(' ')}
+      style={style}
     >
       {icon}
       <span className="whitespace-nowrap select-none">{children}</span>
