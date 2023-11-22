@@ -2,7 +2,6 @@
 // @ts-nocheck
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
-import * as ort from 'onnxruntime-web/webgpu'
 import { ensureModel } from './cache'
 
 // ort.env.debug = true

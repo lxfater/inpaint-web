@@ -35,6 +35,8 @@
     ],
     "consistent-return": "off",
     "no-use-before-define": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off",
     "import/extensions": "off",
     "react/prop-types": 0,
     "react/require-default-props": "off",
@@ -45,6 +47,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "no-debugger": "warn"
   }
 }

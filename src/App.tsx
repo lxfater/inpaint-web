@@ -1,47 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import {
-  ArrowLeftIcon,
-  ChatAltIcon,
-  InformationCircleIcon,
-} from '@heroicons/react/outline'
-import React, { useRef, useState, useEffect } from 'react'
+import { ArrowLeftIcon, InformationCircleIcon } from '@heroicons/react/outline'
+import React, { useRef, useState } from 'react'
 import { useClickAway } from 'react-use'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
 import Modal from './components/Modal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
-import { ensureModel } from './adapters/cache'
+import useDownload from './adapters/use_download'
+import Progress from './components/Progress'
 
 function App() {
   const [file, setFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showDownload, setShowDownload] = useState(true)
   const modalRef = useRef(null)
-  console.log('run')
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function checkGpu() {
-    setShowAlert(
-      // @ts-ignore
-      !navigator?.gpu && !(await navigator.gpu?.requestAdapter())
-    )
-    return !showAlert
-  }
-  useEffect(() => {
-    async function download() {
-      if (await checkGpu()) {
-        await ensureModel()
+  const { downloadProgress, downloaded, showAlert } = useDownload()
 
-        setShowDownload(false)
-      }
-    }
-    download()
-  }, [])
   useClickAway(modalRef, () => {
     setShowAbout(false)
   })
+
   async function startWithDemoImage(img: string) {
     const imgBlob = await fetch(`/exemples/${img}.jpeg`).then(r => r.blob())
     setFile(new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' }))
@@ -72,7 +51,7 @@ function App() {
         </Button>
       </header>
 
-      <main className="h-full flex flex-1 flex-col items-center justify-center overflow-hidden">
+      <main className="relative h-full flex flex-1 flex-col items-center justify-center overflow-hidden">
         {file ? (
           <Editor file={file} />
         ) : (
@@ -123,6 +102,8 @@ function App() {
               <a
                 href="https://github.com/lxfater/inpaint-web"
                 style={{ color: 'blue' }}
+                rel="noreferrer"
+                target="_blank"
               >
                 Inpaint-web
               </a>{' '}
@@ -134,6 +115,8 @@ function App() {
               <a
                 href="https://github.com/lxfater/inpaint-web"
                 style={{ color: 'blue' }}
+                rel="noreferrer"
+                target="_blank"
               >
                 Inpaint-web
               </a>{' '}
@@ -158,7 +141,7 @@ function App() {
           </div>
         </Modal>
       )}
-      {showDownload && (
+      {!downloaded && (
         <Modal>
           <div ref={modalRef} className="text-xl space-y-5">
             <p>
@@ -170,6 +153,7 @@ function App() {
               Need to download a 30MB model file, please wait patiently... The
               first use might be slow...{' '}
             </p>
+            <Progress percent={downloadProgress} />
           </div>
         </Modal>
       )}
