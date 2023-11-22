@@ -137,6 +137,9 @@ export default function Editor(props: EditorProps) {
       if (!original.src || showOriginal) {
         return
       }
+      if (lines.at(-1)?.pts.length === 0) {
+        return
+      }
       setIsInpaintingLoading(true)
       setGenerateProgress(0)
       setTimer(
