@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { DownloadIcon, EyeIcon } from '@heroicons/react/outline'
+import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
+import { sep } from 'path'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
 import Slider from './components/Slider'
@@ -53,11 +54,14 @@ export default function Editor(props: EditorProps) {
   const [showBrush, setShowBrush] = useState(false)
   const [showOriginal, setShowOriginal] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
-  const [showSeparator, setShowSeparator] = useState(false)
   const [scale, setScale] = useState(1)
   const [generateProgress, setGenerateProgress] = useState(0)
   const [timer, setTimer] = useState(0)
   const modalRef = useRef(null)
+  const [separator, setSeparator] = useState<HTMLDivElement>()
+  const [useSeparator, setUseSeparator] = useState(false)
+  const [originalImg, setOriginalImg] = useState<HTMLDivElement>()
+  const [separatorLeft, setSeparatorLeft] = useState(0)
 
   const windowSize = useWindowSize()
 
@@ -129,21 +133,10 @@ export default function Editor(props: EditorProps) {
     }
 
     const onPointerUp = async () => {
-      if (!original.src) {
+      if (!original.src || showOriginal) {
         return
       }
       setIsInpaintingLoading(true)
-      setGenerateProgress(0)
-      setTimer(
-        window.setInterval(() => {
-          setGenerateProgress(p => {
-            if (p < 90) return p + 20 * Math.random()
-            if (p >= 90 && p < 100) return p + 1 * Math.random()
-            window.setTimeout(() => setIsInpaintingLoading(false), 500)
-            return p
-          })
-        }, 1000)
-      )
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
       refreshCanvasMask()
@@ -173,8 +166,7 @@ export default function Editor(props: EditorProps) {
         // eslint-disable-next-line
         alert(e.message ? e.message : e.toString())
       }
-      setGenerateProgress(100)
-      if (timer) clearInterval(timer)
+      setIsInpaintingLoading(false)
       draw()
     }
     window.addEventListener('mousemove', onMouseMove)
@@ -191,7 +183,7 @@ export default function Editor(props: EditorProps) {
       draw()
     }
     const onPointerStart = () => {
-      if (!original.src) {
+      if (!original.src || showOriginal) {
         return
       }
       const currLine = lines[lines.length - 1]
@@ -204,7 +196,7 @@ export default function Editor(props: EditorProps) {
     canvas.addEventListener('touchstart', onPointerStart)
     canvas.addEventListener('touchmove', onTouchMove)
     canvas.addEventListener('touchend', onPointerUp)
-    canvas.onmouseenter = () => setShowBrush(true)
+    canvas.onmouseenter = () => setShowBrush(true && !showOriginal)
     canvas.onmouseleave = () => setShowBrush(false)
     canvas.onmousedown = onPointerStart
 
@@ -232,7 +224,47 @@ export default function Editor(props: EditorProps) {
     original.naturalWidth,
     scale,
     renders,
+    showOriginal,
   ])
+
+  useEffect(() => {
+    if (!separator || !originalImg) return
+
+    const separatorMove = (ev: MouseEvent) => {
+      ev.preventDefault()
+      ev.stopPropagation()
+      const originalRect = originalImg.getBoundingClientRect()
+      const separatorOffsetLeft = (ev.pageX - originalRect.left) / scale
+      if (
+        separatorOffsetLeft <= original.naturalWidth &&
+        separatorOffsetLeft >= 0
+      ) {
+        setSeparatorLeft(separatorOffsetLeft)
+      } else if (separatorOffsetLeft < 0) {
+        setSeparatorLeft(0)
+      } else if (separatorOffsetLeft > original.naturalWidth) {
+        setSeparatorLeft(original.naturalWidth)
+      }
+    }
+
+    const separatorDown = () => {
+      window.addEventListener('mousemove', separatorMove)
+      setUseSeparator(true)
+    }
+
+    const separatorUp = () => {
+      window.removeEventListener('mousemove', separatorMove)
+      setUseSeparator(false)
+    }
+
+    separator.addEventListener('mousedown', separatorDown)
+    window.addEventListener('mouseup', separatorUp)
+
+    return () => {
+      separator.removeEventListener('mousedown', separatorDown)
+      window.removeEventListener('mouseup', separatorUp)
+    }
+  }, [scale, separator, originalImg])
 
   function download() {
     const base64 = context?.canvas.toDataURL(file.type)
@@ -301,7 +333,7 @@ export default function Editor(props: EditorProps) {
             height: '90px',
           }}
         />
-        <div
+        <Button
           className="hover:opacity-100 opacity-0 cursor-pointer rounded-sm"
           style={{
             position: 'absolute',
@@ -314,7 +346,7 @@ export default function Editor(props: EditorProps) {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          onClick={() => backTo(index)}
+          onDown={() => backTo(index)}
         >
           <div
             style={{
@@ -325,7 +357,7 @@ export default function Editor(props: EditorProps) {
           >
             回到这
           </div>
-        </div>
+        </Button>
       </div>
     )
   })
@@ -347,7 +379,7 @@ export default function Editor(props: EditorProps) {
         {History}
       </div>
       <div
-        className={[scale !== 1 ? 'absolute top-0 ' : 'relative'].join(' ')}
+        className={[scale !== 1 ? 'absolute top-0' : 'relative'].join(' ')}
         style={{
           transform: `scale(${scale})`,
           transformOrigin: 'top',
@@ -369,10 +401,7 @@ export default function Editor(props: EditorProps) {
         <div
           className={[
             'absolute top-0 right-0 pointer-events-none',
-            'overflow-hidden',
-            'border-primary',
-            showSeparator ? 'border-l-4' : '',
-            // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
+            showOriginal ? '' : 'overflow-hidden',
           ].join(' ')}
           style={{
             width: showOriginal
@@ -383,7 +412,45 @@ export default function Editor(props: EditorProps) {
             transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
             transitionDuration: '300ms',
           }}
+          ref={r => {
+            if (r && !originalImg) {
+              setOriginalImg(r)
+            }
+          }}
         >
+          <div
+            className={[
+              'absolute top-0 right-0 pointer-events-none z-10',
+              useSeparator ? 'bg-black text-white' : 'bg-primary ',
+              'w-1',
+              'flex items-center justify-center',
+            ].join(' ')}
+            style={{
+              left: `${separatorLeft}px`,
+              height: original.naturalHeight,
+              transitionProperty: 'width, height',
+              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              transitionDuration: '300ms',
+            }}
+          >
+            <div
+              className={[
+                'absolute py-2 px-1 rounded-md pointer-events-auto',
+                useSeparator ? 'bg-black' : 'bg-primary ',
+              ].join(' ')}
+              style={{ cursor: 'ew-resize' }}
+              ref={r => {
+                if (r && !separator) {
+                  setSeparator(r)
+                }
+              }}
+            >
+              <ViewBoardsIcon
+                className="w-5 h-5"
+                style={{ cursor: 'ew-resize' }}
+              />
+            </div>
+          </div>
           <img
             className="absolute right-0"
             src={original.src}
@@ -394,10 +461,10 @@ export default function Editor(props: EditorProps) {
               width: `${original.naturalWidth}px`,
               height: `${original.naturalHeight}px`,
               maxWidth: 'none',
+              clipPath: `inset(0 0 0 ${separatorLeft}px)`,
             }}
           />
         </div>
-
         {isInpaintingLoading && (
           <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
             <div ref={modalRef} className="text-xl space-y-5 p-20">
@@ -461,15 +528,13 @@ export default function Editor(props: EditorProps) {
           value={brushSize}
           onChange={setBrushSize}
         />
+
         <Button
+          primary={showOriginal}
           icon={<EyeIcon className="w-6 h-6" />}
-          onDown={() => {
-            setShowSeparator(true)
-            setShowOriginal(true)
-          }}
           onUp={() => {
-            setShowOriginal(false)
-            setTimeout(() => setShowSeparator(false), 300)
+            setShowOriginal(!showOriginal)
+            setTimeout(() => setSeparatorLeft(0), 300)
           }}
         >
           Original
