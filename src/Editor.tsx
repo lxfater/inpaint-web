@@ -135,6 +135,18 @@ export default function Editor(props: EditorProps) {
         return
       }
       setIsInpaintingLoading(true)
+      setGenerateProgress(0)
+      setTimer(
+        window.setInterval(() => {
+          setGenerateProgress(p => {
+            if (p < 90) return p + 20 * Math.random()
+            if (p >= 90 && p < 100) return p + 1 * Math.random()
+            window.setTimeout(() => setIsInpaintingLoading(false), 500)
+            return p
+          })
+        }, 1000)
+      )
+
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
       refreshCanvasMask()
@@ -164,6 +176,9 @@ export default function Editor(props: EditorProps) {
         // eslint-disable-next-line
         alert(e.message ? e.message : e.toString())
       }
+
+      setGenerateProgress(100)
+      if (timer) clearInterval(timer)
       setIsInpaintingLoading(false)
       draw()
     }
