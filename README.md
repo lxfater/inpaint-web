@@ -40,9 +40,6 @@ Demo link:https://inpaintweb.lxfater.com/
 
 `npm run dev`
 
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=lxfater/inpaint-web&type=Date)](https://star-history.com/#lxfater/inpaint-web&Date)
 
 ## Contributors
 
@@ -50,9 +47,28 @@ Demo link:https://inpaintweb.lxfater.com/
   <img src="https://contrib.rocks/image?repo=lxfater/inpaint-web" />
 </a>
 
+## About me
+### English Content
+For updates and discussions in English, follow me on Twitter:
+[![Twitter Follow](https://img.shields.io/twitter/follow/rules4thing?style=social)](https://twitter.com/rules4thing)
+
+### 中文内容
+获取中文更新和讨论，请关注我的Twitter:
+[![Twitter Follow](https://img.shields.io/twitter/follow/lxfater?style=social)](https://twitter.com/lxfater)
+
 ## Acknowledgements
 
 Frontend code are modified from [cleanup.pictures](https://github.com/initml/cleanup.pictures), You can experience their
 great online services [here](https://cleanup.pictures/).
 
 Model: https://github.com/Picsart-AI-Research/MI-GAN
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=lxfater/inpaint-web&type=Date)](https://star-history.com/#lxfater/inpaint-web&Date)
+
+
+
+
+

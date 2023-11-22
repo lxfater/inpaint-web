@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
@@ -322,6 +324,7 @@ export default function Editor(props: EditorProps) {
         }}
       >
         <img
+          // eslint-disable-next-line react/no-array-index-key
           key={index}
           src={render.src}
           alt="render"
