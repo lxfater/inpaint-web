@@ -131,7 +131,7 @@ function App() {
 
       {showAlert && (
         <Modal>
-          <div ref={modalRef} className="text-xl space-y-5">
+          <div className="text-xl space-y-5">
             <p>
               {' '}
               本项目仅在支持WEBGPU的环境下运行, 也就是说你要安装最新版本的Chrome
@@ -146,7 +146,7 @@ function App() {
       )}
       {!downloaded && (
         <Modal>
-          <div ref={modalRef} className="text-xl space-y-5">
+          <div className="text-xl space-y-5">
             <p>
               {' '}
               需要下载一次30MB大小模型文件,耐心等待。。。 首次使用比较慢。。。

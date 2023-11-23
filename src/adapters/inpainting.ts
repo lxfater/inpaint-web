@@ -150,14 +150,17 @@ function imageDataToDataURL(imageData) {
   return canvas.toDataURL()
 }
 
-console.time('sessionCreate')
-const modelBuffer = await ensureModel()
-const model = await ort.InferenceSession.create(modelBuffer, {
-  executionProviders: ['webgpu'],
-})
-console.timeEnd('sessionCreate')
+let model = null
 
 export default async function inpaint(imageFile: File, maskBase64: string) {
+  console.time('sessionCreate')
+  if (!model) {
+    const modelBuffer = await ensureModel()
+    model = await ort.InferenceSession.create(modelBuffer, {
+      executionProviders: ['webgpu'],
+    })
+  }
+  console.timeEnd('sessionCreate')
   console.time('preProcess')
 
   const fileUrl = URL.createObjectURL(imageFile)
