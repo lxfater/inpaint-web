@@ -105,7 +105,10 @@ export default function Editor(props: EditorProps) {
       const rW = windowSize.width / original.naturalWidth
       const rH = (windowSize.height - 300) / original.naturalHeight
       if (rW < 1 || rH < 1) {
-        setScale(Math.min(rW, rH))
+        console.log(Math.min(rW, rH))
+        const newScale = Math.min(rW, rH)
+        setScale(newScale)
+        setBrushSize(40 / rW)
       } else {
         setScale(1)
       }
@@ -512,8 +515,8 @@ export default function Editor(props: EditorProps) {
         <div
           className="hidden sm:block fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
           style={{
-            width: `${brushSize}px`,
-            height: `${brushSize}px`,
+            width: `${brushSize * scale}px`,
+            height: `${brushSize * scale}px`,
             left: `${x}px`,
             top: `${y}px`,
             transform: 'translate(-50%, -50%)',
@@ -556,7 +559,7 @@ export default function Editor(props: EditorProps) {
         <Slider
           label="Brush Size"
           min={10}
-          max={150}
+          max={200}
           value={brushSize}
           onChange={setBrushSize}
         />
