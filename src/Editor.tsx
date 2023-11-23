@@ -2,8 +2,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
-import { useWindowSize } from 'react-use'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import { useWindowSize, useKeyPressEvent } from 'react-use'
+import {
+  TransformWrapper,
+  TransformComponent,
+  ReactZoomPanPinchContentRef,
+} from 'react-zoom-pan-pinch'
 import { sep } from 'path'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
@@ -65,6 +69,7 @@ export default function Editor(props: EditorProps) {
   const [separatorLeft, setSeparatorLeft] = useState(0)
   const historyListRef = useRef<HTMLDivElement>(null)
   const [minScale, setMinScale] = useState(1)
+  const viewportRef = useRef<ReactZoomPanPinchContentRef | undefined | null>()
 
   const windowSize = useWindowSize()
 
@@ -308,6 +313,21 @@ export default function Editor(props: EditorProps) {
     setRenders([...r])
   }, [lines, renders])
 
+  // Zoom reset
+  const resetZoom = useCallback(() => {
+    if (!minScale || !original || !windowSize) {
+      return
+    }
+    const viewport = viewportRef.current
+    if (!viewport) {
+      throw new Error('no viewport')
+    }
+    viewport.setTransform(0, 0, 1, 200, 'easeOutQuad')
+    setMinScale(scale)
+  }, [scale, minScale, original, windowSize])
+
+  useKeyPressEvent('Escape', resetZoom)
+
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       if (!renders.length) {
@@ -415,6 +435,11 @@ export default function Editor(props: EditorProps) {
         }}
       >
         <TransformWrapper
+          ref={r => {
+            if (r) {
+              viewportRef.current = r
+            }
+          }}
           wheel={{ step: 0.05 }}
           centerZoomedOut
           alignmentAnimation={{ disabled: true }}
