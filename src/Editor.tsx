@@ -347,66 +347,73 @@ export default function Editor(props: EditorProps) {
     }
   }, [renders, undo])
 
-  const backTo = (index: number) => {
-    const l = lines
-    while (l.length > index + 1) {
-      l.pop()
-    }
-    setLines([...l, { pts: [], src: '' }])
-    const r = renders
-    while (r.length > index + 1) {
-      r.pop()
-    }
-    setRenders([...r])
-  }
+  const backTo = useCallback(
+    (index: number) => {
+      const l = lines
+      while (l.length > index + 1) {
+        l.pop()
+      }
+      setLines([...l, { pts: [], src: '' }])
+      const r = renders
+      while (r.length > index + 1) {
+        r.pop()
+      }
+      setRenders([...r])
+    },
+    [renders, lines]
+  )
 
-  const History = renders.map((render, index) => {
-    return (
-      <div
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-          flexShrink: 0,
-        }}
-      >
-        <img
-          // eslint-disable-next-line react/no-array-index-key
-          key={index}
-          src={render.src}
-          alt="render"
-          className="rounded-sm"
-          style={{
-            height: '90px',
-          }}
-        />
-        <Button
-          className="hover:opacity-100 opacity-0 cursor-pointer rounded-sm"
-          style={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onDown={() => backTo(index)}
-        >
+  const History = useMemo(
+    () =>
+      renders.map((render, index) => {
+        return (
           <div
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
             style={{
-              color: '#fff',
-              fontSize: '18px',
-              textAlign: 'center',
+              position: 'relative',
+              display: 'inline-block',
+              flexShrink: 0,
             }}
           >
-            回到这
+            <img
+              src={render.src}
+              alt="render"
+              className="rounded-sm"
+              style={{
+                height: '90px',
+              }}
+            />
+            <Button
+              className="hover:opacity-100 opacity-0 cursor-pointer rounded-sm"
+              style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onDown={() => backTo(index)}
+            >
+              <div
+                style={{
+                  color: '#fff',
+                  fontSize: '18px',
+                  textAlign: 'center',
+                }}
+              >
+                回到这
+              </div>
+            </Button>
           </div>
-        </Button>
-      </div>
-    )
-  })
+        )
+      }),
+    [renders, backTo]
+  )
 
   return (
     <div
