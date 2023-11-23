@@ -27,7 +27,7 @@ const useDownload = () => {
       setDownloadProgress(0)
 
       const response = await fetch(
-        'https://huggingface.co/lxfater/inpaint-web/resolve/main/migan.onnx'
+        'https://huggingface.co/andraniksargsyan/migan/resolve/main/migan.onnx'
       )
       const fullSize = response.headers.get('content-length')
       const reader = response.body!.getReader()

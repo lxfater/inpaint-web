@@ -23,7 +23,7 @@ export async function ensureModel() {
     return loadModel()
   }
   const response = await fetch(
-    'https://huggingface.co/lxfater/inpaint-web/resolve/main/migan.onnx'
+    'https://huggingface.co/andraniksargsyan/migan/resolve/main/migan.onnx'
   )
   const buffer = await response.arrayBuffer()
   await saveModel(buffer)
