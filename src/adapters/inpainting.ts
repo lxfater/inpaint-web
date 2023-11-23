@@ -9,7 +9,7 @@ import { ensureModel } from './cache'
 // ort.env.webgpu.profilingMode = 'default'
 
 ort.env.wasm.wasmPaths =
-  'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.2/dist/'
+  'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
