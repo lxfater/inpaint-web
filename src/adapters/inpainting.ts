@@ -159,31 +159,41 @@ console.timeEnd('sessionCreate')
 
 export default async function inpaint(imageFile: File, maskBase64: string) {
   console.time('preProcess')
+
   const fileUrl = URL.createObjectURL(imageFile)
   const markUrl = maskBase64
 
-  const originalImg = await loadImage(fileUrl)
-  const originalMark = await loadImage(markUrl)
+  const [originalImg, originalMark] = await Promise.all([
+    loadImage(fileUrl),
+    loadImage(markUrl),
+  ])
 
-  const img = await processImage(originalImg)
-  const mark = await processMark(originalMark)
+  const [img, mark] = await Promise.all([
+    processImage(originalImg),
+    processMark(originalMark),
+  ])
+
   const imageTensor = new ort.Tensor('uint8', img, [
     1,
     3,
     originalImg.height,
     originalImg.width,
   ])
+
   const maskTensor = new ort.Tensor('uint8', mark, [
     1,
     1,
     originalImg.height,
     originalImg.width,
   ])
+
   const Feed: {
     [key: string]: any
-  } = {}
-  Feed[model.inputNames[0]] = imageTensor
-  Feed[model.inputNames[1]] = maskTensor
+  } = {
+    [model.inputNames[0]]: imageTensor,
+    [model.inputNames[1]]: maskTensor,
+  }
+
   console.timeEnd('preProcess')
 
   console.time('run')
@@ -204,5 +214,6 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
   )
   const result = imageDataToDataURL(imageData)
   console.timeEnd('postProcess')
+
   return result
 }
