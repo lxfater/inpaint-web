@@ -2,12 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
-import { useWindowSize, useKeyPressEvent } from 'react-use'
-import {
-  TransformWrapper,
-  TransformComponent,
-  ReactZoomPanPinchContentRef,
-} from 'react-zoom-pan-pinch'
+import { useWindowSize } from 'react-use'
 import { sep } from 'path'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
@@ -68,8 +63,6 @@ export default function Editor(props: EditorProps) {
   const [originalImg, setOriginalImg] = useState<HTMLDivElement>()
   const [separatorLeft, setSeparatorLeft] = useState(0)
   const historyListRef = useRef<HTMLDivElement>(null)
-  const [minScale, setMinScale] = useState(1)
-  const viewportRef = useRef<ReactZoomPanPinchContentRef | undefined | null>()
 
   const windowSize = useWindowSize()
 
@@ -113,9 +106,8 @@ export default function Editor(props: EditorProps) {
       const rH = (windowSize.height - 300) / original.naturalHeight
       if (rW < 1 || rH < 1) {
         setScale(Math.min(rW, rH))
-        setMinScale(Math.min(rW, rH))
       } else {
-        setMinScale(1)
+        setScale(1)
       }
       draw()
     }
@@ -173,6 +165,7 @@ export default function Editor(props: EditorProps) {
         }
         // TODO: fix the render if it failed loading
         const newRender = new Image()
+        newRender.dataset.id = Date.now().toString()
         await loadImage(newRender, res)
         renders.push(newRender)
         lines.push({ pts: [], src: '' } as Line)
@@ -313,21 +306,6 @@ export default function Editor(props: EditorProps) {
     setRenders([...r])
   }, [lines, renders])
 
-  // Zoom reset
-  const resetZoom = useCallback(() => {
-    if (!minScale || !original || !windowSize) {
-      return
-    }
-    const viewport = viewportRef.current
-    if (!viewport) {
-      throw new Error('no viewport')
-    }
-    viewport.setTransform(0, 0, 1, 200, 'easeOutQuad')
-    setMinScale(scale)
-  }, [scale, minScale, original, windowSize])
-
-  useKeyPressEvent('Escape', resetZoom)
-
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       if (!renders.length) {
@@ -345,66 +323,72 @@ export default function Editor(props: EditorProps) {
     }
   }, [renders, undo])
 
-  const backTo = (index: number) => {
-    const l = lines
-    while (l.length > index + 1) {
-      l.pop()
-    }
-    setLines([...l, { pts: [], src: '' }])
-    const r = renders
-    while (r.length > index + 1) {
-      r.pop()
-    }
-    setRenders([...r])
-  }
+  const backTo = useCallback(
+    (index: number) => {
+      const l = lines
+      while (l.length > index + 1) {
+        l.pop()
+      }
+      setLines([...l, { pts: [], src: '' }])
+      const r = renders
+      while (r.length > index + 1) {
+        r.pop()
+      }
+      setRenders([...r])
+    },
+    [renders, lines]
+  )
 
-  const History = renders.map((render, index) => {
-    return (
-      <div
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-          flexShrink: 0,
-        }}
-      >
-        <img
-          // eslint-disable-next-line react/no-array-index-key
-          key={index}
-          src={render.src}
-          alt="render"
-          className="rounded-sm"
-          style={{
-            height: '90px',
-          }}
-        />
-        <Button
-          className="hover:opacity-100 opacity-0 cursor-pointer rounded-sm"
-          style={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onDown={() => backTo(index)}
-        >
+  const History = useMemo(
+    () =>
+      renders.map((render, index) => {
+        return (
           <div
+            key={render.dataset.id}
             style={{
-              color: '#fff',
-              fontSize: '18px',
-              textAlign: 'center',
+              position: 'relative',
+              display: 'inline-block',
+              flexShrink: 0,
             }}
           >
-            回到这
+            <img
+              src={render.src}
+              alt="render"
+              className="rounded-sm"
+              style={{
+                height: '90px',
+              }}
+            />
+            <Button
+              className="hover:opacity-100 opacity-0 cursor-pointer rounded-sm"
+              style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onDown={() => backTo(index)}
+            >
+              <div
+                style={{
+                  color: '#fff',
+                  fontSize: '18px',
+                  textAlign: 'center',
+                }}
+              >
+                回到这
+              </div>
+            </Button>
           </div>
-        </Button>
-      </div>
-    )
-  })
+        )
+      }),
+    [renders, backTo]
+  )
 
   return (
     <div
@@ -434,123 +418,102 @@ export default function Editor(props: EditorProps) {
           transformOrigin: 'top',
         }}
       >
-        <TransformWrapper
+        <canvas
+          className="rounded-sm"
+          style={showBrush ? { cursor: 'none' } : {}}
           ref={r => {
-            if (r) {
-              viewportRef.current = r
+            if (r && !context) {
+              const ctx = r.getContext('2d')
+              if (ctx) {
+                setContext(ctx)
+              }
             }
           }}
-          wheel={{ step: 0.05 }}
-          centerZoomedOut
-          alignmentAnimation={{ disabled: true }}
-          doubleClick={{ disabled: false }}
-          limitToBounds={false}
-          minScale={0.5}
-          maxScale={3}
-          initialScale={minScale}
-          onZoom={ref => {
-            setMinScale(ref.state.scale)
+        />
+        <div
+          className={[
+            'absolute top-0 right-0 pointer-events-none',
+            showOriginal ? '' : 'overflow-hidden',
+          ].join(' ')}
+          style={{
+            width: showOriginal
+              ? `${Math.round(original.naturalWidth)}px`
+              : '0px',
+            height: original.naturalHeight,
+            transitionProperty: 'width, height',
+            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            transitionDuration: '300ms',
           }}
-          panning={{ disabled: true, velocityDisabled: true }}
+          ref={r => {
+            if (r && !originalImg) {
+              setOriginalImg(r)
+            }
+          }}
         >
-          <TransformComponent>
-            <canvas
-              className="rounded-sm"
-              style={showBrush ? { cursor: 'none' } : {}}
-              ref={r => {
-                if (r && !context) {
-                  const ctx = r.getContext('2d')
-                  if (ctx) {
-                    setContext(ctx)
-                  }
-                }
-              }}
-            />
+          <div
+            className={[
+              'absolute top-0 right-0 pointer-events-none z-10',
+              useSeparator ? 'bg-black text-white' : 'bg-primary ',
+              'w-1',
+              'flex items-center justify-center',
+            ].join(' ')}
+            style={{
+              left: `${separatorLeft}px`,
+              height: original.naturalHeight,
+              transitionProperty: 'width, height',
+              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              transitionDuration: '300ms',
+            }}
+          >
             <div
               className={[
-                'absolute top-0 right-0 pointer-events-none',
-                showOriginal ? '' : 'overflow-hidden',
+                'absolute py-2 px-1 rounded-md pointer-events-auto',
+                useSeparator ? 'bg-black' : 'bg-primary ',
               ].join(' ')}
-              style={{
-                width: showOriginal
-                  ? `${Math.round(original.naturalWidth)}px`
-                  : '0px',
-                height: original.naturalHeight,
-                transitionProperty: 'width, height',
-                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                transitionDuration: '300ms',
-              }}
+              style={{ cursor: 'ew-resize' }}
               ref={r => {
-                if (r && !originalImg) {
-                  setOriginalImg(r)
+                if (r && !separator) {
+                  setSeparator(r)
                 }
               }}
             >
-              <div
-                className={[
-                  'absolute top-0 right-0 pointer-events-none z-10',
-                  useSeparator ? 'bg-black text-white' : 'bg-primary ',
-                  'w-1',
-                  'flex items-center justify-center',
-                ].join(' ')}
-                style={{
-                  left: `${separatorLeft}px`,
-                  height: original.naturalHeight,
-                  transitionProperty: 'width, height',
-                  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                  transitionDuration: '300ms',
-                }}
-              >
-                <div
-                  className={[
-                    'absolute py-2 px-1 rounded-md pointer-events-auto',
-                    useSeparator ? 'bg-black' : 'bg-primary ',
-                  ].join(' ')}
-                  style={{ cursor: 'ew-resize' }}
-                  ref={r => {
-                    if (r && !separator) {
-                      setSeparator(r)
-                    }
-                  }}
-                >
-                  <ViewBoardsIcon
-                    className="w-5 h-5"
-                    style={{ cursor: 'ew-resize' }}
-                  />
-                </div>
-              </div>
-              <img
-                className="absolute right-0"
-                src={original.src}
-                alt="original"
-                width={`${original.naturalWidth}px`}
-                height={`${original.naturalHeight}px`}
-                style={{
-                  width: `${original.naturalWidth}px`,
-                  height: `${original.naturalHeight}px`,
-                  maxWidth: 'none',
-                  clipPath: `inset(0 0 0 ${separatorLeft}px)`,
-                }}
+              <ViewBoardsIcon
+                className="w-5 h-5"
+                style={{ cursor: 'ew-resize' }}
               />
             </div>
-          </TransformComponent>
-          {isInpaintingLoading && (
-            <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
-              <div ref={modalRef} className="text-xl space-y-5 p-20">
-                <p>正在处理中，请耐心等待。。。</p>
-                <p>It is being processed, please be patient...</p>
-                <Progress percent={generateProgress} />
-              </div>
+          </div>
+          <img
+            className="absolute right-0"
+            src={original.src}
+            alt="original"
+            width={`${original.naturalWidth}px`}
+            height={`${original.naturalHeight}px`}
+            style={{
+              width: `${original.naturalWidth}px`,
+              height: `${original.naturalHeight}px`,
+              maxWidth: 'none',
+              clipPath: `inset(0 0 0 ${separatorLeft}px)`,
+            }}
+          />
+        </div>
+        {isInpaintingLoading && (
+          <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
+            <div ref={modalRef} className="text-xl space-y-5 p-20">
+              <p>正在处理中，请耐心等待。。。</p>
+              <p>It is being processed, please be patient...</p>
+              <Progress percent={generateProgress} />
             </div>
-          )}
-        </TransformWrapper>
+          </div>
+        )}
       </div>
+
       {showBrush && (
         <div
           className="hidden sm:block fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
           style={{
-            width: `${brushSize * minScale}px`,
-            height: `${brushSize * minScale}px`,
+            width: `${brushSize}px`,
+            height: `${brushSize}px`,
             left: `${x}px`,
             top: `${y}px`,
             transform: 'translate(-50%, -50%)',
