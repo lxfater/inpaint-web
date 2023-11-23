@@ -101,7 +101,7 @@ export default function Editor(props: EditorProps) {
     drawLines(ctx, lines, 'white')
   }, [context?.canvas.height, context?.canvas.width, lines, maskCanvas])
 
-  // Draw once the original image is loaded
+  // // Draw once the original image is loaded
   useEffect(() => {
     if (!context?.canvas) {
       return
@@ -111,9 +111,11 @@ export default function Editor(props: EditorProps) {
       context.canvas.height = original.naturalHeight
       const rW = windowSize.width / original.naturalWidth
       const rH = (windowSize.height - 300) / original.naturalHeight
+      const newScale = Math.min(rW, rH)
       if (rW < 1 || rH < 1) {
-        setScale(Math.min(rW, rH))
-        setMinScale(Math.min(rW, rH))
+        setScale(newScale)
+        setMinScale(newScale)
+        viewportRef.current?.centerView(newScale, 1)
       } else {
         setMinScale(1)
       }
@@ -409,7 +411,8 @@ export default function Editor(props: EditorProps) {
   return (
     <div
       className={[
-        'flex flex-col items-center',
+        'flex flex-col items-center flex-grow-1',
+        'w-full',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
@@ -424,36 +427,31 @@ export default function Editor(props: EditorProps) {
       >
         {History}
       </div>
-      <div
-        className={[
-          scale !== 1 ? 'absolute top-0' : 'relative',
-          scale !== 1 ? 'mt-28' : 'mt-6',
-        ].join(' ')}
-        style={{
-          transform: `scale(${scale})`,
-          transformOrigin: 'top',
-        }}
-      >
+      <div>
         <TransformWrapper
           ref={r => {
             if (r) {
               viewportRef.current = r
             }
           }}
-          wheel={{ step: 0.05 }}
+          wheel={{ step: 0.1 }}
           centerZoomedOut
           alignmentAnimation={{ disabled: true }}
           doubleClick={{ disabled: false }}
           limitToBounds={false}
-          minScale={0.5}
+          minScale={0.6 * minScale}
           maxScale={3}
           initialScale={minScale}
           onZoom={ref => {
-            setMinScale(ref.state.scale)
+            setScale(ref.state.scale)
           }}
           panning={{ disabled: true, velocityDisabled: true }}
         >
-          <TransformComponent>
+          <TransformComponent
+            wrapperStyle={{
+              height: 'calc(100vh - 300)',
+            }}
+          >
             <canvas
               className="rounded-sm"
               style={showBrush ? { cursor: 'none' } : {}}
@@ -560,10 +558,12 @@ export default function Editor(props: EditorProps) {
 
       <div
         className={[
-          'flex items-center w-full max-w-4xl py-6',
+          'flex items-center w-full max-w-4xl py-4 px-10 w-auto',
           'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          'backdrop-filter backdrop-blur-lg',
+          'rounded-lg',
           scale !== 1
-            ? 'absolute bottom-0 justify-center'
+            ? 'fixed bottom-0 justify-center'
             : 'relative justify-between',
         ].join(' ')}
       >
