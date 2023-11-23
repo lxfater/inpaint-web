@@ -105,7 +105,10 @@ export default function Editor(props: EditorProps) {
       const rW = windowSize.width / original.naturalWidth
       const rH = (windowSize.height - 300) / original.naturalHeight
       if (rW < 1 || rH < 1) {
-        setScale(Math.min(rW, rH))
+        console.log(Math.min(rW, rH))
+        const newScale = Math.min(rW, rH)
+        setScale(newScale)
+        setBrushSize(40 / newScale)
       } else {
         setScale(1)
       }
@@ -497,23 +500,23 @@ export default function Editor(props: EditorProps) {
             }}
           />
         </div>
-        {isInpaintingLoading && (
-          <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 bottom-0 right-0  h-full w-full grid content-center">
-            <div ref={modalRef} className="text-xl space-y-5 p-20">
-              <p>正在处理中，请耐心等待。。。</p>
-              <p>It is being processed, please be patient...</p>
-              <Progress percent={generateProgress} />
-            </div>
-          </div>
-        )}
       </div>
+      {isInpaintingLoading && (
+        <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 right-0 bottom-0  h-full w-full grid content-center">
+          <div ref={modalRef} className="text-xl space-y-5 p-20  w-1/2 mx-auto">
+            <p>正在处理中，请耐心等待。。。</p>
+            <p>It is being processed, please be patient...</p>
+            <Progress percent={generateProgress} />
+          </div>
+        </div>
+      )}
 
       {showBrush && (
         <div
           className="hidden sm:block fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
           style={{
-            width: `${brushSize}px`,
-            height: `${brushSize}px`,
+            width: `${brushSize * scale}px`,
+            height: `${brushSize * scale}px`,
             left: `${x}px`,
             top: `${y}px`,
             transform: 'translate(-50%, -50%)',
@@ -556,7 +559,7 @@ export default function Editor(props: EditorProps) {
         <Slider
           label="Brush Size"
           min={10}
-          max={150}
+          max={200}
           value={brushSize}
           onChange={setBrushSize}
         />
