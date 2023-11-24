@@ -40,6 +40,8 @@ function drawLines(
     ctx.stroke()
   })
 }
+
+const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
@@ -50,8 +52,12 @@ export default function Editor(props: EditorProps) {
     return document.createElement('canvas')
   })
   const [lines, setLines] = useState<Line[]>([{ pts: [], src: '' }])
-  const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
+  const [{ brushX, brushY }, setBrushCoords] = useState({
+    brushX: -1,
+    brushY: -1,
+  })
   const [showBrush, setShowBrush] = useState(false)
+  const [hideBrushTimeout, setHideBrushTimeout] = useState(0)
   const [showOriginal, setShowOriginal] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
   const [scale, setScale] = useState(1)
@@ -123,7 +129,7 @@ export default function Editor(props: EditorProps) {
       return
     }
     const onMouseMove = (ev: MouseEvent) => {
-      setCoords({ x: ev.pageX, y: ev.pageY })
+      setBrushCoords({ brushX: ev.pageX, brushY: ev.pageY })
     }
     const onPaint = (px: number, py: number) => {
       const currLine = lines[lines.length - 1]
@@ -193,7 +199,7 @@ export default function Editor(props: EditorProps) {
       setIsInpaintingLoading(false)
       draw()
     }
-    window.addEventListener('mousemove', onMouseMove)
+    canvas.addEventListener('mousemove', onMouseMove)
 
     const onTouchMove = (ev: TouchEvent) => {
       ev.preventDefault()
@@ -220,13 +226,16 @@ export default function Editor(props: EditorProps) {
     canvas.addEventListener('touchstart', onPointerStart)
     canvas.addEventListener('touchmove', onTouchMove)
     canvas.addEventListener('touchend', onPointerUp)
-    canvas.onmouseenter = () => setShowBrush(true && !showOriginal)
+    canvas.onmouseenter = () => {
+      window.clearTimeout(hideBrushTimeout)
+      setShowBrush(true && !showOriginal)
+    }
     canvas.onmouseleave = () => setShowBrush(false)
     canvas.onmousedown = onPointerStart
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
-      window.removeEventListener('mousemove', onMouseMove)
+      canvas.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onPointerUp)
       canvas.removeEventListener('touchstart', onPointerStart)
       canvas.removeEventListener('touchmove', onTouchMove)
@@ -393,6 +402,23 @@ export default function Editor(props: EditorProps) {
     [renders, backTo]
   )
 
+  const handleSliderStart = () => {
+    setShowBrush(true)
+    setBrushCoords({
+      brushX: document.documentElement.clientWidth / 2,
+      brushY: document.documentElement.clientHeight / 2,
+    })
+  }
+  const handleSliderChange = (sliderValue: number) => {
+    setBrushSize(sliderValue)
+    window.clearTimeout(hideBrushTimeout)
+    setHideBrushTimeout(
+      window.setTimeout(() => {
+        setShowBrush(false)
+      }, BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT)
+    )
+  }
+
   return (
     <div
       className={[
@@ -517,8 +543,8 @@ export default function Editor(props: EditorProps) {
           style={{
             width: `${brushSize * scale}px`,
             height: `${brushSize * scale}px`,
-            left: `${x}px`,
-            top: `${y}px`,
+            left: `${brushX}px`,
+            top: `${brushY}px`,
             transform: 'translate(-50%, -50%)',
           }}
         />
@@ -561,7 +587,8 @@ export default function Editor(props: EditorProps) {
           min={10}
           max={200}
           value={brushSize}
-          onChange={setBrushSize}
+          onChange={handleSliderChange}
+          onStart={handleSliderStart}
         />
 
         <Button
