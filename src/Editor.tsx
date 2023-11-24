@@ -154,8 +154,8 @@ export default function Editor(props: EditorProps) {
       setTimer(
         window.setInterval(() => {
           setGenerateProgress(p => {
-            if (p < 90) return p + 20 * Math.random()
-            if (p >= 90 && p < 100) return p + 1 * Math.random()
+            if (p < 90) return p + 10 * Math.random()
+            if (p >= 90 && p < 99) return p + 1 * Math.random()
             window.setTimeout(() => setIsInpaintingLoading(false), 500)
             return p
           })
