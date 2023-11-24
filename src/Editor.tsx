@@ -62,7 +62,6 @@ export default function Editor(props: EditorProps) {
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
   const [scale, setScale] = useState(1)
   const [generateProgress, setGenerateProgress] = useState(0)
-  const [timer, setTimer] = useState(0)
   const modalRef = useRef(null)
   const [separator, setSeparator] = useState<HTMLDivElement>()
   const [useSeparator, setUseSeparator] = useState(false)
@@ -151,16 +150,14 @@ export default function Editor(props: EditorProps) {
       }
       setIsInpaintingLoading(true)
       setGenerateProgress(0)
-      setTimer(
-        window.setInterval(() => {
-          setGenerateProgress(p => {
-            if (p < 90) return p + 10 * Math.random()
-            if (p >= 90 && p < 99) return p + 1 * Math.random()
-            window.setTimeout(() => setIsInpaintingLoading(false), 500)
-            return p
-          })
-        }, 1000)
-      )
+      const progressTimer = window.setInterval(() => {
+        setGenerateProgress(p => {
+          if (p < 90) return p + 10 * Math.random()
+          if (p >= 90 && p < 99) return p + 1 * Math.random()
+          window.setTimeout(() => setIsInpaintingLoading(false), 500)
+          return p
+        })
+      }, 1000)
 
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
@@ -194,7 +191,7 @@ export default function Editor(props: EditorProps) {
       }
 
       setGenerateProgress(100)
-      if (timer) clearInterval(timer)
+      if (progressTimer) window.clearInterval(progressTimer)
       historyListRef.current?.scrollTo(historyListRef.current.offsetWidth, 0)
       setIsInpaintingLoading(false)
       draw()
