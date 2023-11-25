@@ -152,7 +152,10 @@ function imageDataToDataURL(imageData) {
 
 let model = null
 
-export default async function inpaint(imageFile: File, maskBase64: string) {
+export default async function inpaint(
+  imageFile: File | HTMLImageElement,
+  maskBase64: string
+) {
   console.time('sessionCreate')
   if (!model) {
     const modelBuffer = await ensureModel()
@@ -162,12 +165,16 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
   }
   console.timeEnd('sessionCreate')
   console.time('preProcess')
-
-  const fileUrl = URL.createObjectURL(imageFile)
+  let imgDom = null
+  if (imageFile instanceof HTMLImageElement) {
+    imgDom = imageFile
+  } else {
+    imgDom = loadImage(URL.createObjectURL(imageFile))
+  }
   const markUrl = maskBase64
 
   const [originalImg, originalMark] = await Promise.all([
-    loadImage(fileUrl),
+    imgDom,
     loadImage(markUrl),
   ])
 
@@ -215,6 +222,7 @@ export default async function inpaint(imageFile: File, maskBase64: string) {
     originalImg.width,
     originalImg.height
   )
+  console.log(imageData, 'imageData')
   const result = imageDataToDataURL(imageData)
   console.timeEnd('postProcess')
 
