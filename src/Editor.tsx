@@ -40,6 +40,8 @@ function drawLines(
     ctx.stroke()
   })
 }
+
+const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
@@ -50,19 +52,23 @@ export default function Editor(props: EditorProps) {
     return document.createElement('canvas')
   })
   const [lines, setLines] = useState<Line[]>([{ pts: [], src: '' }])
-  const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
+  const [{ brushX, brushY }, setBrushCoords] = useState({
+    brushX: -1,
+    brushY: -1,
+  })
   const [showBrush, setShowBrush] = useState(false)
+  const [hideBrushTimeout, setHideBrushTimeout] = useState(0)
   const [showOriginal, setShowOriginal] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
   const [scale, setScale] = useState(1)
   const [generateProgress, setGenerateProgress] = useState(0)
-  const [timer, setTimer] = useState(0)
   const modalRef = useRef(null)
   const [separator, setSeparator] = useState<HTMLDivElement>()
   const [useSeparator, setUseSeparator] = useState(false)
   const [originalImg, setOriginalImg] = useState<HTMLDivElement>()
   const [separatorLeft, setSeparatorLeft] = useState(0)
   const historyListRef = useRef<HTMLDivElement>(null)
+  const isBrushSizeChange = useRef<boolean>(false)
 
   const windowSize = useWindowSize()
 
@@ -110,7 +116,9 @@ export default function Editor(props: EditorProps) {
         console.log(Math.min(rW, rH))
         const newScale = Math.min(rW, rH)
         setScale(newScale)
-        setBrushSize(40 / newScale)
+        if (!isBrushSizeChange.current) {
+          setBrushSize(40 / newScale)
+        }
       } else {
         setScale(1)
       }
@@ -125,7 +133,7 @@ export default function Editor(props: EditorProps) {
       return
     }
     const onMouseMove = (ev: MouseEvent) => {
-      setCoords({ x: ev.pageX, y: ev.pageY })
+      setBrushCoords({ brushX: ev.pageX, brushY: ev.pageY })
     }
     const onPaint = (px: number, py: number) => {
       const currLine = lines[lines.length - 1]
@@ -147,16 +155,14 @@ export default function Editor(props: EditorProps) {
       }
       setIsInpaintingLoading(true)
       setGenerateProgress(0)
-      setTimer(
-        window.setInterval(() => {
-          setGenerateProgress(p => {
-            if (p < 90) return p + 20 * Math.random()
-            if (p >= 90 && p < 100) return p + 1 * Math.random()
-            window.setTimeout(() => setIsInpaintingLoading(false), 500)
-            return p
-          })
-        }, 1000)
-      )
+      const progressTimer = window.setInterval(() => {
+        setGenerateProgress(p => {
+          if (p < 90) return p + 10 * Math.random()
+          if (p >= 90 && p < 99) return p + 1 * Math.random()
+          window.setTimeout(() => setIsInpaintingLoading(false), 500)
+          return p
+        })
+      }, 1000)
 
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
@@ -192,12 +198,17 @@ export default function Editor(props: EditorProps) {
       }
 
       setGenerateProgress(100)
-      if (timer) clearInterval(timer)
-      historyListRef.current?.scrollTo(historyListRef.current.offsetWidth, 0)
+      if (progressTimer) window.clearInterval(progressTimer)
+      if (historyListRef.current) {
+        const { scrollWidth, clientWidth } = historyListRef.current
+        if (scrollWidth > clientWidth) {
+          historyListRef.current.scrollTo(scrollWidth, 0)
+        }
+      }
       setIsInpaintingLoading(false)
       draw()
     }
-    window.addEventListener('mousemove', onMouseMove)
+    canvas.addEventListener('mousemove', onMouseMove)
 
     const onTouchMove = (ev: TouchEvent) => {
       ev.preventDefault()
@@ -224,13 +235,16 @@ export default function Editor(props: EditorProps) {
     canvas.addEventListener('touchstart', onPointerStart)
     canvas.addEventListener('touchmove', onTouchMove)
     canvas.addEventListener('touchend', onPointerUp)
-    canvas.onmouseenter = () => setShowBrush(true && !showOriginal)
+    canvas.onmouseenter = () => {
+      window.clearTimeout(hideBrushTimeout)
+      setShowBrush(true && !showOriginal)
+    }
     canvas.onmouseleave = () => setShowBrush(false)
     canvas.onmousedown = onPointerStart
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
-      window.removeEventListener('mousemove', onMouseMove)
+      canvas.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onPointerUp)
       canvas.removeEventListener('touchstart', onPointerStart)
       canvas.removeEventListener('touchmove', onTouchMove)
@@ -397,6 +411,26 @@ export default function Editor(props: EditorProps) {
     [renders, backTo]
   )
 
+  const handleSliderStart = () => {
+    setShowBrush(true)
+    setBrushCoords({
+      brushX: document.documentElement.clientWidth / 2,
+      brushY: document.documentElement.clientHeight / 2,
+    })
+  }
+  const handleSliderChange = (sliderValue: number) => {
+    if (!isBrushSizeChange.current) {
+      isBrushSizeChange.current = true
+    }
+    setBrushSize(sliderValue)
+    window.clearTimeout(hideBrushTimeout)
+    setHideBrushTimeout(
+      window.setTimeout(() => {
+        setShowBrush(false)
+      }, BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT)
+    )
+  }
+
   return (
     <div
       className={[
@@ -408,9 +442,9 @@ export default function Editor(props: EditorProps) {
         ref={historyListRef}
         className={[
           'flex items-left w-full max-w-4xl py-0',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5 overflow-auto pb-1',
-          'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary scrollbar-rounded-lg overflow-x-scroll',
-          scale !== 1 ? 'absolute top-0 justify-center' : 'relative',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5 pb-1',
+          'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary overflow-x-scroll',
+          scale !== 1 ? 'absolute top-0' : 'relative',
         ].join(' ')}
       >
         {History}
@@ -521,8 +555,8 @@ export default function Editor(props: EditorProps) {
           style={{
             width: `${brushSize * scale}px`,
             height: `${brushSize * scale}px`,
-            left: `${x}px`,
-            top: `${y}px`,
+            left: `${brushX}px`,
+            top: `${brushY}px`,
             transform: 'translate(-50%, -50%)',
           }}
         />
@@ -565,7 +599,8 @@ export default function Editor(props: EditorProps) {
           min={10}
           max={200}
           value={brushSize}
-          onChange={setBrushSize}
+          onChange={handleSliderChange}
+          onStart={handleSliderStart}
         />
 
         <Button

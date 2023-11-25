@@ -6,10 +6,11 @@ type SliderProps = {
   min?: number
   max?: number
   onChange: (value: number) => void
+  onStart?: () => void
 }
 
 export default function Slider(props: SliderProps) {
-  const { value, onChange, label, min, max } = props
+  const { value, label, min, max, onChange, onStart } = props
 
   const step = ((max || 100) - (min || 0)) / 100
 
@@ -23,6 +24,7 @@ export default function Slider(props: SliderProps) {
         min={min}
         max={max}
         value={value}
+        onPointerDown={onStart}
         onChange={ev => {
           ev.preventDefault()
           ev.stopPropagation()

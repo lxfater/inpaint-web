@@ -9,7 +9,7 @@ import { ensureModel } from './cache'
 // ort.env.webgpu.profilingMode = 'default'
 
 ort.env.wasm.wasmPaths =
-  'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.2/dist/'
+  'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -150,17 +150,20 @@ function imageDataToDataURL(imageData) {
   return canvas.toDataURL()
 }
 
-console.time('sessionCreate')
-const modelBuffer = await ensureModel()
-const model = await ort.InferenceSession.create(modelBuffer, {
-  executionProviders: ['webgpu'],
-})
-console.timeEnd('sessionCreate')
+let model = null
 
 export default async function inpaint(
   imageFile: File | HTMLImageElement,
   maskBase64: string
 ) {
+  console.time('sessionCreate')
+  if (!model) {
+    const modelBuffer = await ensureModel()
+    model = await ort.InferenceSession.create(modelBuffer, {
+      executionProviders: ['webgpu'],
+    })
+  }
+  console.timeEnd('sessionCreate')
   console.time('preProcess')
   let imgDom = null
   if (imageFile instanceof HTMLImageElement) {
