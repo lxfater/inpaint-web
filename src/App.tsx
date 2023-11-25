@@ -128,7 +128,7 @@ function App() {
           </div>
         </Modal>
       )}
-
+      {/* 
       {showAlert && (
         <Modal>
           <div className="text-xl space-y-5">
@@ -143,7 +143,7 @@ function App() {
             </p>
           </div>
         </Modal>
-      )}
+      )} */}
       {!downloaded && (
         <Modal>
           <div className="text-xl space-y-5">

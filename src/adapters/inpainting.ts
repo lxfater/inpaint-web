@@ -3,6 +3,7 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
+import { getCapabilities } from './util'
 
 // ort.env.debug = true
 // ort.env.logLevel = 'verbose'
@@ -150,17 +151,34 @@ function imageDataToDataURL(imageData) {
   return canvas.toDataURL()
 }
 
+async function configEnv() {
+  const capablilities = await getCapabilities()
+  if (capablilities.webgpu) {
+    ort.env.wasm.numThreads = 1
+  } else {
+    if (capablilities.threads) {
+      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 4
+    }
+    if (capablilities.simd) {
+      ort.env.wasm.simd = true
+    }
+    ort.env.wasm.proxy = true
+  }
+  console.log('env', ort.env.wasm)
+}
 let model = null
 
 export default async function inpaint(
   imageFile: File | HTMLImageElement,
   maskBase64: string
 ) {
+  await configEnv()
   console.time('sessionCreate')
   if (!model) {
+    const capablilities = await getCapabilities()
     const modelBuffer = await ensureModel()
     model = await ort.InferenceSession.create(modelBuffer, {
-      executionProviders: ['webgpu'],
+      executionProviders: [capablilities.webgpu ? 'webgpu' : 'wasm'],
     })
   }
   console.timeEnd('sessionCreate')
