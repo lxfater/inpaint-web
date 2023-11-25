@@ -16,7 +16,8 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --host",
+    "fast-build": "vite build",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "prepare": "husky install",
