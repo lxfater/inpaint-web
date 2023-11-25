@@ -8,9 +8,7 @@ import { getCapabilities } from './util'
 // ort.env.debug = true
 // ort.env.logLevel = 'verbose'
 // ort.env.webgpu.profilingMode = 'default'
-
-ort.env.wasm.wasmPaths =
-  'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
+// @ts-ignore
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -153,6 +151,8 @@ function imageDataToDataURL(imageData) {
 
 async function configEnv() {
   const capablilities = await getCapabilities()
+  ort.env.wasm.wasmPaths =
+    'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
   if (capablilities.webgpu) {
     ort.env.wasm.numThreads = 1
   } else {
