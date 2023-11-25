@@ -192,7 +192,12 @@ export default function Editor(props: EditorProps) {
 
       setGenerateProgress(100)
       if (progressTimer) window.clearInterval(progressTimer)
-      historyListRef.current?.scrollTo(historyListRef.current.offsetWidth, 0)
+      if (historyListRef.current) {
+        const { scrollWidth, clientWidth } = historyListRef.current
+        if (scrollWidth > clientWidth) {
+          historyListRef.current.scrollTo(scrollWidth, 0)
+        }
+      }
       setIsInpaintingLoading(false)
       draw()
     }
@@ -427,9 +432,9 @@ export default function Editor(props: EditorProps) {
         ref={historyListRef}
         className={[
           'flex items-left w-full max-w-4xl py-0',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5 overflow-auto pb-1',
-          'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary scrollbar-rounded-lg overflow-x-scroll',
-          scale !== 1 ? 'absolute top-0 justify-center' : 'relative',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5 pb-1',
+          'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary overflow-x-scroll',
+          scale !== 1 ? 'absolute top-0' : 'relative',
         ].join(' ')}
       >
         {History}
