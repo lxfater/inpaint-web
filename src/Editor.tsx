@@ -68,6 +68,7 @@ export default function Editor(props: EditorProps) {
   const [originalImg, setOriginalImg] = useState<HTMLDivElement>()
   const [separatorLeft, setSeparatorLeft] = useState(0)
   const historyListRef = useRef<HTMLDivElement>(null)
+  const isBrushSizeChange = useRef<boolean>(false)
 
   const windowSize = useWindowSize()
 
@@ -113,7 +114,9 @@ export default function Editor(props: EditorProps) {
         console.log(Math.min(rW, rH))
         const newScale = Math.min(rW, rH)
         setScale(newScale)
-        setBrushSize(40 / newScale)
+        if (!isBrushSizeChange.current) {
+          setBrushSize(40 / newScale)
+        }
       } else {
         setScale(1)
       }
@@ -412,6 +415,9 @@ export default function Editor(props: EditorProps) {
     })
   }
   const handleSliderChange = (sliderValue: number) => {
+    if (!isBrushSizeChange.current) {
+      isBrushSizeChange.current = true
+    }
     setBrushSize(sliderValue)
     window.clearTimeout(hideBrushTimeout)
     setHideBrushTimeout(
