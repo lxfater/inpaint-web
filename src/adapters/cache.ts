@@ -9,8 +9,12 @@ const modelList = [
     name: 'model-perf',
     url: 'https://huggingface.co/andraniksargsyan/migan/resolve/main/migan.onnx',
   },
+  {
+    name: 'migan-pipeline-v2',
+    url: 'https://huggingface.co/andraniksargsyan/migan/resolve/main/migan_pipeline_v2.onnx',
+  },
 ]
-const currentModel = modelList[1]
+const currentModel = modelList[2]
 const key = currentModel.name
 const { url } = currentModel
 localforage.config({
