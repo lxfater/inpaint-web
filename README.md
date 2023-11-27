@@ -63,6 +63,15 @@ great online services [here](https://cleanup.pictures/).
 
 Model: https://github.com/Picsart-AI-Research/MI-GAN
 
+## Deploy
+Deploy Your Own Inpaint-web (Free)
+
+Click the button below to quickly deploy Inpaint-web (with support for custom domain names).
+
+点击下面按钮，快速部署Inpaint-web，同时还支持自定义域名。
+
+[![Deploy with 4EVERLAND](https://4ever-web.4everland.store/img/deploy.svg)](https://dashboard.4everland.org/hosting/new?type=clone-flow&s=https%3A%2F%2Fgithub.com%2Flxfater%2Finpaint-web)
+
 
 ## Star History
 
