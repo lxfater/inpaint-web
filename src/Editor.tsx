@@ -3,7 +3,6 @@
 import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
-import { sep } from 'path'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
 import Slider from './components/Slider'
@@ -267,6 +266,7 @@ export default function Editor(props: EditorProps) {
     scale,
     renders,
     showOriginal,
+    hideBrushTimeout,
   ])
 
   useEffect(() => {
