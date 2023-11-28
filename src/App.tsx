@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { ArrowLeftIcon, InformationCircleIcon } from '@heroicons/react/outline'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useClickAway } from 'react-use'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'

@@ -1,5 +1,3 @@
-import React from 'react'
-
 type SliderProps = {
   label?: any
   value?: number
