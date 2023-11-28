@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { modelExists, saveModel } from './cache'
 
 const useDownload = () => {

@@ -149,17 +149,16 @@ function imageDataToDataURL(imageData) {
   return canvas.toDataURL()
 }
 
-async function configEnv() {
-  const capablilities = await getCapabilities()
+function configEnv(capabilities) {
   ort.env.wasm.wasmPaths =
     'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
-  if (capablilities.webgpu) {
+  if (capabilities.webgpu) {
     ort.env.wasm.numThreads = 1
   } else {
-    if (capablilities.threads) {
+    if (capabilities.threads) {
       ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 4
     }
-    if (capablilities.simd) {
+    if (capabilities.simd) {
       ort.env.wasm.simd = true
     }
     ort.env.wasm.proxy = true
@@ -172,28 +171,23 @@ export default async function inpaint(
   imageFile: File | HTMLImageElement,
   maskBase64: string
 ) {
-  await configEnv()
   console.time('sessionCreate')
   if (!model) {
-    const capablilities = await getCapabilities()
+    const capabilities = await getCapabilities()
+    configEnv(capabilities)
     const modelBuffer = await ensureModel()
     model = await ort.InferenceSession.create(modelBuffer, {
-      executionProviders: [capablilities.webgpu ? 'webgpu' : 'wasm'],
+      executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })
   }
   console.timeEnd('sessionCreate')
   console.time('preProcess')
-  let imgDom = null
-  if (imageFile instanceof HTMLImageElement) {
-    imgDom = imageFile
-  } else {
-    imgDom = loadImage(URL.createObjectURL(imageFile))
-  }
-  const markUrl = maskBase64
 
   const [originalImg, originalMark] = await Promise.all([
-    imgDom,
-    loadImage(markUrl),
+    imageFile instanceof HTMLImageElement
+      ? imageFile
+      : loadImage(URL.createObjectURL(imageFile)),
+    loadImage(maskBase64),
   ])
 
   const [img, mark] = await Promise.all([
