@@ -68,6 +68,7 @@ export default function Editor(props: EditorProps) {
   const [separatorLeft, setSeparatorLeft] = useState(0)
   const historyListRef = useRef<HTMLDivElement>(null)
   const isBrushSizeChange = useRef<boolean>(false)
+  const scaledBrushSize = useMemo(() => brushSize * scale, [brushSize, scale])
 
   const windowSize = useWindowSize()
 
@@ -158,7 +159,8 @@ export default function Editor(props: EditorProps) {
         setGenerateProgress(p => {
           if (p < 90) return p + 10 * Math.random()
           if (p >= 90 && p < 99) return p + 1 * Math.random()
-          window.setTimeout(() => setIsInpaintingLoading(false), 500)
+          // Do not hide the progress bar after 99%,cause sometimes long time progress
+          // window.setTimeout(() => setIsInpaintingLoading(false), 500)
           return p
         })
       }, 1000)
@@ -393,7 +395,7 @@ export default function Editor(props: EditorProps) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              onDown={() => backTo(index)}
+              onClick={() => backTo(index)}
             >
               <div
                 style={{
@@ -442,7 +444,7 @@ export default function Editor(props: EditorProps) {
         ref={historyListRef}
         className={[
           'flex items-left w-full max-w-4xl py-0',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5 pb-1',
+          'space-y-0 flex-row space-x-5 pb-1',
           'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary overflow-x-scroll',
           scale !== 1 ? 'absolute top-0' : 'relative',
         ].join(' ')}
@@ -540,8 +542,8 @@ export default function Editor(props: EditorProps) {
         </div>
       </div>
       {isInpaintingLoading && (
-        <div className=" bg-[rgba(255,255,255,0.8)] absolute top-0 left-0 right-0 bottom-0  h-full w-full grid content-center">
-          <div ref={modalRef} className="text-xl space-y-5 p-20  w-1/2 mx-auto">
+        <div className="z-10 bg-white bg-opacity-20 absolute top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
+          <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
             <p>正在处理中，请耐心等待。。。</p>
             <p>It is being processed, please be patient...</p>
             <Progress percent={generateProgress} />
@@ -551,13 +553,13 @@ export default function Editor(props: EditorProps) {
 
       {showBrush && (
         <div
-          className="hidden sm:block fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
+          className="fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none left-0 top-0"
           style={{
-            width: `${brushSize * scale}px`,
-            height: `${brushSize * scale}px`,
-            left: `${brushX}px`,
-            top: `${brushY}px`,
-            transform: 'translate(-50%, -50%)',
+            width: `${scaledBrushSize}px`,
+            height: `${scaledBrushSize}px`,
+            transform: `translate(${brushX - scaledBrushSize / 2}px, ${
+              brushY - scaledBrushSize / 2
+            }px)`,
           }}
         />
       )}

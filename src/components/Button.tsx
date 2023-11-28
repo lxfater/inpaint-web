@@ -30,7 +30,9 @@ export default function Button(props: ButtonProps) {
   return (
     <div
       role="button"
-      onKeyDown={onClick}
+      onKeyDown={() => {
+        onDown?.()
+      }}
       onClick={onClick}
       onPointerDown={() => {
         setActive(true)
