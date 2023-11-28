@@ -12,6 +12,7 @@
     "react-use": "^17.3.1",
     "react-zoom-pan-pinch": "^3.3.0",
     "vite": "^5.0.2",
+    "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.2.1"
   },
