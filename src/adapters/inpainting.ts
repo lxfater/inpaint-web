@@ -182,17 +182,12 @@ export default async function inpaint(
   }
   console.timeEnd('sessionCreate')
   console.time('preProcess')
-  let imgDom = null
-  if (imageFile instanceof HTMLImageElement) {
-    imgDom = imageFile
-  } else {
-    imgDom = loadImage(URL.createObjectURL(imageFile))
-  }
-  const markUrl = maskBase64
 
   const [originalImg, originalMark] = await Promise.all([
-    imgDom,
-    loadImage(markUrl),
+    imageFile instanceof HTMLImageElement
+      ? imageFile
+      : loadImage(URL.createObjectURL(imageFile)),
+    loadImage(maskBase64),
   ])
 
   const [img, mark] = await Promise.all([
