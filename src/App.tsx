@@ -28,9 +28,12 @@ function App() {
 
   return (
     <div className="min-h-full flex flex-col">
-      <header className="relative z-10 flex px-5 py-3 justify-between items-center sm:items-start">
+      <header className="relative z-10 relative my-3">
         <Button
-          className={[file ? '' : 'opacity-0 hidden sm:flex'].join(' ')}
+          className={[
+            file ? '' : 'hidden',
+            'absolute top-0 left-0 pl-1 pr-1 mx-1 sm:mx-5',
+          ].join(' ')}
           icon={<ArrowLeftIcon className="w-6 h-6" />}
           onClick={() => {
             setFile(undefined)
@@ -38,10 +41,9 @@ function App() {
         >
           <span className="hidden sm:inline">Start new</span>
         </Button>
-
-        <div style={{ fontSize: '36px' }}>Inpaint-web</div>
+        <h1 className="text-4xl text-center font-normal">Inpaint-web</h1>
         <Button
-          className="hidden sm:flex"
+          className="absolute top-0 right-0 mx-1 sm:mx-5 hidden w-20 sm:flex sm:visible sm:w-44"
           icon={<InformationCircleIcon className="w-6 h-6" />}
           onClick={() => {
             setShowAbout(true)
