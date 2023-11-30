@@ -348,16 +348,10 @@ export default function Editor(props: EditorProps) {
 
   const backTo = useCallback(
     (index: number) => {
-      const l = lines
-      while (l.length > index + 1) {
-        l.pop()
-      }
-      setLines([...l, { pts: [], src: '' }])
-      const r = renders
-      while (r.length > index + 1) {
-        r.pop()
-      }
-      setRenders([...r])
+      lines.splice(index + 1)
+      setLines([...lines, { pts: [], src: '' }])
+      renders.splice(index + 1)
+      setRenders([...renders])
     },
     [renders, lines]
   )
