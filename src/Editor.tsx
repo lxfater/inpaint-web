@@ -72,20 +72,23 @@ export default function Editor(props: EditorProps) {
 
   const windowSize = useWindowSize()
 
-  const draw = useCallback(() => {
-    if (!context) {
-      return
-    }
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height)
-    const currRender = renders[renders.length - 1]
-    if (currRender?.src) {
-      context.drawImage(currRender, 0, 0)
-    } else {
-      context.drawImage(original, 0, 0)
-    }
-    const currentLine = lines[lines.length - 1]
-    drawLines(context, [currentLine])
-  }, [context, lines, original, renders])
+  const draw = useCallback(
+    (index = -1) => {
+      if (!context) {
+        return
+      }
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+      const currRender = renders[index === -1 ? renders.length - 1 : index]
+      if (currRender?.src) {
+        context.drawImage(currRender, 0, 0)
+      } else {
+        context.drawImage(original, 0, 0)
+      }
+      const currentLine = lines[lines.length - 1]
+      drawLines(context, [currentLine])
+    },
+    [context, lines, original, renders]
+  )
 
   const refreshCanvasMask = useCallback(() => {
     if (!context?.canvas.width || !context?.canvas.height) {
@@ -348,16 +351,10 @@ export default function Editor(props: EditorProps) {
 
   const backTo = useCallback(
     (index: number) => {
-      const l = lines
-      while (l.length > index + 1) {
-        l.pop()
-      }
-      setLines([...l, { pts: [], src: '' }])
-      const r = renders
-      while (r.length > index + 1) {
-        r.pop()
-      }
-      setRenders([...r])
+      lines.splice(index + 1)
+      setLines([...lines, { pts: [], src: '' }])
+      renders.splice(index + 1)
+      setRenders([...renders])
     },
     [renders, lines]
   )
@@ -396,15 +393,19 @@ export default function Editor(props: EditorProps) {
                 justifyContent: 'center',
               }}
               onClick={() => backTo(index)}
+              onEnter={() => draw(index)}
+              onLeave={draw}
             >
               <div
                 style={{
                   color: '#fff',
-                  fontSize: '18px',
+                  fontSize: '12px',
                   textAlign: 'center',
                 }}
               >
                 回到这
+                <br />
+                Back here
               </div>
             </Button>
           </div>
