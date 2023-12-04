@@ -11,11 +11,23 @@ interface ButtonProps {
   onClick?: () => void
   onDown?: () => void
   onUp?: () => void
+  onEnter?: () => void
+  onLeave?: () => void
 }
 
 export default function Button(props: ButtonProps) {
-  const { children, className, icon, primary, onClick, onDown, onUp, style } =
-    props
+  const {
+    children,
+    className,
+    icon,
+    primary,
+    style,
+    onClick,
+    onDown,
+    onUp,
+    onEnter,
+    onLeave,
+  } = props
   const [active, setActive] = useState(false)
   let background = ''
   if (primary) {
@@ -41,6 +53,12 @@ export default function Button(props: ButtonProps) {
       onPointerUp={() => {
         setActive(false)
         onUp?.()
+      }}
+      onPointerEnter={() => {
+        onEnter?.()
+      }}
+      onPointerLeave={() => {
+        onLeave?.()
       }}
       tabIndex={-1}
       className={[
