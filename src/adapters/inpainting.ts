@@ -164,6 +164,35 @@ function configEnv(capabilities) {
   }
   console.log('env', ort.env.wasm)
 }
+const resizeMark = (
+  image: HTMLImageElement,
+  width: number,
+  height: number
+): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+
+    // 将图片绘制到canvas上，并调整大小
+    const ctx = canvas.getContext('2d')
+    if (!ctx) {
+      reject(new Error('Unable to get canvas context'))
+      return
+    }
+    ctx.drawImage(image, 0, 0, width, height)
+
+    // 获取调整大小后的图片URL
+    const resizedImageUrl = canvas.toDataURL()
+
+    // 创建一个新的Image对象并设置其src为调整大小后的图片URL
+    const resizedImage = new Image()
+    resizedImage.onload = () => resolve(resizedImage)
+    resizedImage.onerror = () =>
+      reject(new Error('Failed to load resized image'))
+    resizedImage.src = resizedImageUrl
+  })
+}
 let model: ArrayBuffer | null = null
 export default async function inpaint(
   imageFile: File | HTMLImageElement,
@@ -190,7 +219,9 @@ export default async function inpaint(
 
   const [img, mark] = await Promise.all([
     processImage(originalImg),
-    processMark(originalMark),
+    processMark(
+      await resizeMark(originalMark, originalImg.width, originalImg.height)
+    ),
   ])
 
   const imageTensor = new ort.Tensor('uint8', img, [
