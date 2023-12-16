@@ -130,22 +130,6 @@ function App() {
           </div>
         </Modal>
       )}
-      {/* 
-      {showAlert && (
-        <Modal>
-          <div className="text-xl space-y-5">
-            <p>
-              {' '}
-              本项目仅在支持WEBGPU的环境下运行, 也就是说你要安装最新版本的Chrome
-            </p>
-            <p>
-              {' '}
-              This project only runs in environments that support WEBGPU,
-              meaning you need to install the latest version of Chrome.{' '}
-            </p>
-          </div>
-        </Modal>
-      )} */}
       {!downloaded && (
         <Modal>
           <div className="text-xl space-y-5">

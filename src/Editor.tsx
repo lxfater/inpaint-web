@@ -45,7 +45,7 @@ const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
-  const [original, isOriginalLoaded] = useImage(file)
+  const [original, isOriginalLoaded, adjustResolution] = useImage(file)
   const [renders, setRenders] = useState<HTMLImageElement[]>([])
   const [context, setContext] = useState<CanvasRenderingContext2D>()
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
@@ -81,6 +81,10 @@ export default function Editor(props: EditorProps) {
       context.clearRect(0, 0, context.canvas.width, context.canvas.height)
       const currRender = renders[index === -1 ? renders.length - 1 : index]
       const { canvas } = context
+
+      canvas.width = currRender?.width ?? canvas.width
+      canvas.height = currRender?.height ?? canvas.height
+
       if (currRender?.src) {
         context.drawImage(currRender, 0, 0, canvas.width, canvas.height)
       } else {
@@ -463,6 +467,7 @@ export default function Editor(props: EditorProps) {
       lines.push({ pts: [], src: '' } as Line)
       setRenders([...renders])
       setLines([...lines])
+      adjustResolution(newRender.width, newRender.height)
       console.log('superRsolution_processed', {
         duration: Date.now() - start,
         width: original.naturalWidth,
@@ -474,7 +479,15 @@ export default function Editor(props: EditorProps) {
     } finally {
       loading.close()
     }
-  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
+  }, [
+    adjustResolution,
+    file,
+    lines,
+    onloading,
+    original.naturalHeight,
+    original.naturalWidth,
+    renders,
+  ])
 
   return (
     <div

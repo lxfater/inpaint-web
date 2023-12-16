@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export function dataURItoBlob(dataURI: string) {
   const mime = dataURI.split(',')[0].split(':')[1].split(';')[0]
@@ -56,22 +56,41 @@ export function loadImage(image: HTMLImageElement, src: string) {
   })
 }
 
-export function useImage(file: File): [HTMLImageElement, boolean] {
-  const [image] = useState(new Image())
+export function useImage(
+  file: Blob | MediaSource
+): [HTMLImageElement, boolean, (width: number, height: number) => void] {
+  const [image, setImage] = useState(new Image())
   const [isLoaded, setIsLoaded] = useState(false)
 
+  // 调整图像分辨率的函数
+  const adjustResolution = useCallback(
+    (width, height) => {
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')!
+      canvas.width = width
+      canvas.height = height
+      context.drawImage(image, 0, 0, width, height)
+      const resizedImage = new Image()
+      resizedImage.src = canvas.toDataURL()
+      setImage(resizedImage)
+    },
+    [image]
+  )
+
   useEffect(() => {
-    image.onload = () => {
+    const newImage = new Image()
+    newImage.onload = () => {
       setIsLoaded(true)
     }
-    setIsLoaded(false)
-    image.src = URL.createObjectURL(file)
-    return () => {
-      image.onload = null
-    }
-  }, [file, image])
+    newImage.src = URL.createObjectURL(file)
+    setImage(newImage)
 
-  return [image, isLoaded]
+    return () => {
+      newImage.onload = null
+    }
+  }, [file])
+
+  return [image, isLoaded, adjustResolution]
 }
 
 // https://stackoverflow.com/questions/23945494/use-html5-to-resize-an-image-before-upload
