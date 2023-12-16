@@ -542,6 +542,7 @@ export default function Editor(props: EditorProps) {
               useSeparator ? 'bg-black text-white' : 'bg-primary ',
               'w-1',
               'flex items-center justify-center',
+              'separator',
             ].join(' ')}
             style={{
               left: `${separatorLeft}px`,
@@ -551,6 +552,9 @@ export default function Editor(props: EditorProps) {
               transitionDuration: '300ms',
             }}
           >
+            <span className="absolute left-1 bottom-0 p-1 bg-opacity-25 bg-black rounded text-white select-none">
+              original
+            </span>
             <div
               className={[
                 'absolute py-2 px-1 rounded-md pointer-events-auto',
