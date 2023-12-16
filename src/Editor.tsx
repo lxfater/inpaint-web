@@ -103,7 +103,7 @@ export default function Editor(props: EditorProps) {
       throw new Error('could not retrieve mask canvas')
     }
     // Just need the finishing touch
-    const line = lines.at(-1)
+    const line = lines.slice(-1)[0]
     if (line) drawLines(ctx, [line], 'white')
   }, [context?.canvas.height, context?.canvas.width, lines, maskCanvas])
 
@@ -155,7 +155,7 @@ export default function Editor(props: EditorProps) {
       if (!original.src || showOriginal) {
         return
       }
-      if (lines.at(-1)?.pts.length === 0) {
+      if (lines.slice(-1)[0]?.pts.length === 0) {
         return
       }
       setIsInpaintingLoading(true)
@@ -177,7 +177,7 @@ export default function Editor(props: EditorProps) {
         const start = Date.now()
         console.log('inpaint_start')
         // each time based on the last result, the first is the original
-        const newFile = renders.at(-1) ?? file
+        const newFile = renders.slice(-1)[0] ?? file
         const res = await inpaint(newFile, maskCanvas.toDataURL())
         if (!res) {
           throw new Error('empty response')
