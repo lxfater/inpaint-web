@@ -1,14 +1,13 @@
-/* eslint-disable camelcase */
 // @ts-nocheck
+/* eslint-disable camelcase */
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
 import { getCapabilities } from './util'
-
+import type { modelType } from './cache'
 // ort.env.debug = true
 // ort.env.logLevel = 'verbose'
 // ort.env.webgpu.profilingMode = 'default'
-// @ts-ignore
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -165,8 +164,7 @@ function configEnv(capabilities) {
   }
   console.log('env', ort.env.wasm)
 }
-let model = null
-
+let model: ArrayBuffer | null = null
 export default async function inpaint(
   imageFile: File | HTMLImageElement,
   maskBase64: string
@@ -175,7 +173,7 @@ export default async function inpaint(
   if (!model) {
     const capabilities = await getCapabilities()
     configEnv(capabilities)
-    const modelBuffer = await ensureModel()
+    const modelBuffer = await ensureModel('inpaint')
     model = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })

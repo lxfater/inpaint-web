@@ -4,6 +4,7 @@ import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
+import superRsolution from './adapters/superRsolution'
 import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
@@ -79,10 +80,11 @@ export default function Editor(props: EditorProps) {
       }
       context.clearRect(0, 0, context.canvas.width, context.canvas.height)
       const currRender = renders[index === -1 ? renders.length - 1 : index]
+      const { canvas } = context
       if (currRender?.src) {
-        context.drawImage(currRender, 0, 0)
+        context.drawImage(currRender, 0, 0, canvas.width, canvas.height)
       } else {
-        context.drawImage(original, 0, 0)
+        context.drawImage(original, 0, 0, canvas.width, canvas.height)
       }
       const currentLine = lines[lines.length - 1]
       drawLines(context, [currentLine])
@@ -615,6 +617,41 @@ export default function Editor(props: EditorProps) {
           }}
         >
           Original
+        </Button>
+        <Button
+          primary={showOriginal}
+          onUp={async () => {
+            try {
+              // 设置loading
+              // 运行
+              const start = Date.now()
+              console.log('superRsolution_start')
+              // each time based on the last result, the first is the original
+              const newFile = renders.at(-1) ?? file
+              const res = await superRsolution(newFile)
+              if (!res) {
+                throw new Error('empty response')
+              }
+              // TODO: fix the render if it failed loading
+              const newRender = new Image()
+              newRender.dataset.id = Date.now().toString()
+              await loadImage(newRender, res)
+              renders.push(newRender)
+              lines.push({ pts: [], src: '' } as Line)
+              setRenders([...renders])
+              setLines([...lines])
+              console.log('superRsolution_processed', {
+                duration: Date.now() - start,
+                width: original.naturalWidth,
+                height: original.naturalHeight,
+              })
+              // 替换当前图片
+            } catch (error) {
+              console.error('superRsolution', error)
+            }
+          }}
+        >
+          X 4
         </Button>
         <Button
           primary

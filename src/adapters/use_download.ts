@@ -20,7 +20,7 @@ const useDownload = () => {
 
   async function download() {
     if (await checkGpu()) {
-      if (await modelExists()) {
+      if (await modelExists('inpaint')) {
         return
       }
       console.log('start download')
@@ -57,7 +57,7 @@ const useDownload = () => {
           offset += chunk.length
         }
 
-        await saveModel(buffer)
+        await saveModel('inpaint', buffer)
         setDownloadProgress(100)
       } catch (e) {
         alert(e)
