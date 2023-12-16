@@ -125,7 +125,7 @@ export default function FileSelect(props: FileSelectProps) {
               onFileSelected(file)
             }
           }}
-          accept="image/png, image/jpeg"
+          accept="image/png, image/jpeg, image/webp"
         />
         <p>
           点击 或者 拖拽到这里
