@@ -158,18 +158,7 @@ export default function Editor(props: EditorProps) {
       if (lines.slice(-1)[0]?.pts.length === 0) {
         return
       }
-      setIsInpaintingLoading(true)
-      setGenerateProgress(0)
-      const progressTimer = window.setInterval(() => {
-        setGenerateProgress(p => {
-          if (p < 90) return p + 10 * Math.random()
-          if (p >= 90 && p < 99) return p + 1 * Math.random()
-          // Do not hide the progress bar after 99%,cause sometimes long time progress
-          // window.setTimeout(() => setIsInpaintingLoading(false), 500)
-          return p
-        })
-      }, 1000)
-
+      const loading = onloading()
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
       refreshCanvasMask()
@@ -202,16 +191,13 @@ export default function Editor(props: EditorProps) {
         // eslint-disable-next-line
         alert(e.message ? e.message : e.toString())
       }
-
-      setGenerateProgress(100)
-      if (progressTimer) window.clearInterval(progressTimer)
       if (historyListRef.current) {
         const { scrollWidth, clientWidth } = historyListRef.current
         if (scrollWidth > clientWidth) {
           historyListRef.current.scrollTo(scrollWidth, 0)
         }
       }
-      setIsInpaintingLoading(false)
+      loading.close()
       draw()
     }
     canvas.addEventListener('mousemove', onMouseMove)
@@ -436,6 +422,60 @@ export default function Editor(props: EditorProps) {
     )
   }
 
+  const onloading = useCallback(() => {
+    setIsInpaintingLoading(true)
+    setGenerateProgress(0)
+    const progressTimer = window.setInterval(() => {
+      setGenerateProgress(p => {
+        if (p < 90) return p + 10 * Math.random()
+        if (p >= 90 && p < 99) return p + 1 * Math.random()
+        // Do not hide the progress bar after 99%,cause sometimes long time progress
+        // window.setTimeout(() => setIsInpaintingLoading(false), 500)
+        return p
+      })
+    }, 1000)
+    return {
+      close: () => {
+        clearInterval(progressTimer)
+        setGenerateProgress(100)
+        setIsInpaintingLoading(false)
+      },
+    }
+  }, [])
+
+  const onSuperRsolution = useCallback(async () => {
+    const loading = onloading()
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('superRsolution_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await superRsolution(newFile)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('superRsolution_processed', {
+        duration: Date.now() - start,
+        width: original.naturalWidth,
+        height: original.naturalHeight,
+      })
+      // 替换当前图片
+    } catch (error) {
+      console.error('superRsolution', error)
+    } finally {
+      loading.close()
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
+
   return (
     <div
       className={[
@@ -618,39 +658,7 @@ export default function Editor(props: EditorProps) {
         >
           Original
         </Button>
-        <Button
-          primary={showOriginal}
-          onUp={async () => {
-            try {
-              // 设置loading
-              // 运行
-              const start = Date.now()
-              console.log('superRsolution_start')
-              // each time based on the last result, the first is the original
-              const newFile = renders.at(-1) ?? file
-              const res = await superRsolution(newFile)
-              if (!res) {
-                throw new Error('empty response')
-              }
-              // TODO: fix the render if it failed loading
-              const newRender = new Image()
-              newRender.dataset.id = Date.now().toString()
-              await loadImage(newRender, res)
-              renders.push(newRender)
-              lines.push({ pts: [], src: '' } as Line)
-              setRenders([...renders])
-              setLines([...lines])
-              console.log('superRsolution_processed', {
-                duration: Date.now() - start,
-                width: original.naturalWidth,
-                height: original.naturalHeight,
-              })
-              // 替换当前图片
-            } catch (error) {
-              console.error('superRsolution', error)
-            }
-          }}
-        >
+        <Button primary={showOriginal} onUp={onSuperRsolution}>
           X 4
         </Button>
         <Button
