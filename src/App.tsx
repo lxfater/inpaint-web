@@ -85,21 +85,24 @@ function App() {
                   Try it:
                 </span>
                 <div className="flex space-x-2 sm:space-x-4 px-4">
-                  {['bag', 'jacket', 'table', 'shoe', 'paris'].map(image => (
-                    <div
-                      key={image}
-                      onClick={() => startWithDemoImage(image)}
-                      role="button"
-                      onKeyDown={() => startWithDemoImage(image)}
-                      tabIndex={-1}
-                    >
-                      <img
-                        className="rounded-md hover:opacity-75"
-                        src={`examples/${image}.thumb.jpeg`}
-                        alt={image}
-                      />
-                    </div>
-                  ))}
+                  {['dog', 'car', 'bird', 'bag', 'jacket', 'shoe', 'paris'].map(
+                    image => (
+                      <div
+                        key={image}
+                        onClick={() => startWithDemoImage(image)}
+                        role="button"
+                        onKeyDown={() => startWithDemoImage(image)}
+                        tabIndex={-1}
+                      >
+                        <img
+                          className="rounded-md hover:opacity-75 w-auto h-25"
+                          src={`examples/${image}.jpeg`}
+                          alt={image}
+                          style={{ height: '100px' }}
+                        />
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             </div>

@@ -642,7 +642,7 @@ export default function Editor(props: EditorProps) {
           style={{
             width: `${scaledBrushSize}px`,
             height: `${scaledBrushSize}px`,
-            transform: `translate3d(-1px, -1px, 0)`,
+            transform: `translate3d(-100px, -100px, 0)`,
           }}
           ref={brushRef}
         />
@@ -697,7 +697,7 @@ export default function Editor(props: EditorProps) {
         >
           Original
         </Button>
-        {!showOriginal && <Button onUp={onSuperRsolution}>IMG X 4</Button>}
+        {!showOriginal && <Button onUp={onSuperRsolution}>4x-upscaling</Button>}
 
         <Button
           primary
