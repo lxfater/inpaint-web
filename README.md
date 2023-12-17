@@ -4,9 +4,15 @@ A free and open-source inpainting & image-upscaling tool powered by webgpu and w
 
 基于 Webgpu 技术和 wasm 技术的免费开源 inpainting & image-upscaling 工具, 纯浏览器端实现。
 
-## Demo
+## Inpaint（图片修复）
 
 https://github.com/lxfater/inpaint-web/assets/22794120/bcad4812-02ae-48bb-9e84-94dfeb7234f5
+
+## Super-Resolution（图片高清化）
+
+https://github.com/lxfater/inpaint-web/assets/22794120/3a8d894f-9749-4685-b947-8b5f15c9cf38
+
+## Demo link
 
 Demo link:https://inpaintweb.lxfater.com/
 
