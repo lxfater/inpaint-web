@@ -9,6 +9,8 @@ import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
 import Progress from './components/Progress'
+import { modelExists, downloadModel } from './adapters/cache'
+import Modal from './components/Modal'
 
 interface EditorProps {
   file: File
@@ -56,7 +58,7 @@ export default function Editor(props: EditorProps) {
   const [showBrush, setShowBrush] = useState(false)
   const [hideBrushTimeout, setHideBrushTimeout] = useState(0)
   const [showOriginal, setShowOriginal] = useState(false)
-  const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
+  const [isInpaintingLoading, setIsProcessingLoading] = useState(false)
   const [generateProgress, setGenerateProgress] = useState(0)
   const modalRef = useRef(null)
   const [separator, setSeparator] = useState<HTMLDivElement>()
@@ -67,7 +69,8 @@ export default function Editor(props: EditorProps) {
   const isBrushSizeChange = useRef<boolean>(false)
   const scaledBrushSize = useMemo(() => brushSize, [brushSize])
   const canvasDiv = useRef<HTMLDivElement>(null)
-
+  const [downloaded, setDownloaded] = useState(true)
+  const [downloadProgress, setDownloadProgress] = useState(0)
   const windowSize = useWindowSize()
 
   const draw = useCallback(
@@ -409,10 +412,6 @@ export default function Editor(props: EditorProps) {
 
   const handleSliderStart = () => {
     setShowBrush(true)
-    setBrushCoords({
-      brushX: document.documentElement.clientWidth / 2,
-      brushY: document.documentElement.clientHeight / 2,
-    })
     if (brushRef.current) {
       const x = document.documentElement.clientWidth / 2
       const y = document.documentElement.clientHeight / 2
@@ -434,7 +433,7 @@ export default function Editor(props: EditorProps) {
   }
 
   const onloading = useCallback(() => {
-    setIsInpaintingLoading(true)
+    setIsProcessingLoading(true)
     setGenerateProgress(0)
     const progressTimer = window.setInterval(() => {
       setGenerateProgress(p => {
@@ -449,13 +448,18 @@ export default function Editor(props: EditorProps) {
       close: () => {
         clearInterval(progressTimer)
         setGenerateProgress(100)
-        setIsInpaintingLoading(false)
+        setIsProcessingLoading(false)
       },
     }
   }, [])
 
   const onSuperRsolution = useCallback(async () => {
-    setIsInpaintingLoading(true)
+    if (!(await modelExists('superRsolution'))) {
+      setDownloaded(false)
+      await downloadModel('superRsolution', setDownloadProgress)
+      setDownloaded(true)
+    }
+    setIsProcessingLoading(true)
     try {
       // 运行
       const start = Date.now()
@@ -476,15 +480,13 @@ export default function Editor(props: EditorProps) {
       setLines([...lines])
       console.log('superRsolution_processed', {
         duration: Date.now() - start,
-        width: original.naturalWidth,
-        height: original.naturalHeight,
       })
 
       // 替换当前图片
     } catch (error) {
       console.error('superRsolution', error)
     } finally {
-      setIsInpaintingLoading(false)
+      setIsProcessingLoading(false)
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
 
@@ -606,24 +608,41 @@ export default function Editor(props: EditorProps) {
               }}
             />
           </div>
+          {isInpaintingLoading && (
+            <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
+              <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
+                <p>正在处理中，请耐心等待。。。</p>
+                <p>It is being processed, please be patient...</p>
+                <Progress percent={generateProgress} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      {isInpaintingLoading && (
-        <div className="z-10 bg-white bg-opacity-20 absolute top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
-          <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
-            <p>正在处理中，请耐心等待。。。</p>
-            <p>It is being processed, please be patient...</p>
-            <Progress percent={generateProgress} />
-          </div>
-        </div>
-      )}
 
+      {!downloaded && (
+        <Modal>
+          <div className="text-xl space-y-5">
+            <p>
+              {' '}
+              需要下载一次70MB大小模型文件,耐心等待。。。 首次使用比较慢。。。
+            </p>
+            <p>
+              {' '}
+              Need to download a 70MB model file, please wait patiently... The
+              first use might be slow...{' '}
+            </p>
+            <Progress percent={downloadProgress} />
+          </div>
+        </Modal>
+      )}
       {showBrush && (
         <div
           className="fixed rounded-full bg-red-500 bg-opacity-50 pointer-events-none left-0 top-0"
           style={{
             width: `${scaledBrushSize}px`,
             height: `${scaledBrushSize}px`,
+            transform: `translate3d(-1px, -1px, 0)`,
           }}
           ref={brushRef}
         />
@@ -668,7 +687,6 @@ export default function Editor(props: EditorProps) {
           onChange={handleSliderChange}
           onStart={handleSliderStart}
         />
-
         <Button
           primary={showOriginal}
           icon={<EyeIcon className="w-6 h-6" />}
@@ -679,7 +697,8 @@ export default function Editor(props: EditorProps) {
         >
           Original
         </Button>
-        <Button onUp={onSuperRsolution}>IMG X 4</Button>
+        {!showOriginal && <Button onUp={onSuperRsolution}>IMG X 4</Button>}
+
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}

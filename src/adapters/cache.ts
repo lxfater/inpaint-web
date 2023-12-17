@@ -64,3 +64,49 @@ export async function ensureModel(modelType: modelType) {
   await saveModel(modelType, buffer)
   return buffer
 }
+
+export async function downloadModel(
+  modelType: modelType,
+  setDownloadProgress: (arg0: number) => void
+) {
+  if (await modelExists(modelType)) {
+    return
+  }
+  console.log('start download')
+  setDownloadProgress(0)
+  const model = getModel(modelType)
+  try {
+    const response = await fetch(model.url)
+    const fullSize = response.headers.get('content-length')
+    const reader = response.body!.getReader()
+    const total: Uint8Array[] = []
+    let downloaded = 0
+
+    while (true) {
+      const { done, value } = await reader.read()
+
+      if (done) {
+        break
+      }
+
+      downloaded += value?.length || 0
+
+      if (value) {
+        total.push(value)
+      }
+
+      setDownloadProgress((downloaded / Number(fullSize)) * 100)
+    }
+    const buffer = new Uint8Array(downloaded)
+    let offset = 0
+    for (const chunk of total) {
+      buffer.set(chunk, offset)
+      offset += chunk.length
+    }
+
+    await saveModel(modelType, buffer)
+    setDownloadProgress(100)
+  } catch (e) {
+    alert(e)
+  }
+}

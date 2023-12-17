@@ -72,3 +72,7 @@ export const loadingOnnxruntime = async () => {
   // 将script标签添加到文档的head部分
   document.head.appendChild(script)
 }
+
+export async function checkGpu() {
+  return !navigator?.gpu && !(await navigator.gpu?.requestAdapter())
+}
