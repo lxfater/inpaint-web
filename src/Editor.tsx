@@ -52,10 +52,7 @@ export default function Editor(props: EditorProps) {
     return document.createElement('canvas')
   })
   const [lines, setLines] = useState<Line[]>([{ pts: [], src: '' }])
-  const [{ brushX, brushY }, setBrushCoords] = useState({
-    brushX: -1,
-    brushY: -1,
-  })
+  const brushRef = useRef<HTMLDivElement>(null)
   const [showBrush, setShowBrush] = useState(false)
   const [hideBrushTimeout, setHideBrushTimeout] = useState(0)
   const [showOriginal, setShowOriginal] = useState(false)
@@ -150,7 +147,12 @@ export default function Editor(props: EditorProps) {
       return
     }
     const onMouseMove = (ev: MouseEvent) => {
-      setBrushCoords({ brushX: ev.pageX, brushY: ev.pageY })
+      if (brushRef.current) {
+        const x = ev.pageX - scaledBrushSize / 2
+        const y = ev.pageY - scaledBrushSize / 2
+
+        brushRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
+      }
     }
     const onPaint = (px: number, py: number) => {
       const currLine = lines[lines.length - 1]
@@ -172,7 +174,7 @@ export default function Editor(props: EditorProps) {
       }
       const loading = onloading()
       canvas.removeEventListener('mousemove', onMouseDrag)
-      window.removeEventListener('mouseup', onPointerUp)
+      canvas.removeEventListener('mouseup', onPointerUp)
       refreshCanvasMask()
       try {
         const start = Date.now()
@@ -193,8 +195,6 @@ export default function Editor(props: EditorProps) {
         setLines([...lines])
         console.log('inpaint_processed', {
           duration: Date.now() - start,
-          width: original.naturalWidth,
-          height: original.naturalHeight,
         })
       } catch (e: any) {
         console.log('inpaint_failed', {
@@ -220,8 +220,8 @@ export default function Editor(props: EditorProps) {
       const currLine = lines[lines.length - 1]
       const coords = canvas.getBoundingClientRect()
       currLine.pts.push({
-        x: (ev.touches[0].clientX - coords.x) / scale,
-        y: (ev.touches[0].clientY - coords.y) / scale,
+        x: ev.touches[0].clientX - coords.x,
+        y: ev.touches[0].clientY - coords.y,
       })
       draw()
     }
@@ -232,7 +232,7 @@ export default function Editor(props: EditorProps) {
       const currLine = lines[lines.length - 1]
       currLine.size = brushSize
       canvas.addEventListener('mousemove', onMouseDrag)
-      window.addEventListener('mouseup', onPointerUp)
+      canvas.addEventListener('mouseup', onPointerUp)
       // onPaint(e)
     }
 
@@ -249,7 +249,7 @@ export default function Editor(props: EditorProps) {
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
       canvas.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mouseup', onPointerUp)
+      canvas.removeEventListener('mouseup', onPointerUp)
       canvas.removeEventListener('touchstart', onPointerStart)
       canvas.removeEventListener('touchmove', onTouchMove)
       canvas.removeEventListener('touchend', onPointerUp)
@@ -266,8 +266,6 @@ export default function Editor(props: EditorProps) {
     refreshCanvasMask,
     maskCanvas,
     original.src,
-    original.naturalHeight,
-    original.naturalWidth,
     renders,
     showOriginal,
     hideBrushTimeout,
@@ -313,12 +311,8 @@ export default function Editor(props: EditorProps) {
   }, [separator, context])
 
   function download() {
-    const base64 = context?.canvas.toDataURL(file.type)
-    if (!base64) {
-      throw new Error('could not get canvas data')
-    }
-    const name = file.name.replace(/(\.[\w\d_-]+)$/i, '_cleanup$1')
-    downloadImage(base64, name)
+    const currRender = renders.at(-1) ?? original
+    downloadImage(currRender.currentSrc, 'IMG')
   }
 
   const undo = useCallback(async () => {
@@ -419,6 +413,12 @@ export default function Editor(props: EditorProps) {
       brushX: document.documentElement.clientWidth / 2,
       brushY: document.documentElement.clientHeight / 2,
     })
+    if (brushRef.current) {
+      const x = document.documentElement.clientWidth / 2
+      const y = document.documentElement.clientHeight / 2
+
+      brushRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
+    }
   }
   const handleSliderChange = (sliderValue: number) => {
     if (!isBrushSizeChange.current) {
@@ -632,10 +632,8 @@ export default function Editor(props: EditorProps) {
           style={{
             width: `${scaledBrushSize}px`,
             height: `${scaledBrushSize}px`,
-            transform: `translate(${brushX - scaledBrushSize / 2}px, ${
-              brushY - scaledBrushSize / 2
-            }px)`,
           }}
+          ref={brushRef}
         />
       )}
       {/* 工具栏 */}
@@ -643,7 +641,7 @@ export default function Editor(props: EditorProps) {
         className={[
           'flex-shrink-0',
           'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
-          'flex items-center w-full max-w-4xl py-6 mb-4',
+          'flex items-center w-full max-w-4xl py-6 mb-4, justify-between',
           'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
         ].join(' ')}
       >
@@ -689,9 +687,7 @@ export default function Editor(props: EditorProps) {
         >
           Original
         </Button>
-        <Button primary={showOriginal} onUp={onSuperRsolution}>
-          X 4
-        </Button>
+        <Button onUp={onSuperRsolution}>IMG X 4</Button>
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
