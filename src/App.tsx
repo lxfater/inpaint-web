@@ -28,22 +28,25 @@ function App() {
 
   return (
     <div className="min-h-full flex flex-col">
-      <header className="relative z-10 relative my-3">
+      <header className="z-10 shadow flex flex-row items-center justify-between h-14">
         <Button
           className={[
-            file ? '' : 'hidden',
-            'absolute top-0 left-0 pl-1 pr-1 mx-1 sm:mx-5',
+            file ? '' : 'opacity-50 pointer-events-none',
+            'pl-1 pr-1 mx-1 sm:mx-5',
           ].join(' ')}
           icon={<ArrowLeftIcon className="w-6 h-6" />}
           onClick={() => {
             setFile(undefined)
           }}
         >
-          <span className="hidden sm:inline">Start new</span>
+          <span className="hidden sm:inline select-none">Start new</span>
         </Button>
-        <h1 className="text-4xl text-center font-normal">Inpaint-web</h1>
+        <div className="text-4xl font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
+          Inpaint-web
+        </div>
+
         <Button
-          className="absolute top-0 right-0 mx-1 sm:mx-5 hidden w-20 sm:flex sm:visible sm:w-44"
+          className="mx-1 sm:mx-5 hidden w-20 sm:flex sm:visible sm:w-44"
           icon={<InformationCircleIcon className="w-6 h-6" />}
           onClick={() => {
             setShowAbout(true)
@@ -53,45 +56,51 @@ function App() {
         </Button>
       </header>
 
-      <main className="relative h-full flex flex-1 flex-col items-center justify-center overflow-hidden">
+      <main
+        style={{
+          height: 'calc(100vh - 56px)',
+        }}
+        className=" relative"
+      >
         {file ? (
           <Editor file={file} />
         ) : (
           <>
-            <div className="h-72 sm:w-1/2 max-w-5xl">
-              <FileSelect
-                onSelection={async f => {
-                  const { file: resizedFile } = await resizeImageFile(
-                    f,
-                    1024 * 4
-                  )
-                  setFile(resizedFile)
-                }}
-              />
-            </div>
-
-            <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
-              <span className="text-gray-500">
-                试一试:
-                <br />
-                Try it:
-              </span>
-              <div className="flex space-x-2 sm:space-x-4 px-4">
-                {['bag', 'jacket', 'table', 'shoe', 'paris'].map(image => (
-                  <div
-                    key={image}
-                    onClick={() => startWithDemoImage(image)}
-                    role="button"
-                    onKeyDown={() => startWithDemoImage(image)}
-                    tabIndex={-1}
-                  >
-                    <img
-                      className="rounded-md hover:opacity-75"
-                      src={`examples/${image}.thumb.jpeg`}
-                      alt={image}
-                    />
-                  </div>
-                ))}
+            <div className="flex h-full flex-1 flex-col items-center justify-center overflow-hidden">
+              <div className="h-72 sm:w-1/2 max-w-5xl">
+                <FileSelect
+                  onSelection={async f => {
+                    const { file: resizedFile } = await resizeImageFile(
+                      f,
+                      1024 * 4
+                    )
+                    setFile(resizedFile)
+                  }}
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
+                <span className="text-gray-500">
+                  试一试:
+                  <br />
+                  Try it:
+                </span>
+                <div className="flex space-x-2 sm:space-x-4 px-4">
+                  {['bag', 'jacket', 'table', 'shoe', 'paris'].map(image => (
+                    <div
+                      key={image}
+                      onClick={() => startWithDemoImage(image)}
+                      role="button"
+                      onKeyDown={() => startWithDemoImage(image)}
+                      tabIndex={-1}
+                    >
+                      <img
+                        className="rounded-md hover:opacity-75"
+                        src={`examples/${image}.thumb.jpeg`}
+                        alt={image}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </>
