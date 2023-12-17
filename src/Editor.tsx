@@ -52,15 +52,11 @@ export default function Editor(props: EditorProps) {
     return document.createElement('canvas')
   })
   const [lines, setLines] = useState<Line[]>([{ pts: [], src: '' }])
-  const [{ brushX, brushY }, setBrushCoords] = useState({
-    brushX: -1,
-    brushY: -1,
-  })
+  const brushRef = useRef<HTMLDivElement>(null)
   const [showBrush, setShowBrush] = useState(false)
   const [hideBrushTimeout, setHideBrushTimeout] = useState(0)
   const [showOriginal, setShowOriginal] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
-  const [scale, setScale] = useState(1)
   const [generateProgress, setGenerateProgress] = useState(0)
   const modalRef = useRef(null)
   const [separator, setSeparator] = useState<HTMLDivElement>()
@@ -69,7 +65,8 @@ export default function Editor(props: EditorProps) {
   const [separatorLeft, setSeparatorLeft] = useState(0)
   const historyListRef = useRef<HTMLDivElement>(null)
   const isBrushSizeChange = useRef<boolean>(false)
-  const scaledBrushSize = useMemo(() => brushSize * scale, [brushSize, scale])
+  const scaledBrushSize = useMemo(() => brushSize, [brushSize])
+  const canvasDiv = useRef<HTMLDivElement>(null)
 
   const windowSize = useWindowSize()
 
@@ -79,11 +76,33 @@ export default function Editor(props: EditorProps) {
         return
       }
       context.clearRect(0, 0, context.canvas.width, context.canvas.height)
-      const currRender = renders[index === -1 ? renders.length - 1 : index]
+      const currRender =
+        renders[index === -1 ? renders.length - 1 : index] ?? original
       const { canvas } = context
 
-      canvas.width = currRender?.width ?? canvas.width
-      canvas.height = currRender?.height ?? canvas.height
+      const divWidth = canvasDiv.current!.offsetWidth
+      const divHeight = canvasDiv.current!.offsetHeight
+
+      // 计算宽高比
+      const imgAspectRatio = currRender.width / currRender.height
+      const divAspectRatio = divWidth / divHeight
+
+      let canvasWidth
+      let canvasHeight
+
+      // 比较宽高比以决定如何缩放
+      if (divAspectRatio > imgAspectRatio) {
+        // div 较宽，基于高度缩放
+        canvasHeight = divHeight
+        canvasWidth = currRender.width * (divHeight / currRender.height)
+      } else {
+        // div 较窄，基于宽度缩放
+        canvasWidth = divWidth
+        canvasHeight = currRender.height * (divWidth / currRender.width)
+      }
+
+      canvas.width = canvasWidth
+      canvas.height = canvasHeight
 
       if (currRender?.src) {
         context.drawImage(currRender, 0, 0, canvas.width, canvas.height)
@@ -117,20 +136,6 @@ export default function Editor(props: EditorProps) {
       return
     }
     if (isOriginalLoaded) {
-      context.canvas.width = original.naturalWidth
-      context.canvas.height = original.naturalHeight
-      const rW = windowSize.width / original.naturalWidth
-      const rH = (windowSize.height - 300) / original.naturalHeight
-      if (rW < 1 || rH < 1) {
-        console.log(Math.min(rW, rH))
-        const newScale = Math.min(rW, rH)
-        setScale(newScale)
-        if (!isBrushSizeChange.current) {
-          setBrushSize(40 / newScale)
-        }
-      } else {
-        setScale(1)
-      }
       draw()
     }
   }, [context?.canvas, draw, original, isOriginalLoaded, windowSize])
@@ -142,7 +147,12 @@ export default function Editor(props: EditorProps) {
       return
     }
     const onMouseMove = (ev: MouseEvent) => {
-      setBrushCoords({ brushX: ev.pageX, brushY: ev.pageY })
+      if (brushRef.current) {
+        const x = ev.pageX - scaledBrushSize / 2
+        const y = ev.pageY - scaledBrushSize / 2
+
+        brushRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
+      }
     }
     const onPaint = (px: number, py: number) => {
       const currLine = lines[lines.length - 1]
@@ -164,7 +174,7 @@ export default function Editor(props: EditorProps) {
       }
       const loading = onloading()
       canvas.removeEventListener('mousemove', onMouseDrag)
-      window.removeEventListener('mouseup', onPointerUp)
+      canvas.removeEventListener('mouseup', onPointerUp)
       refreshCanvasMask()
       try {
         const start = Date.now()
@@ -185,8 +195,6 @@ export default function Editor(props: EditorProps) {
         setLines([...lines])
         console.log('inpaint_processed', {
           duration: Date.now() - start,
-          width: original.naturalWidth,
-          height: original.naturalHeight,
         })
       } catch (e: any) {
         console.log('inpaint_failed', {
@@ -212,8 +220,8 @@ export default function Editor(props: EditorProps) {
       const currLine = lines[lines.length - 1]
       const coords = canvas.getBoundingClientRect()
       currLine.pts.push({
-        x: (ev.touches[0].clientX - coords.x) / scale,
-        y: (ev.touches[0].clientY - coords.y) / scale,
+        x: ev.touches[0].clientX - coords.x,
+        y: ev.touches[0].clientY - coords.y,
       })
       draw()
     }
@@ -224,7 +232,7 @@ export default function Editor(props: EditorProps) {
       const currLine = lines[lines.length - 1]
       currLine.size = brushSize
       canvas.addEventListener('mousemove', onMouseDrag)
-      window.addEventListener('mouseup', onPointerUp)
+      canvas.addEventListener('mouseup', onPointerUp)
       // onPaint(e)
     }
 
@@ -241,7 +249,7 @@ export default function Editor(props: EditorProps) {
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
       canvas.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mouseup', onPointerUp)
+      canvas.removeEventListener('mouseup', onPointerUp)
       canvas.removeEventListener('touchstart', onPointerStart)
       canvas.removeEventListener('touchmove', onTouchMove)
       canvas.removeEventListener('touchend', onPointerUp)
@@ -258,9 +266,6 @@ export default function Editor(props: EditorProps) {
     refreshCanvasMask,
     maskCanvas,
     original.src,
-    original.naturalHeight,
-    original.naturalWidth,
-    scale,
     renders,
     showOriginal,
     hideBrushTimeout,
@@ -272,17 +277,17 @@ export default function Editor(props: EditorProps) {
     const separatorMove = (ev: MouseEvent) => {
       ev.preventDefault()
       ev.stopPropagation()
-      const originalRect = originalImg.getBoundingClientRect()
-      const separatorOffsetLeft = (ev.pageX - originalRect.left) / scale
-      if (
-        separatorOffsetLeft <= original.naturalWidth &&
-        separatorOffsetLeft >= 0
-      ) {
-        setSeparatorLeft(separatorOffsetLeft)
-      } else if (separatorOffsetLeft < 0) {
-        setSeparatorLeft(0)
-      } else if (separatorOffsetLeft > original.naturalWidth) {
-        setSeparatorLeft(original.naturalWidth)
+      if (context?.canvas) {
+        const { width } = context?.canvas
+        const canvasRect = context?.canvas.getBoundingClientRect()
+        const separatorOffsetLeft = ev.pageX - canvasRect.left
+        if (separatorOffsetLeft <= width && separatorOffsetLeft >= 0) {
+          setSeparatorLeft(separatorOffsetLeft)
+        } else if (separatorOffsetLeft < 0) {
+          setSeparatorLeft(0)
+        } else if (separatorOffsetLeft > width) {
+          setSeparatorLeft(width)
+        }
       }
     }
 
@@ -303,15 +308,11 @@ export default function Editor(props: EditorProps) {
       separator.removeEventListener('mousedown', separatorDown)
       window.removeEventListener('mouseup', separatorUp)
     }
-  }, [scale, separator, originalImg])
+  }, [separator, context])
 
   function download() {
-    const base64 = context?.canvas.toDataURL(file.type)
-    if (!base64) {
-      throw new Error('could not get canvas data')
-    }
-    const name = file.name.replace(/(\.[\w\d_-]+)$/i, '_cleanup$1')
-    downloadImage(base64, name)
+    const currRender = renders.at(-1) ?? original
+    downloadImage(currRender.currentSrc, 'IMG')
   }
 
   const undo = useCallback(async () => {
@@ -412,6 +413,12 @@ export default function Editor(props: EditorProps) {
       brushX: document.documentElement.clientWidth / 2,
       brushY: document.documentElement.clientHeight / 2,
     })
+    if (brushRef.current) {
+      const x = document.documentElement.clientWidth / 2
+      const y = document.documentElement.clientHeight / 2
+
+      brushRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
+    }
   }
   const handleSliderChange = (sliderValue: number) => {
     if (!isBrushSizeChange.current) {
@@ -448,14 +455,14 @@ export default function Editor(props: EditorProps) {
   }, [])
 
   const onSuperRsolution = useCallback(async () => {
-    const loading = onloading()
+    setIsInpaintingLoading(true)
     try {
       // 运行
       const start = Date.now()
       console.log('superRsolution_start')
       // each time based on the last result, the first is the original
       const newFile = renders.at(-1) ?? file
-      const res = await superRsolution(newFile)
+      const res = await superRsolution(newFile, setGenerateProgress)
       if (!res) {
         throw new Error('empty response')
       }
@@ -467,138 +474,138 @@ export default function Editor(props: EditorProps) {
       lines.push({ pts: [], src: '' } as Line)
       setRenders([...renders])
       setLines([...lines])
-      adjustResolution(newRender.width, newRender.height)
       console.log('superRsolution_processed', {
         duration: Date.now() - start,
         width: original.naturalWidth,
         height: original.naturalHeight,
       })
+
       // 替换当前图片
     } catch (error) {
       console.error('superRsolution', error)
     } finally {
-      loading.close()
+      setIsInpaintingLoading(false)
     }
-  }, [
-    adjustResolution,
-    file,
-    lines,
-    onloading,
-    original.naturalHeight,
-    original.naturalWidth,
-    renders,
-  ])
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
 
   return (
     <div
       className={[
-        'flex flex-col items-center',
+        'flex flex-col items-center h-full justify-between',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
+      {/* History */}
       <div
         ref={historyListRef}
+        style={{
+          height: '116px',
+        }}
         className={[
-          'flex items-left w-full max-w-4xl py-0',
-          'space-y-0 flex-row space-x-5 pb-1',
+          'flex-shrink-0',
+          'mt-4 border p-3 rounded',
+          'flex items-left w-full max-w-4xl',
+          'space-y-0 flex-row space-x-5',
           'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary overflow-x-scroll',
-          scale !== 1 ? 'absolute top-0' : 'relative',
         ].join(' ')}
       >
         {History}
       </div>
+      {/* 画图 */}
       <div
         className={[
-          scale !== 1 ? 'absolute top-0' : 'relative',
-          scale !== 1 ? 'mt-28' : 'mt-6',
+          'flex-grow',
+          'flex justify-center',
+          'my-2',
+          'relative',
         ].join(' ')}
         style={{
-          transform: `scale(${scale})`,
-          transformOrigin: 'top',
+          width: '70vw',
         }}
+        ref={canvasDiv}
       >
-        <canvas
-          className="rounded-sm"
-          style={showBrush ? { cursor: 'none' } : {}}
-          ref={r => {
-            if (r && !context) {
-              const ctx = r.getContext('2d')
-              if (ctx) {
-                setContext(ctx)
+        <div className="relative">
+          <canvas
+            className="rounded-sm"
+            style={showBrush ? { cursor: 'none' } : {}}
+            ref={r => {
+              if (r && !context) {
+                const ctx = r.getContext('2d')
+                if (ctx) {
+                  setContext(ctx)
+                }
               }
-            }
-          }}
-        />
-        <div
-          className={[
-            'absolute top-0 right-0 pointer-events-none',
-            showOriginal ? '' : 'overflow-hidden',
-          ].join(' ')}
-          style={{
-            width: showOriginal
-              ? `${Math.round(original.naturalWidth)}px`
-              : '0px',
-            height: original.naturalHeight,
-            transitionProperty: 'width, height',
-            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-            transitionDuration: '300ms',
-          }}
-          ref={r => {
-            if (r && !originalImg) {
-              setOriginalImg(r)
-            }
-          }}
-        >
+            }}
+          />
           <div
             className={[
-              'absolute top-0 right-0 pointer-events-none z-10',
-              useSeparator ? 'bg-black text-white' : 'bg-primary ',
-              'w-1',
-              'flex items-center justify-center',
-              'separator',
+              'absolute top-0 right-0 pointer-events-none',
+              showOriginal ? '' : 'overflow-hidden',
             ].join(' ')}
             style={{
-              left: `${separatorLeft}px`,
-              height: original.naturalHeight,
+              width: showOriginal ? `${context?.canvas.width}px` : '0px',
+              height: context?.canvas.height,
               transitionProperty: 'width, height',
               transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
               transitionDuration: '300ms',
             }}
+            ref={r => {
+              if (r && !originalImg) {
+                setOriginalImg(r)
+              }
+            }}
           >
-            <span className="absolute left-1 bottom-0 p-1 bg-opacity-25 bg-black rounded text-white select-none">
-              original
-            </span>
             <div
               className={[
-                'absolute py-2 px-1 rounded-md pointer-events-auto',
-                useSeparator ? 'bg-black' : 'bg-primary ',
+                'absolute top-0 right-0 pointer-events-none z-10',
+                useSeparator ? 'bg-black text-white' : 'bg-primary ',
+                'w-1',
+                'flex items-center justify-center',
+                'separator',
               ].join(' ')}
-              style={{ cursor: 'ew-resize' }}
-              ref={r => {
-                if (r && !separator) {
-                  setSeparator(r)
-                }
+              style={{
+                left: `${separatorLeft}px`,
+                height: context?.canvas.height,
+                transitionProperty: 'width, height',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                transitionDuration: '300ms',
               }}
             >
-              <ViewBoardsIcon
-                className="w-5 h-5"
+              <span className="absolute left-1 bottom-0 p-1 bg-opacity-25 bg-black rounded text-white select-none">
+                original
+              </span>
+              <div
+                className={[
+                  'absolute py-2 px-1 rounded-md pointer-events-auto',
+                  useSeparator ? 'bg-black' : 'bg-primary ',
+                ].join(' ')}
                 style={{ cursor: 'ew-resize' }}
-              />
+                ref={r => {
+                  if (r && !separator) {
+                    setSeparator(r)
+                  }
+                }}
+              >
+                <ViewBoardsIcon
+                  className="w-5 h-5"
+                  style={{ cursor: 'ew-resize' }}
+                />
+              </div>
             </div>
+            <img
+              className="absolute right-0"
+              src={original.src}
+              alt="original"
+              width={`${context?.canvas.width}px`}
+              height={`${context?.canvas.height}px`}
+              style={{
+                width: `${context?.canvas.width}px`,
+                height: `${context?.canvas.height}px`,
+                maxWidth: 'none',
+                clipPath: `inset(0 0 0 ${separatorLeft}px)`,
+              }}
+            />
           </div>
-          <img
-            className="absolute right-0"
-            src={original.src}
-            alt="original"
-            width={`${original.naturalWidth}px`}
-            height={`${original.naturalHeight}px`}
-            style={{
-              width: `${original.naturalWidth}px`,
-              height: `${original.naturalHeight}px`,
-              maxWidth: 'none',
-              clipPath: `inset(0 0 0 ${separatorLeft}px)`,
-            }}
-          />
         </div>
       </div>
       {isInpaintingLoading && (
@@ -617,20 +624,17 @@ export default function Editor(props: EditorProps) {
           style={{
             width: `${scaledBrushSize}px`,
             height: `${scaledBrushSize}px`,
-            transform: `translate(${brushX - scaledBrushSize / 2}px, ${
-              brushY - scaledBrushSize / 2
-            }px)`,
           }}
+          ref={brushRef}
         />
       )}
-
+      {/* 工具栏 */}
       <div
         className={[
-          'flex items-center w-full max-w-4xl py-6',
+          'flex-shrink-0',
+          'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
+          'flex items-center w-full max-w-4xl py-6 mb-4, justify-between',
           'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
-          scale !== 1
-            ? 'absolute bottom-0 justify-center'
-            : 'relative justify-between',
         ].join(' ')}
       >
         {renders.length > 0 && (
@@ -675,9 +679,7 @@ export default function Editor(props: EditorProps) {
         >
           Original
         </Button>
-        <Button primary={showOriginal} onUp={onSuperRsolution}>
-          X 4
-        </Button>
+        <Button onUp={onSuperRsolution}>IMG X 4</Button>
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}

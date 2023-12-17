@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { getCapabilities } from './util'
@@ -37,7 +38,8 @@ function imgProcess(img: Mat) {
 }
 async function tileProc(
   inputTensor: ort.Tensor,
-  session: ort.InferenceSession
+  session: ort.InferenceSession,
+  callback: (progress: number) => void
 ) {
   const inputDims = inputTensor.dims
   const imageW = inputDims[3]
@@ -159,6 +161,7 @@ async function tileProc(
       console.log(
         `tile ${currentTile} of ${numTiles} took ${dt} ms, remaining time: ${remTime} ms`
       )
+      callback(Math.round(100 * (currentTile / numTiles)))
     }
   }
   console.log(`output dims:${outputTensor.dims}`)
@@ -187,7 +190,12 @@ function processImage(
     }
   })
 }
-function configEnv(capabilities) {
+function configEnv(capabilities: {
+  webgpu: any
+  wasm?: boolean
+  simd: any
+  threads: any
+}) {
   ort.env.wasm.wasmPaths =
     'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
   if (capabilities.webgpu) {
@@ -227,7 +235,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   return chwToHwcData
 }
 
-function imageDataToDataURL(imageData) {
+function imageDataToDataURL(imageData: ImageData) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
   canvas.width = imageData.width
@@ -242,7 +250,8 @@ function imageDataToDataURL(imageData) {
 }
 let model: ArrayBuffer | null = null
 export default async function superRsolution(
-  imageFile: File | HTMLImageElement
+  imageFile: File | HTMLImageElement,
+  callback: (progress: number) => void
 ) {
   console.time('sessionCreate')
   if (!model) {
@@ -267,7 +276,7 @@ export default async function superRsolution(
     img.width,
   ])
 
-  const result = await tileProc(imageTensor, model)
+  const result = await tileProc(imageTensor, model, callback)
   console.time('postProcess')
   const outsTensor = result
   const chwToHwcData = postProcess(
