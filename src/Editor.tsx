@@ -455,14 +455,14 @@ export default function Editor(props: EditorProps) {
   }, [])
 
   const onSuperRsolution = useCallback(async () => {
-    const loading = onloading()
+    setIsInpaintingLoading(true)
     try {
       // 运行
       const start = Date.now()
       console.log('superRsolution_start')
       // each time based on the last result, the first is the original
       const newFile = renders.at(-1) ?? file
-      const res = await superRsolution(newFile)
+      const res = await superRsolution(newFile, setGenerateProgress)
       if (!res) {
         throw new Error('empty response')
       }
@@ -474,27 +474,19 @@ export default function Editor(props: EditorProps) {
       lines.push({ pts: [], src: '' } as Line)
       setRenders([...renders])
       setLines([...lines])
-      adjustResolution(newRender.width, newRender.height)
       console.log('superRsolution_processed', {
         duration: Date.now() - start,
         width: original.naturalWidth,
         height: original.naturalHeight,
       })
+
       // 替换当前图片
     } catch (error) {
       console.error('superRsolution', error)
     } finally {
-      loading.close()
+      setIsInpaintingLoading(false)
     }
-  }, [
-    adjustResolution,
-    file,
-    lines,
-    onloading,
-    original.naturalHeight,
-    original.naturalWidth,
-    renders,
-  ])
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
 
   return (
     <div
