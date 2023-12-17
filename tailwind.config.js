@@ -1,6 +1,8 @@
 const tailwindScrollbar = require('tailwind-scrollbar')
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       animation: {
@@ -13,13 +15,4 @@ module.exports = {
   },
   variants: {},
   plugins: [tailwindScrollbar],
-  purge: {
-    // Filenames to scan for classes
-    content: ['./src/**/*.{js,ts,jsx,tsx}', './index.html'],
-    // Options passed to PurgeCSS
-    options: {
-      // Whitelist specific selectors by name
-      // safelist: [],
-    },
-  },
 }
