@@ -1,21 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { ArrowLeftIcon, InformationCircleIcon } from '@heroicons/react/outline'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useClickAway } from 'react-use'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
 import Modal from './components/Modal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
-import useDownload from './adapters/use_download'
 import Progress from './components/Progress'
+import { downloadModel } from './adapters/cache'
 
 function App() {
   const [file, setFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
-  const { downloadProgress, downloaded, showAlert } = useDownload()
+
+  const [downloadProgress, setDownloadProgress] = useState(100)
+
+  useEffect(() => {
+    downloadModel('inpaint', setDownloadProgress)
+  }, [])
 
   useClickAway(modalRef, () => {
     setShowAbout(false)
@@ -142,7 +147,7 @@ function App() {
           </div>
         </Modal>
       )}
-      {!downloaded && (
+      {!(downloadProgress === 100) && (
         <Modal>
           <div className="text-xl space-y-5">
             <p>

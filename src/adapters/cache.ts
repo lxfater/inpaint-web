@@ -16,14 +16,18 @@ function getModel(modelType: modelType) {
       {
         name: 'model',
         url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/migan.onnx',
+        backupUrl: '',
       },
       {
         name: 'model-perf',
         url: 'https://huggingface.co/andraniksargsyan/migan/resolve/main/migan.onnx',
+        backupUrl: '',
       },
       {
         name: 'migan-pipeline-v2',
         url: 'https://huggingface.co/andraniksargsyan/migan/resolve/main/migan_pipeline_v2.onnx',
+        backupUrl:
+          'https://modelscope.cn/api/v1/models/lxfater/inpaint-web/repo?Revision=master&FilePath=migan_pipeline_v2.onnx',
       },
     ]
     const currentModel = modelList[2]
@@ -34,6 +38,8 @@ function getModel(modelType: modelType) {
       {
         name: 'realesrgan-x4',
         url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
+        backupUrl:
+          'https://modelscope.cn/api/v1/models/lxfater/inpaint-web/repo?Revision=master&FilePath=realesrgan-x4.onnx',
       },
     ]
     const currentModel = modelList[0]
@@ -72,11 +78,11 @@ export async function downloadModel(
   if (await modelExists(modelType)) {
     return
   }
-  console.log('start download')
-  setDownloadProgress(0)
-  const model = getModel(modelType)
-  try {
-    const response = await fetch(model.url)
+
+  async function downloadFromUrl(url: string) {
+    console.log('start download from', url)
+    setDownloadProgress(0)
+    const response = await fetch(url)
     const fullSize = response.headers.get('content-length')
     const reader = response.body!.getReader()
     const total: Uint8Array[] = []
@@ -97,6 +103,7 @@ export async function downloadModel(
 
       setDownloadProgress((downloaded / Number(fullSize)) * 100)
     }
+
     const buffer = new Uint8Array(downloaded)
     let offset = 0
     for (const chunk of total) {
@@ -106,7 +113,19 @@ export async function downloadModel(
 
     await saveModel(modelType, buffer)
     setDownloadProgress(100)
+  }
+
+  const model = getModel(modelType)
+  try {
+    await downloadFromUrl(model.url)
   } catch (e) {
-    alert(e)
+    if (model.backupUrl) {
+      try {
+        await downloadFromUrl(model.backupUrl)
+      } catch (r) {
+        alert(`Failed to download the backup model: ${r}`)
+      }
+    }
+    alert(`Failed to download the model, network problem: ${e}`)
   }
 }
