@@ -249,7 +249,7 @@ function imageDataToDataURL(imageData: ImageData) {
   return canvas.toDataURL()
 }
 let model: ArrayBuffer | null = null
-export default async function superRsolution(
+export default async function superResolution(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
 ) {
@@ -257,7 +257,7 @@ export default async function superRsolution(
   if (!model) {
     const capabilities = await getCapabilities()
     configEnv(capabilities)
-    const modelBuffer = await ensureModel('superRsolution')
+    const modelBuffer = await ensureModel('superResolution')
     model = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })

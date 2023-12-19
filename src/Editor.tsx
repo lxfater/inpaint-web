@@ -4,7 +4,7 @@ import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
-import superRsolution from './adapters/superRsolution'
+import superResolution from './adapters/superResolution'
 import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
@@ -453,20 +453,20 @@ export default function Editor(props: EditorProps) {
     }
   }, [])
 
-  const onSuperRsolution = useCallback(async () => {
-    if (!(await modelExists('superRsolution'))) {
+  const onSuperResolution = useCallback(async () => {
+    if (!(await modelExists('superResolution'))) {
       setDownloaded(false)
-      await downloadModel('superRsolution', setDownloadProgress)
+      await downloadModel('superResolution', setDownloadProgress)
       setDownloaded(true)
     }
     setIsProcessingLoading(true)
     try {
       // 运行
       const start = Date.now()
-      console.log('superRsolution_start')
+      console.log('superResolution_start')
       // each time based on the last result, the first is the original
       const newFile = renders.at(-1) ?? file
-      const res = await superRsolution(newFile, setGenerateProgress)
+      const res = await superResolution(newFile, setGenerateProgress)
       if (!res) {
         throw new Error('empty response')
       }
@@ -478,13 +478,13 @@ export default function Editor(props: EditorProps) {
       lines.push({ pts: [], src: '' } as Line)
       setRenders([...renders])
       setLines([...lines])
-      console.log('superRsolution_processed', {
+      console.log('superResolution_processed', {
         duration: Date.now() - start,
       })
 
       // 替换当前图片
     } catch (error) {
-      console.error('superRsolution', error)
+      console.error('superResolution', error)
     } finally {
       setIsProcessingLoading(false)
     }

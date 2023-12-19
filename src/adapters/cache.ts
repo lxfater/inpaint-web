@@ -1,6 +1,6 @@
 import localforage from 'localforage'
 
-export type modelType = 'inpaint' | 'superRsolution'
+export type modelType = 'inpaint' | 'superResolution'
 
 localforage.config({
   name: 'modelCache',
@@ -33,7 +33,7 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[2]
     return currentModel
   }
-  if (modelType === 'superRsolution') {
+  if (modelType === 'superResolution') {
     const modelList = [
       {
         name: 'realesrgan-x4',
