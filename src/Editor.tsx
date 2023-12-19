@@ -697,7 +697,9 @@ export default function Editor(props: EditorProps) {
         >
           Original
         </Button>
-        {!showOriginal && <Button onUp={onSuperRsolution}>4x-upscaling</Button>}
+        {!showOriginal && (
+          <Button onUp={onSuperResolution}>4x-upscaling</Button>
+        )}
 
         <Button
           primary
