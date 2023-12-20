@@ -10,9 +10,19 @@ import Editor from './Editor'
 import { resizeImageFile } from './utils'
 import Progress from './components/Progress'
 import { downloadModel } from './adapters/cache'
+import * as m from './paraglide/messages'
+import {
+  languageTag,
+  onSetLanguageTag,
+  setLanguageTag,
+} from './paraglide/runtime'
 
 function App() {
   const [file, setFile] = useState<File>()
+  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('en')
+
+  onSetLanguageTag(() => setStateLanguageTag(languageTag()))
+
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
 
@@ -33,7 +43,7 @@ function App() {
 
   return (
     <div className="min-h-full flex flex-col">
-      <header className="z-10 shadow flex flex-row items-center justify-between h-14">
+      <header className="z-10 shadow flex flex-row items-center md:justify-between h-14">
         <Button
           className={[
             file ? '' : 'opacity-50 pointer-events-none',
@@ -44,21 +54,38 @@ function App() {
             setFile(undefined)
           }}
         >
-          <span className="hidden sm:inline select-none">Start new</span>
+          <div className="md:w-[290px]">
+            <span className="hidden sm:inline select-none">
+              {m.start_new()}
+            </span>
+          </div>
         </Button>
         <div className="text-4xl font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
           Inpaint-web
         </div>
-
-        <Button
-          className="mx-1 sm:mx-5 hidden w-20 sm:flex sm:visible sm:w-44"
-          icon={<InformationCircleIcon className="w-6 h-6" />}
-          onClick={() => {
-            setShowAbout(true)
-          }}
-        >
-          <p>反馈/feedback</p>
-        </Button>
+        <div className="hidden md:flex justify-end w-[300px] mx-1 sm:mx-5">
+          <Button
+            className="w-38 flex sm:visible"
+            icon={<InformationCircleIcon className="w-6 h-6" />}
+            onClick={() => {
+              setShowAbout(true)
+            }}
+          >
+            <p>{m.feedback()}</p>
+          </Button>
+          <Button
+            className="mr-5 flex"
+            onClick={() => {
+              if (languageTag() === 'zh') {
+                setLanguageTag('en')
+              } else {
+                setLanguageTag('zh')
+              }
+            }}
+          >
+            <p>{languageTag() === 'en' ? 'zh' : 'en'}</p>
+          </Button>
+        </div>
       </header>
 
       <main
@@ -84,11 +111,7 @@ function App() {
                 />
               </div>
               <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
-                <span className="text-gray-500">
-                  试一试:
-                  <br />
-                  Try it:
-                </span>
+                <span className="text-gray-500">{m.try_it_images()}</span>
                 <div className="flex space-x-2 sm:space-x-4 px-4">
                   {['dog', 'car', 'bird', 'bag', 'jacket', 'shoe', 'paris'].map(
                     image => (
