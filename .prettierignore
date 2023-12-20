@@ -6,3 +6,4 @@ cache
 node_modules
 *-lock.yaml
 *-lock.json
+src/paraglide/*

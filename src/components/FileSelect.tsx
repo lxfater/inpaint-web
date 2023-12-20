@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import * as m from '../paraglide/messages'
 
 type FileSelectProps = {
   onSelection: (file: File) => void
@@ -127,10 +128,7 @@ export default function FileSelect(props: FileSelectProps) {
           }}
           accept="image/png, image/jpeg, image/webp"
         />
-        <p>
-          点击 或者 拖拽到这里
-          <br /> Click or drag here{' '}
-        </p>
+        <p>{m.drop_zone()}</p>
       </div>
     </label>
   )

@@ -1,0 +1,6 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"drop_zone": "点击 或者 拖拽到这里",
+	"try_it_images": "试一试:",
+	"feedback": "反馈"
+}
