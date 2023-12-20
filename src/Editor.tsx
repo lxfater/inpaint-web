@@ -11,6 +11,7 @@ import { downloadImage, loadImage, useImage } from './utils'
 import Progress from './components/Progress'
 import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
+import * as m from './paraglide/messages'
 
 interface EditorProps {
   file: File
@@ -680,7 +681,7 @@ export default function Editor(props: EditorProps) {
           </Button>
         )}
         <Slider
-          label="Brush Size"
+          label={m.bruch_size()}
           min={10}
           max={200}
           value={brushSize}
@@ -695,10 +696,10 @@ export default function Editor(props: EditorProps) {
             setTimeout(() => setSeparatorLeft(0), 300)
           }}
         >
-          Original
+          {m.original()}
         </Button>
         {!showOriginal && (
-          <Button onUp={onSuperResolution}>4x-upscaling</Button>
+          <Button onUp={onSuperResolution}>{m.upscale()}</Button>
         )}
 
         <Button
@@ -706,7 +707,7 @@ export default function Editor(props: EditorProps) {
           icon={<DownloadIcon className="w-6 h-6" />}
           onClick={download}
         >
-          Download
+          {m.download()}
         </Button>
       </div>
     </div>
