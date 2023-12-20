@@ -624,15 +624,7 @@ export default function Editor(props: EditorProps) {
       {!downloaded && (
         <Modal>
           <div className="text-xl space-y-5">
-            <p>
-              {' '}
-              需要下载一次70MB大小模型文件,耐心等待。。。 首次使用比较慢。。。
-            </p>
-            <p>
-              {' '}
-              Need to download a 70MB model file, please wait patiently... The
-              first use might be slow...{' '}
-            </p>
+            <p>{m.upscaleing_model_download_message()}</p>
             <Progress percent={downloadProgress} />
           </div>
         </Modal>
@@ -677,7 +669,7 @@ export default function Editor(props: EditorProps) {
               </svg>
             }
           >
-            Undo
+            {m.undo()}
           </Button>
         )}
         <Slider

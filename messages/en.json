@@ -7,5 +7,8 @@
 	"bruch_size": "Brush Size",
 	"original": "Original",
 	"upscale": "4x-upscaling",
-	"download": "Download"
+	"download": "Download",
+	"undo": "Undo",
+	"inpaint_model_download_message": "Need to download a 30MB model file, please wait patiently...",
+	"upscaleing_model_download_message": "Need to download a 70MB model file, please wait patiently..."
 }

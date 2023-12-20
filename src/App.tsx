@@ -65,15 +65,6 @@ function App() {
         </div>
         <div className="hidden md:flex justify-end w-[300px] mx-1 sm:mx-5">
           <Button
-            className="w-38 flex sm:visible"
-            icon={<InformationCircleIcon className="w-6 h-6" />}
-            onClick={() => {
-              setShowAbout(true)
-            }}
-          >
-            <p>{m.feedback()}</p>
-          </Button>
-          <Button
             className="mr-5 flex"
             onClick={() => {
               if (languageTag() === 'zh') {
@@ -83,7 +74,16 @@ function App() {
               }
             }}
           >
-            <p>{languageTag() === 'en' ? 'zh' : 'en'}</p>
+            <p>{languageTag() === 'en' ? '切换到中文' : 'en'}</p>
+          </Button>
+          <Button
+            className="w-38 flex sm:visible"
+            icon={<InformationCircleIcon className="w-6 h-6" />}
+            onClick={() => {
+              setShowAbout(true)
+            }}
+          >
+            <p>{m.feedback()}</p>
           </Button>
         </div>
       </header>
@@ -173,15 +173,7 @@ function App() {
       {!(downloadProgress === 100) && (
         <Modal>
           <div className="text-xl space-y-5">
-            <p>
-              {' '}
-              需要下载一次30MB大小模型文件,耐心等待。。。 首次使用比较慢。。。
-            </p>
-            <p>
-              {' '}
-              Need to download a 30MB model file, please wait patiently... The
-              first use might be slow...{' '}
-            </p>
+            <p>{m.inpaint_model_download_message()}</p>
             <Progress percent={downloadProgress} />
           </div>
         </Modal>
