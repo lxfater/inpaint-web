@@ -48,7 +48,7 @@ const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
-  const [original, isOriginalLoaded, adjustResolution] = useImage(file)
+  const [original, isOriginalLoaded] = useImage(file)
   const [renders, setRenders] = useState<HTMLImageElement[]>([])
   const [context, setContext] = useState<CanvasRenderingContext2D>()
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
@@ -413,16 +413,16 @@ export default function Editor(props: EditorProps) {
 
   const handleSliderStart = () => {
     setShowBrush(true)
-    if (brushRef.current) {
-      const x = document.documentElement.clientWidth / 2
-      const y = document.documentElement.clientHeight / 2
-
-      brushRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
-    }
   }
   const handleSliderChange = (sliderValue: number) => {
     if (!isBrushSizeChange.current) {
       isBrushSizeChange.current = true
+    }
+    if (brushRef.current) {
+      const x = document.documentElement.clientWidth / 2 - scaledBrushSize / 2
+      const y = document.documentElement.clientHeight / 2 - scaledBrushSize / 2
+
+      brushRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
     }
     setBrushSize(sliderValue)
     window.clearTimeout(hideBrushTimeout)
