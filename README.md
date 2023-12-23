@@ -52,6 +52,9 @@ Demo link:https://inpaintweb.lxfater.com/
   <img src="https://contrib.rocks/image?repo=lxfater/inpaint-web" />
 </a>
 
+## Translations via [fink editor](https://inlang.com/m/tdozzpar/app-inlang-editor)
+[![inlang status badge](https://inlang.com/badge?url=github.com/lxfater/inpaint-web)](https://inlang.com/editor/github.com/lxfater/inpaint-web?ref=badge)
+
 ## About me
 
 ### English Content
