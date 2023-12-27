@@ -46,6 +46,10 @@ Demo link:https://inpaintweb.lxfater.com/
 
 `npm run start`
 
+## Deploy on Sealos
+
+[![](https://raw.githubusercontent.com/labring-actions/templates/main/Deploy-on-Sealos.svg)](https://cloud.sealos.io/?openapp=system-template%3FtemplateName%3Dinpaint-web)
+
 ## Contributors
 
 <a href="https://github.com/lxfater/inpaint-web/graphs/contributors">
