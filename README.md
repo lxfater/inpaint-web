@@ -57,7 +57,10 @@ Demo link:https://inpaintweb.lxfater.com/
 
 ## About me
 ### Wechat
-![运行截图](https://raw.githubusercontent.com/lxfater/inpaint-web/main/media/wechat.jpg)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/lxfater/inpaint-web/main/media/wechat.jpg" width="500" height="500">
+</div>
 
 ### English Content
 
