@@ -19,7 +19,7 @@ import {
 
 function App() {
   const [file, setFile] = useState<File>()
-  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('en')
+  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('zh')
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
 

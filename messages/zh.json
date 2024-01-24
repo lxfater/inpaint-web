@@ -9,6 +9,6 @@
 	"upscale": "4 倍放大",
 	"download": "下载",
 	"undo": "撤销",
-	"inpaint_model_download_message": "需要下载一次30MB大小模型文件,耐心等待。。。",
-	"upscaleing_model_download_message": "需要下载一次70MB大小模型文件,耐心等待。。。"
+	"inpaint_model_download_message": "需要连接国际互联网，需要下载一次30MB大小模型文件,耐心等待。。。",
+	"upscaleing_model_download_message": "需要连接国际互联网，需要下载一次70MB大小模型文件,耐心等待。。。"
 }
