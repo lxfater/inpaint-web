@@ -1,3 +1,5 @@
+![Inpaint-web](./media/cover.png)
+
 # [Inpaint-web](https://github.com/lxfater/inpaint-web)
 
 A free and open-source inpainting & image-upscaling tool powered by webgpu and wasm on the browser.
@@ -53,9 +55,11 @@ Demo link:https://inpaintweb.lxfater.com/
 </a>
 
 ## Translations via [fink editor](https://inlang.com/m/tdozzpar/app-inlang-editor)
+
 [![inlang status badge](https://inlang.com/badge?url=github.com/lxfater/inpaint-web)](https://inlang.com/editor/github.com/lxfater/inpaint-web?ref=badge)
 
 ## About me
+
 ### Wechat
 
 <div align="left">
