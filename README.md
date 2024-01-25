@@ -1,10 +1,14 @@
 ![Inpaint-web](./media/cover.png)
+<div align="center">
+  
+# Inpaint-web
 
-# [Inpaint-web](https://github.com/lxfater/inpaint-web)
 
 A free and open-source inpainting & image-upscaling tool powered by webgpu and wasm on the browser.
 
 基于 Webgpu 技术和 wasm 技术的免费开源 inpainting & image-upscaling 工具, 纯浏览器端实现。
+
+</div>
 
 ## Inpaint（图片修复）
 
