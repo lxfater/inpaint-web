@@ -113,7 +113,7 @@ function App() {
               <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
                 <span className="text-gray-500">{m.try_it_images()}</span>
                 <div className="flex space-x-2 sm:space-x-4 px-4">
-                  {['dog', 'car', 'bird', 'bag', 'jacket', 'shoe', 'paris'].map(
+                  {['bag', 'dog', 'car', 'bird', 'jacket', 'shoe', 'paris'].map(
                     image => (
                       <div
                         key={image}

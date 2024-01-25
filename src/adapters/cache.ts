@@ -27,7 +27,7 @@ function getModel(modelType: modelType) {
         name: 'migan-pipeline-v2',
         url: 'https://huggingface.co/andraniksargsyan/migan/resolve/main/migan_pipeline_v2.onnx',
         backupUrl:
-          'https://modelscope.cn/api/v1/models/lxfater/inpaint-web/repo?Revision=master&FilePath=migan_pipeline_v2.onnx',
+          'https://worker-share-proxy-01f5.lxfater.workers.dev/andraniksargsyan/migan/resolve/main/migan_pipeline_v2.onnx',
       },
     ]
     const currentModel = modelList[2]
@@ -39,7 +39,7 @@ function getModel(modelType: modelType) {
         name: 'realesrgan-x4',
         url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
         backupUrl:
-          'https://modelscope.cn/api/v1/models/lxfater/inpaint-web/repo?Revision=master&FilePath=realesrgan-x4.onnx',
+          'https://worker-share-proxy-01f5.lxfater.workers.dev/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
       },
     ]
     const currentModel = modelList[0]
