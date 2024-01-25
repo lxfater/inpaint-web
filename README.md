@@ -56,6 +56,11 @@ Demo link:https://inpaintweb.lxfater.com/
 [![inlang status badge](https://inlang.com/badge?url=github.com/lxfater/inpaint-web)](https://inlang.com/editor/github.com/lxfater/inpaint-web?ref=badge)
 
 ## About me
+### Wechat
+
+<div align="left">
+    <img src="https://raw.githubusercontent.com/lxfater/inpaint-web/main/media/wechat.jpg" width="50%">
+</div>
 
 ### English Content
 
