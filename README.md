@@ -25,6 +25,16 @@ Demo link:https://inpaintweb.lxfater.com/
 
 ## Project Roadmap
 
+### fr
+- [x] Historique des modifications d'images
+- [x] Optimiser le modèle
+- [x] Intégrer le post-traitement dans le modèle
+- [x] Mise à l'échelle de l'image
+- [ ] Intégrez tout segment pour une sélection et une suppression rapides dans les images
+- [ ] Intégrer la diffusion stable pour le remplacement de l'image
+- [ ] Meilleure interface utilisateur
+
+
 ### en
 
 - [x] Image Modification History
