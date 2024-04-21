@@ -1,0 +1,14 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"drop_zone": "Cliquer ou glisser deposer",
+	"try_it_images": "Essayer cela",
+	"feedback": "A propos de inpaint",
+	"start_new": "Demarrer nouveau",
+	"bruch_size": "Taille du pinceau",
+	"original": "Original",
+	"upscale": "4x-upscaling",
+	"download": "Telechargement",
+	"undo": "Annuler",
+	"inpaint_model_download_message": "Telechargement de 30MB de fichier model, veuillez patienter ...",
+	"upscaleing_model_download_message": "Telechargement de 70MB fichier model, veuillez patienter..."
+}
