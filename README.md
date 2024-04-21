@@ -3,6 +3,7 @@
   
 # Inpaint-web
 
+Un outil gratuit et open-source d’inpainting et de mise à l’échelle d’images alimenté par webgpu et wasm sur le navigateur.
 
 A free and open-source inpainting & image-upscaling tool powered by webgpu and wasm on the browser.
 
