@@ -29,8 +29,6 @@
     "prettier/prettier": [
       "error",
       {
-        "singleQuote": true,
-        "arrowParens": "avoid",
         "endOfLine": "auto"
       }
     ],
