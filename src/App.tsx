@@ -19,10 +19,12 @@ import {
 
 function App() {
   const [file, setFile] = useState<File>()
-  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('zh')
-
+  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+    'zh'
+  )
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
 
+  console.log(stateLanguageTag)
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
 
@@ -76,6 +78,20 @@ function App() {
           >
             <p>{languageTag() === 'en' ? '切换到中文' : 'en'}</p>
           </Button>
+
+          <Button
+            className="mr-5 flex"
+            onClick={() => {
+              if (languageTag() === 'zh') {
+                setLanguageTag('fr')
+              } else {
+                setLanguageTag('zh')
+              }
+            }}
+          >
+            <p>{languageTag() === 'fr' ? '切换到中文' : 'fr'}</p>
+          </Button>
+
           <Button
             className="w-38 flex sm:visible"
             icon={<InformationCircleIcon className="w-6 h-6" />}
