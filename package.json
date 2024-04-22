@@ -34,6 +34,7 @@
       "echo '统一格式化完成🌸'"
     ]
   },
+  "lint-fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
   "eslintConfig": {
     "extends": "react-app"
   },
