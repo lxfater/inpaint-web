@@ -12,6 +12,7 @@ import Progress from './components/Progress'
 import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
 import * as m from './paraglide/messages'
+//import EnhancerWaterMark from 'watermark-enhancer'
 
 interface EditorProps {
   file: File
@@ -45,6 +46,7 @@ function drawLines(
 }
 
 const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
+
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
