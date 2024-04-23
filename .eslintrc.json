@@ -1,7 +1,6 @@
 {
   "extends": [
-    "airbnb",
-    "airbnb/hooks",
+    "react-app",
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "plugin:prettier/recommended",
@@ -29,7 +28,9 @@
     "prettier/prettier": [
       "error",
       {
-        "endOfLine": "auto"
+        "singleQuote": true,
+	"arrowParens": "avoid",
+	"endOfLine": "auto"
       }
     ],
     "consistent-return": "off",
