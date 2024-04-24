@@ -254,7 +254,7 @@ export default async function waterMark(
   callback: (progress: number) => void
 ) {
   console.time('sessionCreate')
-  const result = await default EnhancerWaterMark({
+  const result = await EnhancerWaterMark({
   width: '100',
   height: '80',
   rotate: '17',
