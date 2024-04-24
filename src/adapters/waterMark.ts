@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
+import EnhancerWaterMark from 'watermark-enhancer'
 
 function imgProcess(img: Mat) {
   const channels = new cv.MatVector()
