@@ -458,11 +458,6 @@ export default function Editor(props: EditorProps) {
   }, [])
 
   const onWaterMark = useCallback(async () => {
-    if (!(await modelExists('waterMark'))) {
-      setDownloaded(false)
-      await downloadModel('waterMark', setDownloadProgress)
-      setDownloaded(true)
-    }
     setIsProcessingLoading(true)
     try {
       // 运行
