@@ -743,7 +743,9 @@ export default function Editor(props: EditorProps) {
         >
           {m.original()}
         </Button>
-        {!showOriginal && (<Button onUp={onWaterMark}>{m.watermark()}</Button>)}
+        {!showOriginal && (
+        <Button onUp={onWaterMark}>{m.watermark()}</Button>
+        )}
 
         <Button
           primary
