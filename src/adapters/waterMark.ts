@@ -74,7 +74,7 @@ export default async function waterMark(
       height: '80',
       rotate: '17',
       content: 'test',
-      asyncContent: renderEffectContent,
+      // asyncContent: renderEffectContent,
     },
     {
       content: 'watermark loading...',
