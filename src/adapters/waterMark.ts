@@ -254,14 +254,17 @@ export default async function waterMark(
   callback: (progress: number) => void
 ) {
   console.time('sessionCreate')
-  const result = await EnhancerWaterMark(
-  options = {
-    + content: 'test',
-    width: '100',
-    height: '80',
-    rotate: '17'
-  }, 
-)(imageTensor)
+  const result = await export default EnhancerWaterMark({
+  width: '100',
+  height: '80',
+  rotate: '17',
+  content: 'test',
+  asyncContent: renderEffectContent,
+}, {
+  content: 'watermark loading...',
+  color: 'black',
+  background: 'white'
+})(imageTensor)
   console.time('postProcess')
   const outsTensor = result
   const chwToHwcData = postProcess(
