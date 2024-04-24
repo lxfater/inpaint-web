@@ -62,13 +62,11 @@ function imageDataToDataURL(imageData: ImageData) {
   // 导出为数据 URL
   return canvas.toDataURL()
 }
-let model: ArrayBuffer | null = null
 export default async function waterMark(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
 ) {
   console.time('sessionCreate')
-  
   const result = await EnhancerWaterMark({
   width: '100',
   height: '80',
