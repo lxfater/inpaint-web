@@ -732,6 +732,7 @@ export default function Editor(props: EditorProps) {
         </Button>
         {!showOriginal && (
           <Button onUp={onSuperResolution}>{m.upscale()}</Button>
+          <Button onUp={onWaterMark}>{m.watermark()}</Button>
         )}
 
         <Button
