@@ -732,19 +732,8 @@ export default function Editor(props: EditorProps) {
         </Button>
         {!showOriginal && (
           <Button onUp={onSuperResolution}>{m.upscale()}</Button>
+          <Button onUp={onWaterMark}>{m.watermark()}</Button>
         )}
-        <Button
-          primary={showOriginal}
-          icon={<EyeIcon className="w-6 h-6" />}
-          onUp={() => {
-            setShowOriginal(!showOriginal)
-            setTimeout(() => setSeparatorLeft(0), 300)
-          }}
-        >
-          {m.original()}
-        </Button>
-        {!showOriginal && <Button·onUp={onWaterMark}>{m.watermark()}</Button>}
-
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
