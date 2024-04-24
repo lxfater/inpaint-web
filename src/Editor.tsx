@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
 import superResolution from './adapters/superResolution'
+import waterMark from './adapters/waterMark'
 import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
@@ -12,7 +13,7 @@ import Progress from './components/Progress'
 import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
 import * as m from './paraglide/messages'
-//import EnhancerWaterMark from 'watermark-enhancer'
+import EnhancerWaterMark from 'watermark-enhancer'
 
 interface EditorProps {
   file: File
@@ -456,6 +457,43 @@ export default function Editor(props: EditorProps) {
     }
   }, [])
 
+  const onWaterMark = useCallback(async () => {
+    if (!(await modelExists('waterMark'))) {
+      setDownloaded(false)
+      await downloadModel('waterMark', setDownloadProgress)
+      setDownloaded(true)
+    }
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('waterMark_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await waterMark(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('waterMark_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('waterMark', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
+  
   const onSuperResolution = useCallback(async () => {
     if (!(await modelExists('superResolution'))) {
       setDownloaded(false)
