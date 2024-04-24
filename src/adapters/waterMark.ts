@@ -259,7 +259,7 @@ export default async function superResolution(
     + content: 'test',
     width: '100',
     height: '80',
-    rotate: '17',
+    rotate: '17'
   }, 
 )(imageTensor)
   console.time('postProcess')
