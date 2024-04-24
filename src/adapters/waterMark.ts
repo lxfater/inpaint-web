@@ -254,29 +254,14 @@ export default async function superResolution(
   callback: (progress: number) => void
 ) {
   console.time('sessionCreate')
-  if (!model) {
-    const capabilities = await getCapabilities()
-    configEnv(capabilities)
-    const modelBuffer = await ensureModel('superResolution')
-    model = await ort.InferenceSession.create(modelBuffer, {
-      executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
-    })
-  }
-  console.timeEnd('sessionCreate')
-
-  const img =
-    imageFile instanceof HTMLImageElement
-      ? imageFile
-      : await loadImage(URL.createObjectURL(imageFile))
-  const imageTersorData = await processImage(img)
-  const imageTensor = new ort.Tensor('float32', imageTersorData, [
-    1,
-    3,
-    img.height,
-    img.width,
-  ])
-
-  const result = await tileProc(imageTensor, model, callback)
+  const result = await EnhancerWaterMark(
+  options = {
+    + content: 'test',
+    width: '100',
+    height: '80',
+    rotate: '17',
+  }, 
+)(imageTensor)
   console.time('postProcess')
   const outsTensor = result
   const chwToHwcData = postProcess(
