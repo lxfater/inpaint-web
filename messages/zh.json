@@ -7,6 +7,7 @@
 	"bruch_size": "刷子大小",
 	"original": "原图",
 	"upscale": "4 倍放大",
+	"watermark": "加水印",
 	"download": "下载",
 	"undo": "撤销",
 	"inpaint_model_download_message": "注意需要连接国际互联网，需要下载一次30MB大小模型文件,耐心等待。。。",
