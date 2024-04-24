@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
 
 function imgProcess(img: Mat) {
