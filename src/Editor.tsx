@@ -13,7 +13,6 @@ import Progress from './components/Progress'
 import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
 import * as m from './paraglide/messages'
-import EnhancerWaterMark from 'watermark-enhancer'
 
 interface EditorProps {
   file: File
