@@ -249,7 +249,7 @@ function imageDataToDataURL(imageData: ImageData) {
   return canvas.toDataURL()
 }
 let model: ArrayBuffer | null = null
-export default async function superResolution(
+export default async function waterMark(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
 ) {
