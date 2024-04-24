@@ -733,9 +733,7 @@ export default function Editor(props: EditorProps) {
         {!showOriginal && (
           <Button onUp={onSuperResolution}>{m.upscale()}</Button>
         )}
-        {!showOriginal && (
-          <Button onUp={onWaterMark}>{m.watermark()}</Button>
-        )}
+        <Button onUp={onWaterMark}>{m.watermark()}</Button>
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
