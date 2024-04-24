@@ -7,6 +7,7 @@
 	"bruch_size": "Taille du pinceau",
 	"original": "Original",
 	"upscale": "4x-upscaling",
+	"watermark": "Add WaterMark",
 	"download": "Telechargement",
 	"undo": "Annuler",
 	"inpaint_model_download_message": "Telechargement de 30MB de fichier model, veuillez patienter ...",
