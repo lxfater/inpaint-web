@@ -81,7 +81,7 @@ export default async function waterMark(
       color: 'black',
       background: 'white',
     }
-  )(imageTensor)
+  )(imageFile)
   console.time('postProcess')
   const outsTensor = result
   const chwToHwcData = postProcess(
