@@ -493,7 +493,7 @@ export default function Editor(props: EditorProps) {
       setIsProcessingLoading(false)
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
-  
+  // Supper fonction
   const onSuperResolution = useCallback(async () => {
     if (!(await modelExists('superResolution'))) {
       setDownloaded(false)
