@@ -133,7 +133,7 @@ export default async function waterMark(
     })
   }
   console.timeEnd('sessionCreate')
-
+/*
   const img =
     imageFile instanceof HTMLImageElement
       ? imageFile
@@ -145,7 +145,7 @@ export default async function waterMark(
     img.height,
     img.width,
   ])
-  
+  */
     console.time('sessionCreate')
   const result = await EnhancerWaterMark(
     {
