@@ -167,7 +167,7 @@ export default async function waterMark(
   console.timeEnd('sessionCreate')
   console.time('preProcess')
 
-  maskBase64 = URL.createObjectURL(imageFile)
+  const maskBase64 = URL.createObjectURL(imageFile)
   const [originalImg, originalMark] = await Promise.all([
     imageFile instanceof HTMLImageElement
       ? imageFile
