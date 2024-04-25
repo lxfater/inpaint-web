@@ -51,20 +51,6 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   }
   return chwToHwcData
 }
-
-function imageDataToDataURL(imageFile: imageFile) {
-  // 创建 canvas
-  const canvas = document.createElement('canvas')
-  canvas.width = imageFile.width
-  canvas.height = imageFile.height
-
-  // 绘制 imageData 到 canvas
-  const ctx = canvas.getContext('2d')
-  ctx.putImageFile(imageFile, 0, 0)
-
-  // 导出为数据 URL
-  return canvas.toDataURL()
-}
 export default async function waterMark(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
@@ -85,7 +71,7 @@ export default async function waterMark(
     }
   )(imageFile)
   console.log(imageFile, 'imageFile')
-  const url = imageDataToDataURL(imageFile)
+  const url = imageFile.getUrl()
   console.timeEnd('postProcess')
 
   return url
