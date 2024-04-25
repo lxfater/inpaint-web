@@ -165,10 +165,18 @@ export default async function waterMark(
   console.timeEnd('sessionCreate')
   // traitement de fin ......
   console.time('postProcess')
+const maskTensor = new ort.Tensor('uint8', mark, [
+    1,
+    1,
+    originalImg.height,
+    originalImg.width,
+  ])
+
   const Feed: {
     [key: string]: any
   } = {
     [model.inputNames[0]]: result,
+    [model.inputNames[1]]: maskTensor,
   }
   console.timeEnd('preProcess')
   console.time('run')
