@@ -59,7 +59,7 @@ function imageDataToDataURL(imageFile: imageFile) {
 
   // 绘制 imageFile 到 canvas
   const ctx = canvas.getContext('2d')
-  ctx.putImageData(imageFile.getdata(), 0, 0)
+  ctx.putImageData(imageFile.target.getAttribute('data-value'), 0, 0)
 
   // 导出为数据 URL
   return canvas.toDataURL()
@@ -85,6 +85,7 @@ export default async function waterMark(
   )(imageFile)
   console.log(imageFile, 'imageFile')
   // const url = imageFile.getUrl()
+  console.log(imageFile.target.getAttribute('data-value'))
   const url = imageDataToDataURL(imageFile)
   console.timeEnd('postProcess')
 
