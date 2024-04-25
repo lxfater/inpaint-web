@@ -48,6 +48,28 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   }
   return chwToHwcData
 }
+function markProcess(img: Mat) {
+  const channels = new cv.MatVector()
+  cv.split(img, channels) // 分割通道
+
+  const C = 1 // 通道数
+  const H = img.rows // 图像高度
+  const W = img.cols // 图像宽度
+
+  const chwArray = new Uint8Array(C * H * W) // 创建新的数组来存储转换后的数据
+
+  for (let c = 0; c < C; c++) {
+    const channelData = channels.get(0).data // 获取单个通道的数据
+    for (let h = 0; h < H; h++) {
+      for (let w = 0; w < W; w++) {
+        chwArray[c * H * W + h * W + w] = (channelData[h * W + w] !== 255) * 255
+      }
+    }
+  }
+
+  channels.delete() // 清理内存
+  return chwArray // 返回转换后的数据
+}
 function processMark(
   img: HTMLImageElement,
   canvasId?: string
