@@ -102,7 +102,7 @@ export default async function waterMark(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
 ) {
-  console.timeEnd('sessionCreate')
+  // console.timeEnd('sessionCreate')
 
   const img =
     imageFile instanceof HTMLImageElement
@@ -135,19 +135,6 @@ export default async function waterMark(
   console.timeEnd('sessionCreate')
   // traitement de fin ......
   console.time('postProcess')
-  const outsTensor = result
-  const chwToHwcData = postProcess(
-    outsTensor.data,
-    img.width * 4,
-    img.height * 4
-  )
-  const imageData = new ImageData(
-    new Uint8ClampedArray(chwToHwcData),
-    img.width * 4,
-    img.height * 4
-  )
-  console.log(imageData, 'imageData')
-  
   const Feed: {
     [key: string]: any
   } = {
