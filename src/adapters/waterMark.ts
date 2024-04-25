@@ -55,8 +55,8 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
 function imageDataToDataURL(imageFile: imageFile) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
-  canvas.width = imageData.width
-  canvas.height = imageData.height
+  canvas.width = imageFile.width
+  canvas.height = imageFile.height
 
   // 绘制 imageData 到 canvas
   const ctx = canvas.getContext('2d')
