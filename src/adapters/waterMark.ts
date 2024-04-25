@@ -52,7 +52,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   return chwToHwcData
 }
 
-function imageDataToDataURL(imageData: imageFile) {
+function imageDataToDataURL(imageFile: imageFile) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
   canvas.width = imageData.width
@@ -60,7 +60,7 @@ function imageDataToDataURL(imageData: imageFile) {
 
   // 绘制 imageData 到 canvas
   const ctx = canvas.getContext('2d')
-  ctx.putImageData(imageData, 0, 0)
+  ctx.putImageFile(imageFile, 0, 0)
 
   // 导出为数据 URL
   return canvas.toDataURL()
