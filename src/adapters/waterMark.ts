@@ -261,8 +261,6 @@ const maskTensor = new ort.Tensor('uint8', mark, [
     originalImg.height,
     originalImg.width,
   ])
-
-/*
   const Feed: {
     [key: string]: any
   } = {
@@ -278,8 +276,8 @@ const maskTensor = new ort.Tensor('uint8', mark, [
 
   return url
 }
-*/
 
+/*
 console.time('postProcess')
   const outsTensor = result
   const chwToHwcData = postProcess(
@@ -298,3 +296,4 @@ console.time('postProcess')
 
   return url
 }
+*/
