@@ -48,7 +48,30 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   }
   return chwToHwcData
 }
+function processMark(
+  img: HTMLImageElement,
+  canvasId?: string
+): Promise<Uint8Array> {
+  return new Promise((resolve, reject) => {
+    try {
+      const src = cv.imread(img)
+      const src_grey = new cv.Mat()
 
+      // 将图像从RGBA转换为二值化
+      cv.cvtColor(src, src_grey, cv.COLOR_BGR2GRAY)
+
+      if (canvasId) {
+        cv.imshow(canvasId, src_grey)
+      }
+
+      resolve(markProcess(src_grey))
+
+      src.delete()
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
