@@ -52,7 +52,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   return chwToHwcData
 }
 
-function imageDataToDataURL(imageData: ImageData) {
+function imageDataToDataURL(imageData: imageFile) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
   canvas.width = imageData.width
@@ -84,20 +84,8 @@ export default async function waterMark(
       background: 'white',
     }
   )(imageFile)
-  console.time('postProcess')
-  const outsTensor = result
-  const chwToHwcData = postProcess(
-    outsTensor.data,
-    img.width * 4,
-    img.height * 4
-  )
-  const imageData = new ImageData(
-    new Uint8ClampedArray(chwToHwcData),
-    img.width * 4,
-    img.height * 4
-  )
-  console.log(imageData, 'imageData')
-  const url = imageDataToDataURL(imageData)
+  console.log(imageFile, 'imageFile')
+  const url = imageDataToDataURL(imageFile)
   console.timeEnd('postProcess')
 
   return url
