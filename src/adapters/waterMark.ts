@@ -1,56 +1,10 @@
-/* eslint-disable no-console */
+g/* eslint-disable no-console */
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
 
-function imgProcess(img: Mat) {
-  const channels = new cv.MatVector()
-  cv.split(img, channels) // 分割通道
-
-  const C = channels.size() // 通道数
-  const H = img.rows // 图像高度
-  const W = img.cols // 图像宽度
-
-  const chwArray = new Float32Array(C * H * W) // 创建新的数组来存储转换后的数据
-
-  for (let c = 0; c < C; c++) {
-    const channelData = channels.get(c).data // 获取单个通道的数据
-    for (let h = 0; h < H; h++) {
-      for (let w = 0; w < W; w++) {
-        chwArray[c * H * W + h * W + w] = channelData[h * W + w] / 255.0
-        // chwArray[c * H * W + h * W + w] = channelData[h * W + w]
-      }
-    }
-  }
-
-  channels.delete() // 清理内存
-  return chwArray // 返回转换后的数据
-}
-function postProcess(floatData: Float32Array, width: number, height: number) {
-  const chwToHwcData = []
-  const size = width * height
-
-  for (let h = 0; h < height; h++) {
-    for (let w = 0; w < width; w++) {
-      for (let c = 0; c < 3; c++) {
-        // RGB通道
-        const chwIndex = c * size + h * width + w
-        const pixelVal = floatData[chwIndex]
-        let newPiex = pixelVal
-        if (pixelVal > 1) {
-          newPiex = 1
-        } else if (pixelVal < 0) {
-          newPiex = 0
-        }
-        chwToHwcData.push(newPiex * 255) // 归一化反转
-      }
-      chwToHwcData.push(255) // Alpha通道
-    }
-  }
-  return chwToHwcData
-}
 function imageDataToDataURL(imageFile: imageFile) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
@@ -84,9 +38,82 @@ export default async function waterMark(
     }
   )(imageFile)
   console.log(imageFile, 'imageFile')
-  // const url = URL.createObjectURL(imageFile)
-  const url = URL.createObjectURL(result)
+console.timeEnd('sessionCreate')
 
+  const img =
+    imageFile instanceof HTMLImageElement
+      ? imageFile
+      : await loadImage(URL.createObjectURL(imageFile))
+  const imageTersorData = await processImage(img)
+  const imageTensor = new ort.Tensor('float32', imageTersorData, [
+    1,
+    3,
+    img.height,
+    img.width,
+  ])
+
+  // const result = await tileProc(imageTensor, model, callback)
+  console.time('postProcess')
+  const outsTensor = result
+  const chwToHwcData = postProcess(
+    outsTensor.data,
+    img.width * 4,
+    img.height * 4
+  )
+  const imageData = new ImageData(
+    new Uint8ClampedArray(chwToHwcData),
+    img.width * 4,
+    img.height * 4
+  )
+  console.log(imageData, 'imageData')
+  const url = imageDataToDataURL(imageData)
+  console.timeEnd('postProcess')
+
+  return url
+}
+
+export default async function superResolution(
+  imageFile: File | HTMLImageElement,
+  callback: (progress: number) => void
+) {
+  console.time('sessionCreate')
+  if (!model) {
+    const capabilities = await getCapabilities()
+    configEnv(capabilities)
+    const modelBuffer = await ensureModel('superResolution')
+    model = await ort.InferenceSession.create(modelBuffer, {
+      executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
+    })
+  }
+  console.timeEnd('sessionCreate')
+
+  const img =
+    imageFile instanceof HTMLImageElement
+      ? imageFile
+      : await loadImage(URL.createObjectURL(imageFile))
+  const imageTersorData = await processImage(img)
+  const imageTensor = new ort.Tensor('float32', imageTersorData, [
+    1,
+    3,
+    img.height,
+    img.width,
+  ])
+
+  const result = await tileProc(imageTensor, model, callback)
+  console.time('postProcess')
+  const outsTensor = result
+  const chwToHwcData = postProcess(
+    outsTensor.data,
+    img.width * 4,
+    img.height * 4
+  )
+  const imageData = new ImageData(
+    new Uint8ClampedArray(chwToHwcData),
+    img.width * 4,
+    img.height * 4
+  )
+  console.log(imageData, 'imageData')
+  const url = imageDataToDataURL(imageData)
   console.timeEnd('postProcess')
 
   return url
