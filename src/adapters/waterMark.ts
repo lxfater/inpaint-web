@@ -84,11 +84,8 @@ export default async function waterMark(
     }
   )(imageFile)
   console.log(imageFile, 'imageFile')
-  // const url = imageFile.getUrl()
-  //console.log(imageFile.target.getAttribute('data-value'))
-  // console.log(imageFile.getData()) caca
-  // const url = imageDataToDataURL(imageFile)
-  const url = URL.createObjectURL(imageFile)
+  // const url = URL.createObjectURL(imageFile)
+  const url = URL.createObjectURL(result)
 
   console.timeEnd('postProcess')
 
