@@ -133,7 +133,7 @@ export default async function waterMark(
   )(imageFile)
   console.log(imageFile, 'imageFile')
   console.timeEnd('sessionCreate')
-  
+  // traitement de fin ......
   console.time('postProcess')
   const outsTensor = result
   const chwToHwcData = postProcess(
@@ -147,7 +147,23 @@ export default async function waterMark(
     img.height * 4
   )
   console.log(imageData, 'imageData')
-  const url = imageDataToDataURL(imageData)
+
+const imageTensor = new ort.Tensor('uint8', imageData, [
+    1,
+    3,
+    originalImg.height,
+    originalImg.width,
+  ])
+  const Feed: {
+    [key: string]: any
+  } = {
+    [model.inputNames[0]]: result,
+  }
+  console.timeEnd('preProcess')
+  console.time('run')
+  const results = await model.run(Feed)
+  
+  const url = imageDataToDataURL(results)
   console.timeEnd('postProcess')
 
   return url
