@@ -147,13 +147,7 @@ export default async function waterMark(
     img.height * 4
   )
   console.log(imageData, 'imageData')
-
-const imageTensor = new ort.Tensor('uint8', imageData, [
-    1,
-    3,
-    originalImg.height,
-    originalImg.width,
-  ])
+  
   const Feed: {
     [key: string]: any
   } = {
