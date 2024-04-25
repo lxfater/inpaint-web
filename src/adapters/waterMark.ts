@@ -51,15 +51,15 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   }
   return chwToHwcData
 }
-function imageDataToDataURL(imageData: ImageData) {
+function imageDataToDataURL(imageFile: imageFile) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
-  canvas.width = imageData.width
-  canvas.height = imageData.height
+  canvas.width = imageFile.width
+  canvas.height = imageFile.height
 
-  // 绘制 imageData 到 canvas
+  // 绘制 imageFile 到 canvas
   const ctx = canvas.getContext('2d')
-  ctx.putImageData(imageData, 0, 0)
+  ctx.putImageData(imageFile.getdata(), 0, 0)
 
   // 导出为数据 URL
   return canvas.toDataURL()
@@ -84,7 +84,8 @@ export default async function waterMark(
     }
   )(imageFile)
   console.log(imageFile, 'imageFile')
-  const url = imageFile.getUrl()
+  // const url = imageFile.getUrl()
+  const url = imageDataToDataURL(imageFile)
   console.timeEnd('postProcess')
 
   return url
