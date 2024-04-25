@@ -240,7 +240,7 @@ export default async function waterMark(
   // traitement de fin ......
   console.timeEnd('sessionCreate')
   console.time('preProcess')
-/*
+
   const maskBase64 = URL.createObjectURL(imageFile)
   const [originalImg, originalMark] = await Promise.all([
     imageFile instanceof HTMLImageElement
@@ -262,6 +262,7 @@ const maskTensor = new ort.Tensor('uint8', mark, [
     originalImg.width,
   ])
 
+/*
   const Feed: {
     [key: string]: any
   } = {
