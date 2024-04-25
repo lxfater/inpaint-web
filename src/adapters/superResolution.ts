@@ -290,7 +290,8 @@ export default async function superResolution(
     img.height * 4
   )
   console.log(imageData, 'imageData')
-  const url = imageDataToDataURL(imageData)
+  const url = URL.createObjectURL(imageData);
+  // const url = imageDataToDataURL(imageData)
   console.timeEnd('postProcess')
 
   return url
