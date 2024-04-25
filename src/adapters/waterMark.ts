@@ -1,4 +1,4 @@
-g/* eslint-disable no-console */
+/* eslint-disable no-console */
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import 'core-js/stable'
