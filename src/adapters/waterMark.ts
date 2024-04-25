@@ -5,6 +5,15 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
 
+function loadImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.crossOrigin = 'Anonymous'
+    img.onload = () => resolve(img)
+    img.onerror = () => reject(new Error(`Failed to load image from ${url}`))
+    img.src = url
+  })
+}
 function processImage(
   img: HTMLImageElement,
   canvasId?: string
