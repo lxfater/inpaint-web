@@ -5,6 +5,30 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
 
+function postProcess(floatData: Float32Array, width: number, height: number) {
+  const chwToHwcData = []
+  const size = width * height
+
+  for (let h = 0; h < height; h++) {
+    for (let w = 0; w < width; w++) {
+      for (let c = 0; c < 3; c++) {
+        // RGB通道
+        const chwIndex = c * size + h * width + w
+        const pixelVal = floatData[chwIndex]
+        let newPiex = pixelVal
+        if (pixelVal > 1) {
+          newPiex = 1
+        } else if (pixelVal < 0) {
+          newPiex = 0
+        }
+        chwToHwcData.push(newPiex * 255) // 归一化反转
+      }
+      chwToHwcData.push(255) // Alpha通道
+    }
+  }
+  return chwToHwcData
+}
+
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
