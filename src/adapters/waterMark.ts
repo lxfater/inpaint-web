@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
+import { ensureModel } from './cache'
+import { getCapabilities } from './util'
+import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
