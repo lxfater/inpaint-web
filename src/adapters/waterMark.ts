@@ -102,7 +102,16 @@ export default async function waterMark(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
 ) {
-  // console.timeEnd('sessionCreate')
+    console.time('sessionCreate')
+  if (!model) {
+    const capabilities = await getCapabilities()
+    configEnv(capabilities)
+    const modelBuffer = await ensureModel('inpaint')
+    model = await ort.InferenceSession.create(modelBuffer, {
+      executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
+    })
+  }
+  console.timeEnd('sessionCreate')
 
   const img =
     imageFile instanceof HTMLImageElement
