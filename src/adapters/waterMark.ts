@@ -299,7 +299,7 @@ export default async function waterMark(
       background: 'white',
     }
   )(result) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
-  console.log(imageData, 'outsTensor')
+  // console.log(imageData, 'outsTensor')
   
   console.time('postProcess')
   const outsTensor = result2
