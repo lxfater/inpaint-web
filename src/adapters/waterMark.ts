@@ -8,6 +8,8 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
 
+const multi = 4
+
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -56,8 +58,8 @@ async function tileProc(
   const outputDims = [
     inputDims[0],
     inputDims[1],
-    inputDims[2] * 4,
-    inputDims[3] * 4,
+    inputDims[2] * multi,
+    inputDims[3] * multi,
   ]
   const outputTensor = new ort.Tensor(
     'float32',
@@ -134,10 +136,10 @@ async function tileProc(
       }
       console.log(`pre dims:${results.output.dims}`)
 
-      const outTileW = tileW * 4
-      const outTileH = tileH * 4
-      const outTileSize = tileSize * 4
-      const outTileSizePre = tileSizePre * 4
+      const outTileW = tileW * multi
+      const outTileH = tileH * multi
+      const outTileSize = tileSize * multi
+      const outTileSizePre = tileSizePre * multi
 
       const outTileROffset = 0
       const outTileGOffset = outTileSize * outTileSize
@@ -149,8 +151,8 @@ async function tileProc(
           const xim = i * outTileSizePre + x
           const yim = j * outTileSizePre + y
           const idx = xim + yim * outImageW
-          const xt = x + tilePadding * 4
-          const yt = y + tilePadding * 4
+          const xt = x + tilePadding * multi
+          const yt = y + tilePadding * multi
           outputTensor.data[idx + outROffset] =
             results.output.data[xt + yt * outTileSize + outTileROffset]
           outputTensor.data[idx + outGOffset] =
@@ -206,7 +208,7 @@ function configEnv(capabilities: {
     ort.env.wasm.numThreads = 1
   } else {
     if (capabilities.threads) {
-      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 4
+      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? multi
     }
     if (capabilities.simd) {
       ort.env.wasm.simd = true
@@ -308,13 +310,13 @@ export default async function waterMark(
   const outsTensor = result
   const chwToHwcData = postProcess(
     outsTensor.data,
-    img.width * 4,
-    img.height * 4
+    img.width * multi,
+    img.height * multi
   )
   const imageData = new ImageData(
     new Uint8ClampedArray(chwToHwcData),
-    img.width * 4,
-    img.height * 4
+    img.width * multi,
+    img.height * multi
   )
   // console.log(imageData, 'imageData')
 
