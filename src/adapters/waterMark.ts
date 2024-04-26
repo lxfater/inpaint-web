@@ -251,23 +251,23 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   return chwToHwcData
 }
 
-async function addWaterMarki (canvas: pCanvas){
+function addWaterMarki (canvas: canvas){
 // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
   // 水印参数, 水印内容可异步获取
-  const p = await EnhancerWaterMark(
+  const p = EnhancerWaterMark(
     {
-      width: pCanvas.width,
-      height: pCanvas.height,
+      width: canvas.width,
+      height: canvas.height,
       rotate: '17',
       content: 'Copyright',
       // asyncContent: renderEffectContent,
-    },
-    {
-      content: 'watermark loading...',
-      color: 'black',
-      background: 'white',
+//    },
+//    {
+//      content: 'watermark loading...',
+//      color: 'black',
+//      background: 'white',
     }
-  )(pCanvas) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
+  )(canvas) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
   
   return p
   
@@ -280,9 +280,9 @@ function imageDataToDataURL(imageData: ImageData) {
 
   // 绘制 imageData 到 canvas
   const ctx = canvas.getContext('2d')
-  ctx.putImageData(ImageData,0,0)
+  ctx.putImageData(imageData, 0, 0)
   // Ajout du waterMark
-  addWaterMarki (canvas)
+  const result = addWaterMarki (canvas)
   // 导出为数据 URL
   return canvas.toDataURL()
 }
@@ -331,7 +331,7 @@ export default async function waterMark(
     img.width * multi,
     img.height * multi
   )
-  // console.log(imageData, 'imageData')
+  console.log(imageData, 'imageData')
 
   const url = imageDataToDataURL(imageData)
   console.timeEnd('postProcess')
