@@ -220,7 +220,9 @@ export default async function waterMark(
     img.width,
   ])
   */
-    console.time('sessionCreate')
+  console.time('sessionCreate')
+  // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
+  // 水印参数, 水印内容可异步获取
   const result = await EnhancerWaterMark(
     {
       width: '100',
@@ -234,7 +236,7 @@ export default async function waterMark(
       color: 'black',
       background: 'white',
     }
-  )(imageFile)
+  )(imageFile) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
   console.log(imageFile, 'imageFile')
   console.timeEnd('sessionCreate')
   // traitement de fin ......
