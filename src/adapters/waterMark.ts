@@ -272,20 +272,11 @@ export default async function waterMark(
     imageFile instanceof HTMLImageElement
       ? imageFile
       : await loadImage(URL.createObjectURL(imageFile))
-  const imageTersorData = await processImage(img)
-  const imageTensor = new ort.Tensor('float32', imageTersorData, [
-    1,
-    3,
-    img.height,
-    img.width,
-  ])
 
-  
-  const result = await tileProc(imageTensor, model, callback)
 
   // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
   // 水印参数, 水印内容可异步获取
-  const result2 = await EnhancerWaterMark(
+  img = await EnhancerWaterMark(
     {
       width: '100',
       height: '80',
@@ -298,11 +289,21 @@ export default async function waterMark(
       color: 'black',
       background: 'white',
     }
-  )(result) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
-  // console.log(imageData, 'outsTensor')
+  )(img) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
+  // console.log(img, 'img')
   
+  const imageTersorData = await processImage(img)
+  const imageTensor = new ort.Tensor('float32', imageTersorData, [
+    1,
+    3,
+    img.height,
+    img.width,
+  ])
+
+  
+  const result = await tileProc(imageTensor, model, callback)  
   console.time('postProcess')
-  const outsTensor = result2
+  const outsTensor = result
   const chwToHwcData = postProcess(
     outsTensor.data,
     img.width * 4,
