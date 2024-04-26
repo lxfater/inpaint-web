@@ -8,7 +8,8 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
 
-const multi = 2
+const multi = 4
+const multi2 = 4
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -58,8 +59,8 @@ async function tileProc(
   const outputDims = [
     inputDims[0],
     inputDims[1],
-    inputDims[2] * multi,
-    inputDims[3] * multi,
+    inputDims[2] * multi2,
+    inputDims[3] * multi2,
   ]
   const outputTensor = new ort.Tensor(
     'float32',
@@ -76,6 +77,7 @@ async function tileProc(
   const outBOffset = outImageW * outImageH * 2
 
   const tileSize = 64
+  // const tileSize = 32
   const tilePadding = 6
   const tileSizePre = tileSize - tilePadding * 2
 
@@ -136,10 +138,11 @@ async function tileProc(
       }
       console.log(`pre dims:${results.output.dims}`)
 
-      const outTileW = tileW * multi
-      const outTileH = tileH * multi
-      const outTileSize = tileSize * multi
-      const outTileSizePre = tileSizePre * multi
+      const outTileW = tileW * multi2
+      const outTileH = tileH * multi2
+      const outTileSize = tileSize * multi2
+      const outTileSizePre = tileSizePre * multi2
+
 
       const outTileROffset = 0
       const outTileGOffset = outTileSize * outTileSize
@@ -151,8 +154,8 @@ async function tileProc(
           const xim = i * outTileSizePre + x
           const yim = j * outTileSizePre + y
           const idx = xim + yim * outImageW
-          const xt = x + tilePadding * multi
-          const yt = y + tilePadding * multi
+          const xt = x + tilePadding * multi2
+          const yt = y + tilePadding * multi2
           outputTensor.data[idx + outROffset] =
             results.output.data[xt + yt * outTileSize + outTileROffset]
           outputTensor.data[idx + outGOffset] =
@@ -215,7 +218,7 @@ This setting is available only when WebAssembly multithread feature is available
     ort.env.wasm.numThreads = 1
   } else {
     if (capabilities.threads) {
-      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 0
+      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? multi
     }
     if (capabilities.simd) {
       ort.env.wasm.simd = true
