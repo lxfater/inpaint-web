@@ -305,13 +305,13 @@ export default async function waterMark(
   const outsTensor = result2
   const chwToHwcData = postProcess(
     outsTensor.data,
-    img.width * 2,
-    img.height * 2
+    img.width * 4,
+    img.height * 4
   )
   const imageData = new ImageData(
     new Uint8ClampedArray(chwToHwcData),
-    img.width * 2,
-    img.height * 2
+    img.width * 4,
+    img.height * 4
   )
   console.log(imageData, 'imageData')
 
