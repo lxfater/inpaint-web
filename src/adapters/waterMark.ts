@@ -8,7 +8,7 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import EnhancerWaterMark from 'watermark-enhancer'
 
-const multi = 4
+const multi = 2
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
