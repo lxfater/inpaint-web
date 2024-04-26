@@ -313,7 +313,7 @@ export default async function waterMark(
     img.width * 4,
     img.height * 4
   )
-  console.log(imageData, 'imageData')
+  // console.log(imageData, 'imageData')
 
   const url = imageDataToDataURL(imageData)
   console.timeEnd('postProcess')
