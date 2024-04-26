@@ -268,12 +268,12 @@ export default async function waterMark(
   }
   console.timeEnd('sessionCreate')
 
-  const imgi =
+  const img =
     imageFile instanceof HTMLImageElement
       ? imageFile
       : await loadImage(URL.createObjectURL(imageFile))
 
-
+  /*
   // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
   // 水印参数, 水印内容可异步获取
   const img = await EnhancerWaterMark(
@@ -291,6 +291,8 @@ export default async function waterMark(
     }
   )(imgi) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
   // console.log(imgi, 'imgi')
+
+  */
   
   const imageTersorData = await processImage(img)
   const imageTensor = new ort.Tensor('float32', imageTersorData, [
