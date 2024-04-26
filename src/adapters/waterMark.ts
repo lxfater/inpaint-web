@@ -282,7 +282,7 @@ function imageDataToDataURL(imageData: ImageData) {
   const ctx = canvas.getContext('2d')
   ctx.putImageData(imageData, 0, 0)
   // Ajout du waterMark
-  const result = addWaterMarki (canvas)
+  // const result = addWaterMarki (canvas)
   // 导出为数据 URL
   return canvas.toDataURL()
 }
