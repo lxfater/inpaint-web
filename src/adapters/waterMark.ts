@@ -20,18 +20,19 @@ function loadImage(url: string): Promise<HTMLImageElement> {
     img.src = url
   })
 }
+// On decompose l'image source dans un tableau
 function imgProcess(img: Mat) {
   const channels = new cv.MatVector()
-  cv.split(img, channels) // 分割通道
+  cv.split(img, channels) // 分割通道 - canal divisé
 
-  const C = channels.size() // 通道数
-  const H = img.rows // 图像高度
-  const W = img.cols // 图像宽度
-
-  const chwArray = new Float32Array(C * H * W) // 创建新的数组来存储转换后的数据
+  const C = channels.size() // 通道数 - Nombre de canaux
+  const H = img.rows // 图像高度 - hauteur de l'image
+  const W = img.cols // 图像宽度 - Largeur de l'image
+  // Créer un nouveau tableau pour stocker les données converties
+  const chwArray = new Float32Array(C * H * W) // 创建新的数组来存储转换后的数据 
 
   for (let c = 0; c < C; c++) {
-    const channelData = channels.get(c).data // 获取单个通道的数据
+    const channelData = channels.get(c).data // 获取单个通道的数据 - Obtenez des données à partir d’un seul canal
     for (let h = 0; h < H; h++) {
       for (let w = 0; w < W; w++) {
         chwArray[c * H * W + h * W + w] = channelData[h * W + w] / 255.0
@@ -40,8 +41,8 @@ function imgProcess(img: Mat) {
     }
   }
 
-  channels.delete() // 清理内存
-  return chwArray // 返回转换后的数据
+  channels.delete() // 清理内存 - Nettoyer la mémoire
+  return chwArray // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
   inputTensor: ort.Tensor,
@@ -77,7 +78,6 @@ async function tileProc(
   const outBOffset = outImageW * outImageH * 2
 
   const tileSize = 64
-  // const tileSize = 32
   const tilePadding = 6
   const tileSizePre = tileSize - tilePadding * 2
 
@@ -100,16 +100,16 @@ async function tileProc(
       const tileGOffset = tileSize * tileSize
       const tileBOffset = tileSize * tileSize * 2
 
-      // padding tile 转移到上面的数据上
+      // padding tile 转移到上面的数据上 - Transfert vers les données ci-dessus
       const tileData = new Float32Array(tileSize * tileSize * 3)
       for (let xp = -tilePadding; xp < tileSizePre + tilePadding; xp++) {
         for (let yp = -tilePadding; yp < tileSizePre + tilePadding; yp++) {
-          // 计算在data中的一维坐标，防止边缘溢出
+          // 计算在data中的一维坐标，防止边缘溢出 - Calculer les coordonnées unidimensionnelles dans les données pour éviter le débordement des bords
           let xim = i * tileSizePre + xp
           if (xim < 0) xim = 0
           else if (xim >= imageW) xim = imageW - 1
 
-          // 计算在data中的一维坐标，防止边缘溢出
+          // 计算在data中的一维坐标，防止边缘溢出 - Calculer les coordonnées unidimensionnelles dans les données pour éviter le débordement des bords
           let yim = j * tileSizePre + yp
           if (yim < 0) yim = 0
           else if (yim >= imageH) yim = imageH - 1
@@ -119,7 +119,7 @@ async function tileProc(
           const xt = xp + tilePadding
           const yt = yp + tilePadding
           // const idx = (i * tileSize + x) + (j * tileSize + y) * imageW;
-          // 主要转化到一维的坐标上，
+          // 主要转化到一维的坐标上，- Principalement converti en coordonnées unidimensionnelles,
           tileData[xt + yt * tileSize + tileROffset] = data[idx + rOffset]
           tileData[xt + yt * tileSize + tileGOffset] = data[idx + gOffset]
           tileData[xt + yt * tileSize + tileBOffset] = data[idx + bOffset]
@@ -185,7 +185,7 @@ function processImage(
       const src = cv.imread(img)
       // eslint-disable-next-line camelcase
       const src_rgb = new cv.Mat()
-      // 将图像从RGBA转换为RGB
+      // 将图像从RGBA转换为RGB - Convertir l'image de RGBA en RVB
       cv.cvtColor(src, src_rgb, cv.COLOR_RGBA2RGB)
       if (canvasId) {
         cv.imshow(canvasId, src_rgb)
@@ -210,6 +210,10 @@ function configEnv(capabilities: {
 ort.env.wasm.numThreads
 set or get number of thread(s). If omitted or set to 0, number of thread(s) will be determined by system. If set to 1, no worker thread will be spawned.
 This setting is available only when WebAssembly multithread feature is available in current context.
+
+ort.env.wasm.numThreads
+définir ou obtenir le nombre de threads. S'il est omis ou défini sur 0, le nombre de threads sera déterminé par le système. S'il est défini sur 1, aucun thread de travail ne sera généré.
+Ce paramètre est disponible uniquement lorsque la fonctionnalité multithread WebAssembly est disponible dans le contexte actuel.
 */
 
   ort.env.wasm.wasmPaths =
@@ -243,9 +247,9 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
         } else if (pixelVal < 0) {
           newPiex = 0
         }
-        chwToHwcData.push(newPiex * 255) // 归一化反转
+        chwToHwcData.push(newPiex * 255) // 归一化反转 - inversion normalisée
       }
-      chwToHwcData.push(255) // Alpha通道
+      chwToHwcData.push(255) // Alpha通道 - Canal alpha
     }
   }
   return chwToHwcData
