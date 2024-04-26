@@ -256,8 +256,8 @@ async function addWaterMarki (canvas: pCanvas){
   // 水印参数, 水印内容可异步获取
   const p = await EnhancerWaterMark(
     {
-      width: '100',
-      height: '80',
+      width: pCanvas.width,
+      height: pCanvas.height,
       rotate: '17',
       content: 'Copyright',
       // asyncContent: renderEffectContent,
@@ -279,13 +279,20 @@ function imageDataToDataURL(imageData: ImageData) {
   canvas.height = imageData.height
 
   // 绘制 imageData 到 canvas
-  const ctx = canvas.getContext('2d')
-  ctx.putImageData(imageData, 0, 0)
+  // const ctx = canvas.getContext('2d')
 
   // Ajout du waterMark 
-  const pcanvas = addWaterMarki (canvas)
+  // const pcanvas = document.createElement('canvas')
+  // pcanvas.width = canvas.width
+  // pcanvas.width = canvas.width
+  // ctx.putImageData(pcanvas,0,0)
+  // addWaterMarki (canvas)
+  const ctx = canvas.getContext('2d')
+  ctx.putImageData(ImageData,0,0)
+  // Ajout du waterMark
+  addWaterMarki (canvas)
   // 导出为数据 URL
-  return pcanvas.toDataURL()
+  return canvas.toDataURL()
 }
 
 // var def model
