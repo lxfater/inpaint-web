@@ -249,7 +249,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
         }
         chwToHwcData.push(newPiex * 255) // 归一化反转 - inversion normalisée
       }
-      chwToHwcData.push(255) // Alpha通道 - Canal alpha
+      chwToHwcData.push(127) // Alpha通道 - Canal alpha - 0  to 255
     }
   }
   return chwToHwcData
