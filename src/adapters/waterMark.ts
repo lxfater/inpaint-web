@@ -285,7 +285,7 @@ export default async function waterMark(
 
   // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
   // 水印参数, 水印内容可异步获取
-  const result = await EnhancerWaterMark(
+  const result2 = await EnhancerWaterMark(
     {
       width: '100',
       height: '80',
@@ -302,7 +302,7 @@ export default async function waterMark(
   console.log(imageData, 'outsTensor')
   
   console.time('postProcess')
-  const outsTensor = result
+  const outsTensor = result2
   const chwToHwcData = postProcess(
     outsTensor.data,
     img.width * 2,
