@@ -279,14 +279,6 @@ function imageDataToDataURL(imageData: ImageData) {
   canvas.height = imageData.height
 
   // 绘制 imageData 到 canvas
-  // const ctx = canvas.getContext('2d')
-
-  // Ajout du waterMark 
-  // const pcanvas = document.createElement('canvas')
-  // pcanvas.width = canvas.width
-  // pcanvas.width = canvas.width
-  // ctx.putImageData(pcanvas,0,0)
-  // addWaterMarki (canvas)
   const ctx = canvas.getContext('2d')
   ctx.putImageData(ImageData,0,0)
   // Ajout du waterMark
