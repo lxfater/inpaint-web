@@ -251,7 +251,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   return chwToHwcData
 }
 
-function addWaterMarki (canvas: pCanvas){
+async function addWaterMarki (canvas: pCanvas){
 // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
   // 水印参数, 水印内容可异步获取
   const p = await EnhancerWaterMark(
