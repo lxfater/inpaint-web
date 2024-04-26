@@ -280,7 +280,27 @@ export default async function waterMark(
     img.width,
   ])
 
+  
   const result = await tileProc(imageTensor, model, callback)
+
+  // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
+  // 水印参数, 水印内容可异步获取
+  const result = await EnhancerWaterMark(
+    {
+      width: '100',
+      height: '80',
+      rotate: '17',
+      content: 'test',
+      // asyncContent: renderEffectContent,
+    },
+    {
+      content: 'watermark loading...',
+      color: 'black',
+      background: 'white',
+    }
+  )(result) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
+  console.log(imageData, 'outsTensor')
+  
   console.time('postProcess')
   const outsTensor = result
   const chwToHwcData = postProcess(
@@ -294,6 +314,7 @@ export default async function waterMark(
     img.height * 2
   )
   console.log(imageData, 'imageData')
+
   const url = imageDataToDataURL(imageData)
   console.timeEnd('postProcess')
 
