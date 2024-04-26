@@ -56,8 +56,8 @@ async function tileProc(
   const outputDims = [
     inputDims[0],
     inputDims[1],
-    inputDims[2] * 2,
-    inputDims[3] * 2,
+    inputDims[2] * 4,
+    inputDims[3] * 4,
   ]
   const outputTensor = new ort.Tensor(
     'float32',
@@ -71,7 +71,7 @@ async function tileProc(
   const outImageH = outputDims[2]
   const outROffset = 0
   const outGOffset = outImageW * outImageH
-  const out = outImageW * outImageH * 2
+  const outBOffset = outImageW * outImageH * 2
 
   const tileSize = 64
   const tilePadding = 6
@@ -94,7 +94,7 @@ async function tileProc(
       console.log(`tileW: ${tileW} tileH: ${tileH}`)
       const tileROffset = 0
       const tileGOffset = tileSize * tileSize
-      const tile = tileSize * tileSize * 2
+      const tileBOffset = tileSize * tileSize * 2
 
       // padding tile 转移到上面的数据上
       const tileData = new Float32Array(tileSize * tileSize * 3)
@@ -134,10 +134,10 @@ async function tileProc(
       }
       console.log(`pre dims:${results.output.dims}`)
 
-      const outTileW = tileW * 2
-      const outTileH = tileH * 2
-      const outTileSize = tileSize * 2
-      const outTileSizePre = tileSizePre * 2
+      const outTileW = tileW * 4
+      const outTileH = tileH * 4
+      const outTileSize = tileSize * 4
+      const outTileSizePre = tileSizePre * 4
 
       const outTileROffset = 0
       const outTileGOffset = outTileSize * outTileSize
