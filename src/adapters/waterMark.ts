@@ -251,6 +251,27 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   return chwToHwcData
 }
 
+function addWaterMarki (canvas: pCanvas){
+// Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
+  // 水印参数, 水印内容可异步获取
+  const p = await EnhancerWaterMark(
+    {
+      width: '100',
+      height: '80',
+      rotate: '17',
+      content: 'Copyright',
+      // asyncContent: renderEffectContent,
+    },
+    {
+      content: 'watermark loading...',
+      color: 'black',
+      background: 'white',
+    }
+  )(pCanvas) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
+  
+  return p
+  
+}
 function imageDataToDataURL(imageData: ImageData) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
@@ -261,9 +282,13 @@ function imageDataToDataURL(imageData: ImageData) {
   const ctx = canvas.getContext('2d')
   ctx.putImageData(imageData, 0, 0)
 
+  // Ajout du waterMark 
+  const pcanvas = addWaterMarki (canvas)
   // 导出为数据 URL
-  return canvas.toDataURL()
+  return pcanvas.toDataURL()
 }
+
+// var def model
 let model: ArrayBuffer | null = null
 export default async function waterMark(
   imageFile: File | HTMLImageElement,
@@ -285,27 +310,6 @@ export default async function waterMark(
       ? imageFile
       : await loadImage(URL.createObjectURL(imageFile))
 
-  /*
-  // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
-  // 水印参数, 水印内容可异步获取
-  const img = await EnhancerWaterMark(
-    {
-      width: '100',
-      height: '80',
-      rotate: '17',
-      content: 'test',
-      // asyncContent: renderEffectContent,
-    },
-    {
-      content: 'watermark loading...',
-      color: 'black',
-      background: 'white',
-    }
-  )(imgi) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
-  // console.log(imgi, 'imgi')
-
-  */
-  
   const imageTersorData = await processImage(img)
   const imageTensor = new ort.Tensor('float32', imageTersorData, [
     1,
