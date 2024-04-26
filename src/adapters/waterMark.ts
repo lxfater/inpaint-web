@@ -289,7 +289,7 @@ export default async function waterMark(
       color: 'black',
       background: 'white',
     }
-  )(img) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
+  )(imgi) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
   // console.log(imgi, 'imgi')
   
   const imageTersorData = await processImage(img)
