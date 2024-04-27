@@ -67,7 +67,6 @@ Demo link:https://inpaintweb.lxfater.com/
 ### Wechat
 
 <div align="left">
-    <img src="./media/wechatG.jpg" style="width: 200px; display: inline-block;">
     <img src="https://raw.githubusercontent.com/lxfater/inpaint-web/main/media/wechat.jpg" style="width: 200px; display: inline-block;">
 </div>
 
