@@ -28,5 +28,5 @@ jobs:
         cache: 'npm'
     - run: npm update
     - run: npm upgrade
-    - run: npm install
+    # - run: npm install
     - run: npm run start
