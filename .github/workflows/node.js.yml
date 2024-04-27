@@ -28,6 +28,5 @@ jobs:
         cache: 'npm'
     - run: npm update
     - run: npm upgrade
-    - run: npp audit fix --force
     - run: npm install
     - run: npm run start
