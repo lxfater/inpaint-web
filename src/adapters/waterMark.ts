@@ -6,7 +6,7 @@ import { getCapabilities } from './util'
 import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
-import EnhancerWaterMark from 'watermark-enhancer'
+// import EnhancerWaterMark from 'watermark-enhancer'
 
 const multi = 4
 const multi2 = 4
@@ -254,7 +254,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   }
   return chwToHwcData
 }
-
+/*
 function addWaterMarki (canvas: canvas){
 // Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
   // 水印参数, 水印内容可异步获取
@@ -276,6 +276,7 @@ function addWaterMarki (canvas: canvas){
   return p
   
 }
+*/
 function imageDataToDataURL(imageData: ImageData) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
