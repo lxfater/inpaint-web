@@ -9,7 +9,7 @@ import 'regenerator-runtime/runtime'
 // import EnhancerWaterMark from 'watermark-enhancer'
 
 const multi = 4
-const multi2 = 4
+const scal = 4
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -60,8 +60,8 @@ async function tileProc(
   const outputDims = [
     inputDims[0],
     inputDims[1],
-    inputDims[2] * multi2,
-    inputDims[3] * multi2,
+    inputDims[2] * scal,
+    inputDims[3] * scal,
   ]
   const outputTensor = new ort.Tensor(
     'float32',
@@ -78,7 +78,7 @@ async function tileProc(
   const outBOffset = outImageW * outImageH * 2
 
   const tileSize = 64
-  const tilePadding = 6
+  const tilePadding = 2
   const tileSizePre = tileSize - tilePadding * 2
 
   const tilesx = Math.ceil(inputDims[3] / tileSizePre)
@@ -138,10 +138,10 @@ async function tileProc(
       }
       console.log(`pre dims:${results.output.dims}`)
 
-      const outTileW = tileW * multi2
-      const outTileH = tileH * multi2
-      const outTileSize = tileSize * multi2
-      const outTileSizePre = tileSizePre * multi2
+      const outTileW = tileW * scal
+      const outTileH = tileH * scal
+      const outTileSize = tileSize * scal
+      const outTileSizePre = tileSizePre * scal
 
 
       const outTileROffset = 0
@@ -154,8 +154,8 @@ async function tileProc(
           const xim = i * outTileSizePre + x
           const yim = j * outTileSizePre + y
           const idx = xim + yim * outImageW
-          const xt = x + tilePadding * multi2
-          const yt = y + tilePadding * multi2
+          const xt = x + tilePadding * scal
+          const yt = y + tilePadding * scal
           outputTensor.data[idx + outROffset] =
             results.output.data[xt + yt * outTileSize + outTileROffset]
           outputTensor.data[idx + outGOffset] =
@@ -249,7 +249,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
         }
         chwToHwcData.push(newPiex * 255) // 归一化反转 - inversion normalisée
       }
-      chwToHwcData.push(127) // Alpha通道 - Canal alpha - 0  to 255
+      chwToHwcData.push(255) // Alpha通道 - Canal alpha - 0  to 255
     }
   }
   return chwToHwcData
