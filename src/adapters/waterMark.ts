@@ -180,7 +180,6 @@ async function tileProc(
     }
   }
   console.log(`output dims:${outputTensor.dims}`)
-  inputTensor.delete() // 清理内存 - Nettoyer la mémoire
   return outputTensor
 }
 function processImage(
