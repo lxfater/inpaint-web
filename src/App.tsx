@@ -31,7 +31,13 @@ function App() {
   if (stateLanguageTag.indexOf(userLangNav) > -1){
     console.log("userLang nav:")
     console.log(userLangNav)
-    setLanguageTag(userLangNav)
+    if (userLangNav === 'fr'){
+      setStateLanguageTag('fr')
+    }else if (userLangNav === 'en'){
+      setStateLanguageTag('en')
+    }else{
+      setStateLanguageTag('zh')
+    }    
   }
 
   const [showAbout, setShowAbout] = useState(false)
