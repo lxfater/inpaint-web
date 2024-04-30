@@ -5,6 +5,7 @@
   "dependencies": {
     "@heroicons/react": "^1.0.4",
     "@inlang/paraglide-js-adapter-vite": "^1.0.2",
+    "@petamoriken/float16": "^3.8.6",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "core-js": "^3.37.0",
     "eslint": "^8.0.0",
