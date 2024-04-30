@@ -29,7 +29,7 @@ jobs:
     - run: npm update
     - run: npm upgrade
     # - run: vite build
-    - run: vite preview
+    # - run: vite preview
     - run: husky install
     # - run: tsc && vite build
     # - run: npm install
