@@ -27,7 +27,7 @@ jobs:
         cache: 'npm'
     - run: npm update
     - run: npm upgrade
-    - run: fast-build
+    # - run: fast-build
     - run: format
     # - run: vite build
     # - run: vite preview
