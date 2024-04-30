@@ -28,6 +28,7 @@ jobs:
         cache: 'npm'
     - run: npm update
     - run: npm upgrade
+    - run: tsc && vite build
     # - run: npm install
     # - run: npm audit fix
     # - run: npm run start
