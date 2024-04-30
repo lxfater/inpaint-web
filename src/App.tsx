@@ -32,11 +32,11 @@ function App() {
     console.log("userLang nav:")
     console.log(userLangNav)
     if (userLangNav === 'fr'){
-      setStateLanguageTag('fr')
+      setLanguageTag('fr')
     }else if (userLangNav === 'en'){
-      setStateLanguageTag('en')
+      setLanguageTag('en')
     }else{
-      setStateLanguageTag('zh')
+      setLanguageTag('zh')
     }    
   }
 
