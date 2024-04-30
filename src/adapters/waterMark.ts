@@ -83,8 +83,8 @@ async function tileProc(
   const outGOffset = outImageW * outImageH
   const outBOffset = outImageW * outImageH * 2
 
-  const tileSize = 128
-  const tilePadding = 12
+  const tileSize = 46
+  const tilePadding = 3
   const tileSizePre = tileSize - tilePadding * 2
 
   const tilesx = Math.ceil(inputDims[3] / tileSizePre)
@@ -180,6 +180,7 @@ async function tileProc(
     }
   }
   console.log(`output dims:${outputTensor.dims}`)
+  inputTensor.delete() // 清理内存 - Nettoyer la mémoire
   return outputTensor
 }
 function processImage(
