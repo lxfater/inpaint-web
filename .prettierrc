@@ -3,6 +3,5 @@
   "semi": false,
   "trailingComma": "es5",
   "arrowParens": "avoid",
-  "useTabs": false,
-  "vars": true
+  "useTabs": false
 }
