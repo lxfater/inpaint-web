@@ -1,4 +1,5 @@
 ![Inpaint-web](./media/cover.png)
+
 <div align="center">
   
 # Inpaint-web
@@ -26,6 +27,7 @@ Demo link:https://inpaintweb.lxfater.com/
 ## Project Roadmap
 
 ### fr
+
 - [x] Historique des modifications d'images
 - [x] Optimiser le modèle
 - [x] Intégrer le post-traitement dans le modèle
@@ -33,7 +35,6 @@ Demo link:https://inpaintweb.lxfater.com/
 - [ ] Intégrez tout segment pour une sélection et une suppression rapides dans les images
 - [ ] Intégrer la diffusion stable pour le remplacement de l'image
 - [ ] Meilleure interface utilisateur
-
 
 ### en
 

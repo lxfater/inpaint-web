@@ -29,8 +29,8 @@
       "error",
       {
         "singleQuote": true,
-	"arrowParens": "avoid",
-	"endOfLine": "auto"
+        "arrowParens": "avoid",
+        "endOfLine": "auto"
       }
     ],
     "consistent-return": "off",
