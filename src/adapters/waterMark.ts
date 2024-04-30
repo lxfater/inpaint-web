@@ -50,18 +50,19 @@ function imgProcess(img: Mat) {
   return chwArray // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
-  inputTensor: Uint16Array,
+  inputTensor: ort.Tensor,
   session: ort.InferenceSession,
   callback: (progress: number) => void
 ) {
-  const inputDims = new Float16Array(inputTensor.data).dims
+  const inputDims = inputTensor.dims
   const imageW = inputDims[3]
   const imageH = inputDims[2]
 
   const rOffset = 0
   const gOffset = imageW * imageH
   const bOffset = imageW * imageH * 2
-
+  
+/****/
   const outputDims = [
     inputDims[0],
     inputDims[1],
