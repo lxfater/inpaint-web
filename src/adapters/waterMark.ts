@@ -321,7 +321,7 @@ export default async function waterMark(
       : await loadImage(URL.createObjectURL(imageFile))
 
   const imageTersorData = await processImage(img)
-  const imageTensor = new Uint16Array('float16', imageTersorData, [
+  const imageTensor = new ort.Tensor('float32', imageTersorData, [
     1,
     3,
     img.height,
