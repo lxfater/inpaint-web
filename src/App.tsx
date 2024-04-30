@@ -25,10 +25,12 @@ function App() {
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
   console.log(stateLanguageTag)
-  const userLangNav = navigator.language || navigator.language;
-  console.log("userLang nav:")
-  console.log(userLangNav)
-  onSetLanguageTag(() => setStateLanguageTag(userLangNav))
+  if (languageTag() === 'zh') { // if default init
+    const userLangNav = navigator.language || navigator.language;
+    console.log("userLang nav:")
+    console.log(userLangNav)
+    setLanguageTag(userLangNav)
+  }  
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
 
