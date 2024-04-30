@@ -54,7 +54,7 @@ async function tileProc(
   session: ort.InferenceSession,
   callback: (progress: number) => void
 ) {
-  const inputDims = new Float16Array(inputTensor.data)
+  const inputDims = new Float16Array(inputTensor.data).dims
   const imageW = inputDims[3]
   const imageH = inputDims[2]
 
