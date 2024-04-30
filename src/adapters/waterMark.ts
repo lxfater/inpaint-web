@@ -6,6 +6,11 @@ import { getCapabilities } from './util'
 import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
+import {
+  Float16Array, isFloat16Array, isTypedArray,
+  getFloat16, setFloat16,
+  f16round,
+} from "@petamoriken/float16";
 // import EnhancerWaterMark from 'watermark-enhancer'
 
 const multi = 4
@@ -29,7 +34,7 @@ function imgProcess(img: Mat) {
   const H = img.rows // 图像高度 - hauteur de l'image
   const W = img.cols // 图像宽度 - Largeur de l'image
   // Créer un nouveau tableau pour stocker les données converties
-  const chwArray = new Float32Array(C * H * W) // 创建新的数组来存储转换后的数据 
+  const chwArray = new Float16Array(C * H * W) // 创建新的数组来存储转换后的数据 
 
   for (let c = 0; c < C; c++) {
     const channelData = channels.get(c).data // 获取单个通道的数据 - Obtenez des données à partir d’un seul canal
@@ -64,8 +69,8 @@ async function tileProc(
     inputDims[3] * scal,
   ]
   const outputTensor = new ort.Tensor(
-    'float32',
-    new Float32Array(
+    'float16',
+    new Float16Array(
       outputDims[0] * outputDims[1] * outputDims[2] * outputDims[3]
     ),
     outputDims
