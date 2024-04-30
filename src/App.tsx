@@ -25,7 +25,7 @@ function App() {
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
   console.log(stateLanguageTag)
-  var userLang = navigator.language || navigator.language;
+  let userLang = navigator.language || navigator.language;
   console.log("userLang nav:")
   console.log(userLang)
   onSetLanguageTag(() => setStateLanguageTag(userLang))
