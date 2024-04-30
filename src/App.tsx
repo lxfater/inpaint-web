@@ -22,8 +22,10 @@ function App() {
   const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
     'zh'
   )
+  var userLang = navigator.language || navigator.userLanguage;
+  console.log("userLang nav:")
+  console.log(userLang)
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
-
   console.log(stateLanguageTag)
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
