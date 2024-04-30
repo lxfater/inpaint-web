@@ -22,12 +22,13 @@ function App() {
   const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
     'zh'
   )
+  const [name, setName] = useState('Anonymous');
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
   console.log(stateLanguageTag)
   // test in array value of navlanguage
   const userLangNav = navigator.language || navigator.language;
-  if (useState.indexOf(userLangNav) > -1){
+  if (stateLanguageTag.indexOf(userLangNav) > -1){
     console.log("userLang nav:")
     console.log(userLangNav)
     setLanguageTag(userLangNav)
