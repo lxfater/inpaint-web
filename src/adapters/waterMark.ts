@@ -50,7 +50,7 @@ function imgProcess(img: Mat) {
   return chwArray // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
-  inputTensor: ort.Tensor,
+  inputTensor: Uint16Array,
   session: ort.InferenceSession,
   callback: (progress: number) => void
 ) {
