@@ -85,7 +85,7 @@ Demo link:https://inpaintweb.lxfater.com/
 
 ### Contenu en Francais
 Pour les mises à jour et les discussions en Francais, suivez-moi sur Twitter
-[![Instagram Follow](https://img.shields.io/twitter/follow/rules4thing?style=social)](https://www.instagram.com/n3oray/)
+[![Instagram Follow N3oray](https://raw.githubusercontent.com/N3oRay/inpaint-web/main/media/instagram-s.png)](https://www.instagram.com/n3oray/)
 
 
 ### English Content
