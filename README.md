@@ -83,6 +83,11 @@ Demo link:https://inpaintweb.lxfater.com/
     <img src="https://raw.githubusercontent.com/lxfater/inpaint-web/main/media/wechat.jpg" style="width: 200px; display: inline-block;">
 </div>
 
+### Contenu en Francais
+Pour les mises à jour et les discussions en Francais, suivez-moi sur Twitter
+[![Instagram Follow](https://img.shields.io/twitter/follow/rules4thing?style=social)](https://www.instagram.com/n3oray/)
+
+
 ### English Content
 
 For updates and discussions in English, follow me on Twitter:
