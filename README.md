@@ -84,9 +84,9 @@ Demo link:https://inpaintweb.lxfater.com/
 </div>
 
 ### Contenu en Francais
+
 Pour les mises à jour et les discussions en Francais, suivez-nous sur Instagram
 [![Instagram Follow N3oray](https://raw.githubusercontent.com/N3oRay/inpaint-web/main/media/instagram-s.png)](https://www.instagram.com/n3oray/)
-
 
 ### English Content
 
