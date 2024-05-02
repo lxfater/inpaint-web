@@ -558,7 +558,6 @@ export default function Editor(props: EditorProps) {
       setIsProcessingLoading(false)
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
-
   return (
     <div
       className={[
