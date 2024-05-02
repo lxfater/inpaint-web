@@ -761,7 +761,7 @@ export default function Editor(props: EditorProps) {
           <Button onUp={onSuperResolution}>{m.upscale()}</Button>
         )}
         <Button onUp={onWaterMark}>{m.watermark()}</Button>
-        <Button onUp={onSuperAntiBlur>{m.superantiblur()}</Button>
+        <Button onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
