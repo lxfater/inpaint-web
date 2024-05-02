@@ -47,8 +47,8 @@ function imgProcess(img: Mat) {
   }
 
   channels.delete() // 清理内存 - Nettoyer la mémoire
-  const chwArray32 = new Float32Array(chwArray) // conversion 
-  return chwArray32 // 返回转换后的数据 - Renvoie les données converties
+  //const chwArray32 = new Float32Array(chwArray) // conversion 
+  return chwArray // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
   inputTensor: ort.Tensor,
