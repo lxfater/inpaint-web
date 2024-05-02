@@ -34,7 +34,7 @@ function imgProcess(img: Mat) {
   const H = img.rows // 图像高度 - hauteur de l'image
   const W = img.cols // 图像宽度 - Largeur de l'image
   // Créer un nouveau tableau pour stocker les données converties
-  const chwArray = new Float32Array(C * H * W) // 创建新的数组来存储转换后的数据 
+  const chwArray = new Float16Array(C * H * W) // 创建新的数组来存储转换后的数据 
 
   for (let c = 0; c < C; c++) {
     const channelData = channels.get(c).data // 获取单个通道的数据 - Obtenez des données à partir d’un seul canal
@@ -47,7 +47,8 @@ function imgProcess(img: Mat) {
   }
 
   channels.delete() // 清理内存 - Nettoyer la mémoire
-  return chwArray // 返回转换后的数据 - Renvoie les données converties
+  const chwArray32 = new Float32Array(chwArray) // conversion 
+  return chwArray32 // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
   inputTensor: ort.Tensor,
