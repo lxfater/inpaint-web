@@ -458,7 +458,7 @@ export default function Editor(props: EditorProps) {
   }, [])
 
   // superAntiblur
-  const onWaterMark = useCallback(async () => {
+  const onSuperAntiBlur = useCallback(async () => {
     setIsProcessingLoading(true)
     try {
       // 运行
@@ -762,6 +762,7 @@ export default function Editor(props: EditorProps) {
           <Button onUp={onSuperResolution}>{m.upscale()}</Button>
         )}
         <Button onUp={onWaterMark}>{m.watermark()}</Button>
+        <Button onUp={onSuperAntiBlur>{m.superantiblur()}</Button>
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
