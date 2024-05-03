@@ -5,6 +5,8 @@
 # Inpaint-web
 
 Un outil gratuit et open-source d’inpainting et de mise à l’échelle d’images alimenté par webgpu et wasm sur le navigateur.
+Cet AI permet de modifier une image via une interface Web. En utilisant les ressources du poste Client.
+Compatible mobile, pc et tablette. Cette solution exploite directement le CPU et le GPU depuis un navigateur.
 
 A free and open-source inpainting & image-upscaling tool powered by webgpu and wasm on the browser.
 
