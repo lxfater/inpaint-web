@@ -21,26 +21,18 @@ function App() {
   const [file, setFile] = useState<File>()
   // test in array value of navlanguage
   const userLangNav = navigator.language || navigator.language;
-  let [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
-    'zh'
-  )
   console.log("userLang nav:")
   console.log(userLangNav)
-  if (userLangNav === 'fr'){
-      [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
-    'fr'
-  )
-  }else if (userLangNav === 'en'){
-      [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
-    'en'
-  )
-  }else{
-      [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
-    'zh'
-  )
-  }  
+  const tabsSet = new Set(['en', 'zh', 'fr'])
+  const isLangTabstrue = (keyInput: string): boolean => tabsSet.has(keyInput)
+  function isLangTabs (keyInput: string): keyInput is TabTypes {
+  return ['en', 'fr', 'zh'].includes(keyInput);
+ }
   
-  
+  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+    isLangTabs(userLangNav)
+  )
+   
   const [name, setName] = useState('Anonymous');
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
