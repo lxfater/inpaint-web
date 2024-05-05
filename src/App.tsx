@@ -31,11 +31,18 @@ function App() {
   console.log("userLang nav:")
   console.log(userLangNav)
   if (userLangNav === 'fr'){
-    setLanguageTag('fr')
+    useEffect(() => {
+      setLanguageTag('fr');
+    }, [])
+    
   }else if (userLangNav === 'en'){
-    setLanguageTag('en')
+    useEffect(() => {
+      setLanguageTag('en');
+    }, [])
   }else{
-    setLanguageTag('zh')
+    useEffect(() => {
+      setLanguageTag('zh');
+    }, [])
   }    
 
 
