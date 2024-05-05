@@ -28,18 +28,16 @@ function App() {
   console.log(stateLanguageTag)
   // test in array value of navlanguage
   const userLangNav = navigator.language || navigator.language;
+  console.log("userLang nav:")
   console.log(userLangNav)
-  if (stateLanguageTag.indexOf(userLangNav) > -1){
-    console.log("userLang nav:")
-    console.log(userLangNav)
-    if (userLangNav === 'fr'){
-      setLanguageTag('fr')
-    }else if (userLangNav === 'en'){
-      setLanguageTag('en')
-    }else{
-      setLanguageTag('zh')
-    }    
-  }
+  if (userLangNav === 'fr'){
+    setLanguageTag('fr')
+  }else if (userLangNav === 'en'){
+    setLanguageTag('en')
+  }else{
+    setLanguageTag('zh')
+  }    
+
 
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
