@@ -26,7 +26,11 @@ function App() {
   const tabsSet = new Set(['en', 'zh', 'fr'])
   const isLangTabstrue = (keyInput: string): boolean => tabsSet.has(keyInput)
   function isLangTabs (keyInput: string): keyInput is TabTypes {
-  return ['en', 'fr', 'zh'].includes(keyInput);
+    if( ['en', 'fr', 'zh'].includes(keyInput)) {
+      return keyInput
+    } else {
+      return 'zh'
+    }
  }
   
   const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
