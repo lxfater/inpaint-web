@@ -26,7 +26,7 @@ function App() {
   const tabsSet = new Set(['en', 'zh', 'fr', 'sp'])
   const isLangTabstrue = (keyInput: string): boolean => tabsSet.has(keyInput)
   function isLangTabs (keyInput: string): keyInput is TabTypes {
-    if( tabsSet.includes(keyInput)) {
+    if( ['en', 'zh', 'fr', 'sp'].includes(keyInput)) {
       return keyInput
     } else {
       return 'zh'
