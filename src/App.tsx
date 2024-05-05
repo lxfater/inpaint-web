@@ -19,24 +19,30 @@ import {
 
 function App() {
   const [file, setFile] = useState<File>()
-  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
-    'zh'
-  )
-  const [name, setName] = useState('Anonymous');
-
-  onSetLanguageTag(() => setStateLanguageTag(languageTag()))
-  console.log(stateLanguageTag)
   // test in array value of navlanguage
   const userLangNav = navigator.language || navigator.language;
   console.log("userLang nav:")
   console.log(userLangNav)
   if (userLangNav === 'fr'){
-      setStateLanguageTag('fr');
+      const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+    'fr'
+  )
   }else if (userLangNav === 'en'){
-      setStateLanguageTag('en');
+      const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+    'en'
+  )
   }else{
-      setStateLanguageTag('zh');
-  }    
+      const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+    'zh'
+  )
+  }  
+  
+  
+  const [name, setName] = useState('Anonymous');
+
+  onSetLanguageTag(() => setStateLanguageTag(languageTag()))
+  console.log(stateLanguageTag)
+  
 
 
   const [showAbout, setShowAbout] = useState(false)
