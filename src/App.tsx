@@ -21,18 +21,21 @@ function App() {
   const [file, setFile] = useState<File>()
   // test in array value of navlanguage
   const userLangNav = navigator.language || navigator.language;
+  var [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+    'zh'
+  )
   console.log("userLang nav:")
   console.log(userLangNav)
   if (userLangNav === 'fr'){
-      const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+      [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
     'fr'
   )
   }else if (userLangNav === 'en'){
-      const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+      [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
     'en'
   )
   }else{
-      const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+      [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
     'zh'
   )
   }  
