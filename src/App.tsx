@@ -21,7 +21,7 @@ function App() {
   const [file, setFile] = useState<File>()
   // test in array value of navlanguage
   const userLangNav = navigator.language || navigator.language;
-  var [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+  let [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
     'zh'
   )
   console.log("userLang nav:")
