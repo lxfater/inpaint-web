@@ -23,7 +23,7 @@ function App() {
   const userLangNav = navigator.language || navigator.language;
   console.log("userLang nav:")
   console.log(userLangNav)
-  const tabsSet = new Set(['en', 'zh', 'fr'])
+  const tabsSet = new Set(['en', 'zh', 'fr', 'sp'])
   const isLangTabstrue = (keyInput: string): boolean => tabsSet.has(keyInput)
   function isLangTabs (keyInput: string): keyInput is TabTypes {
     if( ['en', 'fr', 'zh'].includes(keyInput)) {
@@ -33,7 +33,7 @@ function App() {
     }
  }
   
-  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr'>(
+  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr' | 'sp'>(
     isLangTabs(userLangNav)
   )
    
@@ -109,6 +109,19 @@ function App() {
             }}
           >
             <p>{languageTag() === 'fr' ? '切换到中文' : 'fr'}</p>
+          </Button>
+
+          <Button
+            className="mr-5 flex"
+            onClick={() => {
+              if (languageTag() === 'zh') {
+                setLanguageTag('sp')
+              } else {
+                setLanguageTag('zh')
+              }
+            }}
+          >
+            <p>{languageTag() === 'sp' ? '切换到中文' : 'sp'}</p>
           </Button>
 
           <Button
