@@ -28,6 +28,7 @@ function App() {
   console.log(stateLanguageTag)
   // test in array value of navlanguage
   const userLangNav = navigator.language || navigator.language;
+  console.log(userLangNav)
   if (stateLanguageTag.indexOf(userLangNav) > -1){
     console.log("userLang nav:")
     console.log(userLangNav)
