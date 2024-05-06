@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
+import { DownloadIcon, EyeIcon, ViewBoardsIcon, ArrowLongUpIcon } from '@heroicons/react/outline'
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
@@ -758,10 +758,10 @@ export default function Editor(props: EditorProps) {
           {m.original()}
         </Button>
         {!showOriginal && (
-          <Button onUp={onSuperResolution}>{m.upscale()}</Button>
+          <Button icon={<ArrowLongUpIcon className="w-6 h-6" />} onUp={onSuperResolution}>{m.upscale()}</Button>
         )}
-        <Button onUp={onWaterMark}>{m.watermark()}</Button>
-        <Button onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
+        <Button icon={<ArrowLongUpIcon className="w-6 h-6" />} onUp={onWaterMark}>{m.watermark()}</Button>
+        <Button icon={<ArrowLongUpIcon className="w-6 h-6" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
