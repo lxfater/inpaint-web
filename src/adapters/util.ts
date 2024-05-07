@@ -77,7 +77,7 @@ export async function checkGpu() {
   return !navigator?.gpu && !(await navigator.gpu?.requestAdapter())
 }
 
-function configEnv(capabilities: {
+export function configEnv(capabilities: {
   webgpu: any
   wasm?: boolean
   simd: any
