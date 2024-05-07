@@ -1,6 +1,6 @@
 import localforage from 'localforage'
 
-export type modelType = 'inpaint' | 'superResolution'
+export type modelType = 'inpaint' | 'superResolution' | 'superPhi'
 
 localforage.config({
   name: 'modelCache',
