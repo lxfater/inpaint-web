@@ -2,7 +2,7 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
-import { getCapabilities} from './util'
+import { getCapabilities, configEnv} from './util'
 import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
@@ -208,6 +208,8 @@ function processImage(
     }
   })
 }
+
+/*
 function configEnv(capabilities: {
   webgpu: any
   wasm?: boolean
@@ -215,15 +217,15 @@ function configEnv(capabilities: {
   threads: any
 }) {
 
-/*
-ort.env.wasm.numThreads
-set or get number of thread(s). If omitted or set to 0, number of thread(s) will be determined by system. If set to 1, no worker thread will be spawned.
-This setting is available only when WebAssembly multithread feature is available in current context.
+//
+// ort.env.wasm.numThreads
+// set or get number of thread(s). If omitted or set to 0, number of thread(s) will be determined by system. If set to 1, no worker thread will be spawned.
+// This setting is available only when WebAssembly multithread feature is available in current context.
 
-ort.env.wasm.numThreads
-définir ou obtenir le nombre de threads. S'il est omis ou défini sur 0, le nombre de threads sera déterminé par le système. S'il est défini sur 1, aucun thread de travail ne sera généré.
-Ce paramètre est disponible uniquement lorsque la fonctionnalité multithread WebAssembly est disponible dans le contexte actuel.
-*/
+//  ort.env.wasm.numThreads
+// définir ou obtenir le nombre de threads. S'il est omis ou défini sur 0, le nombre de threads sera déterminé par le système. S'il est défini sur 1, aucun thread de travail ne sera généré.
+// Ce paramètre est disponible uniquement lorsque la fonctionnalité multithread WebAssembly est disponible dans le contexte actuel.
+
 
   ort.env.wasm.wasmPaths =
     'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
@@ -240,6 +242,7 @@ Ce paramètre est disponible uniquement lorsque la fonctionnalité multithread W
   }
   console.log('env', ort.env.wasm)
 }
+*/
 function postProcess(floatData: Float32Array, width: number, height: number) {
   const chwToHwcData = []
   const size = width * height
