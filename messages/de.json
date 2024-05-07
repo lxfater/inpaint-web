@@ -1,0 +1,16 @@
+{
+ "$schema": "https://inlang.com/schema/inlang-message-format",
+ "drop_zone": "Klicken oder ziehen und ablegen",
+ "try_it_images": "Versuchen Sie es",
+ "feedback": "Über Inpaint",
+ "start_new": "Neu beginnen",
+ "bruch_size": "Pinselgröße",
+ "original": "Original",
+ "upscale": "4x-Hochskalierung",
+ "watermark": "4x-up HD",
+ "superantiblur": "4x-up antiblur",
+ "download": "Herunterladen",
+ "undo": "Rückgängig machen",
+ "inpaint_model_download_message": "30 MB große Modelldatei wird heruntergeladen, bitte warten…",
+ "upscaleing_model_download_message": "70 MB große Modelldatei wird heruntergeladen, bitte warten …"
+}
