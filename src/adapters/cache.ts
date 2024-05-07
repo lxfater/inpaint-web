@@ -48,8 +48,10 @@ function getModel(modelType: modelType) {
   if (modelType === 'superPhi') {
     const modelList = [
       {
-        name: 'phi3-mini-128k-instruct-cuda-int4-rtn-block-32',
-        url: 'https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx/resolve/main/cuda/cuda-int4-rtn-block-32/phi3-mini-128k-instruct-cuda-int4-rtn-block-32.onnx',
+        // name: 'phi3-mini-128k-instruct-cuda-int4-rtn-block-32',
+        // url: 'https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx/resolve/main/cuda/cuda-int4-rtn-block-32/phi3-mini-128k-instruct-cuda-int4-rtn-block-32.onnx',
+        name: 'model',
+        url: 'https://huggingface.co/saddam213/swin-ir-x4-onnx/resolve/main/Upscaler/model.onnx',  
         backupUrl:'',
       },
     ]
