@@ -45,6 +45,17 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[0]
     return currentModel
   }
+  if (modelType === 'superPhi') {
+    const modelList = [
+      {
+        name: 'phi3-mini-128k-instruct-cuda-int4-rtn-block-32',
+        url: 'https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx/resolve/main/cuda/cuda-int4-rtn-block-32/phi3-mini-128k-instruct-cuda-int4-rtn-block-32.onnx?download=true',
+        backupUrl:'',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
   throw new Error('wrong modelType')
 }
 
