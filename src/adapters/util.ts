@@ -87,6 +87,15 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
   })
 }
 
+
+// ort.env.wasm.numThreads
+// set or get number of thread(s). If omitted or set to 0, number of thread(s) will be determined by system. If set to 1, no worker thread will be spawned.
+// This setting is available only when WebAssembly multithread feature is available in current context.
+
+//  ort.env.wasm.numThreads
+// définir ou obtenir le nombre de threads. S'il est omis ou défini sur 0, le nombre de threads sera déterminé par le système. S'il est défini sur 1, aucun thread de travail ne sera généré.
+// Ce paramètre est disponible uniquement lorsque la fonctionnalité multithread WebAssembly est disponible dans le contexte actuel.
+
 export function configEnv(capabilities: {
   webgpu: any
   wasm?: boolean
