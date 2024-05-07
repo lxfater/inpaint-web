@@ -270,7 +270,7 @@ export default async function superAntiBlur(
   if (!model) {
     const capabilities = await getCapabilities()
     configEnv(capabilities)
-    const modelBuffer = await ensureModel('superResolution')
+    const modelBuffer = await ensureModel('superAntiblur')
     model = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })
