@@ -86,3 +86,25 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
     img.src = url
   })
 }
+
+export function configEnv(capabilities: {
+  webgpu: any
+  wasm?: boolean
+  simd: any
+  threads: any
+}) {
+  ort.env.wasm.wasmPaths =
+    'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
+  if (capabilities.webgpu) {
+    ort.env.wasm.numThreads = 1
+  } else {
+    if (capabilities.threads) {
+      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 4
+    }
+    if (capabilities.simd) {
+      ort.env.wasm.simd = true
+    }
+    ort.env.wasm.proxy = true
+  }
+  console.log('env', ort.env.wasm)
+}
