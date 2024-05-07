@@ -3,8 +3,6 @@
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
 import { getCapabilities} from './util'
-import loadImage from './util'
-// import * as util from "./util";
 import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
@@ -15,11 +13,10 @@ import {
 } from "@petamoriken/float16";
 // import EnhancerWaterMark from 'watermark-enhancer'
 
-export default {...}
 
 const multi = 4
 const scal = 4
-/*
+
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -29,7 +26,7 @@ function loadImage(url: string): Promise<HTMLImageElement> {
     img.src = url
   })
 }
-*/
+
 // On decompose l'image source dans un tableau
 function imgProcess(img: Mat) {
   const channels = new cv.MatVector()
