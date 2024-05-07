@@ -71,7 +71,7 @@ Demo link:https://inpaintweb.lxfater.com/
 
 `npm run start`
 
--> http://127.0.0.1:5173
+Now you should have Inpaint running locally and should be able to visit http://localhost:5173 or http://127.0.0.1:5173
 
 ## Contributors
 
