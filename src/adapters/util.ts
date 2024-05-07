@@ -77,12 +77,35 @@ export async function checkGpu() {
   return !navigator?.gpu && !(await navigator.gpu?.requestAdapter())
 }
 
-function loadImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.crossOrigin = 'Anonymous'
-    img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error(`Failed to load image from ${url}`))
-    img.src = url
-  })
+function configEnv(capabilities: {
+  webgpu: any
+  wasm?: boolean
+  simd: any
+  threads: any
+}) {
+
+/*
+ort.env.wasm.numThreads
+set or get number of thread(s). If omitted or set to 0, number of thread(s) will be determined by system. If set to 1, no worker thread will be spawned.
+This setting is available only when WebAssembly multithread feature is available in current context.
+
+ort.env.wasm.numThreads
+définir ou obtenir le nombre de threads. S'il est omis ou défini sur 0, le nombre de threads sera déterminé par le système. S'il est défini sur 1, aucun thread de travail ne sera généré.
+Ce paramètre est disponible uniquement lorsque la fonctionnalité multithread WebAssembly est disponible dans le contexte actuel.
+*/
+
+  ort.env.wasm.wasmPaths =
+    'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
+  if (capabilities.webgpu) {
+    ort.env.wasm.numThreads = 1
+  } else {
+    if (capabilities.threads) {
+      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? multi
+    }
+    if (capabilities.simd) {
+      ort.env.wasm.simd = true
+    }
+    ort.env.wasm.proxy = true
+  }
+  console.log('env', ort.env.wasm)
 }
