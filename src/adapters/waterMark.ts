@@ -2,7 +2,10 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
-import { getCapabilities, loadImage } from './util'
+// import { getCapabilities, loadImage } from './util'
+import * as util from "./util";
+const defaultExport = util.default;
+
 import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
