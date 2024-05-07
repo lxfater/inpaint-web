@@ -49,7 +49,7 @@ function getModel(modelType: modelType) {
     const modelList = [
       {
         name: 'phi3-mini-128k-instruct-cuda-int4-rtn-block-32',
-        url: 'https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx/resolve/main/cuda/cuda-int4-rtn-block-32/phi3-mini-128k-instruct-cuda-int4-rtn-block-32.onnx?download=true',
+        url: 'https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx/resolve/main/cuda/cuda-int4-rtn-block-32/phi3-mini-128k-instruct-cuda-int4-rtn-block-32.onnx',
         backupUrl:'',
       },
     ]
