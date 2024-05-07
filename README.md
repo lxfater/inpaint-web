@@ -58,7 +58,7 @@ Demo link:https://inpaintweb.lxfater.com/
 - [ ] 接入 stable diffusion，实现图像替换
 - [ ] 更好的界面
 
-## Requis NPM
+## Requis Git & NPM
 
 `sudo apt install git-all`
 `sudo apt install npm`
