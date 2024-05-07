@@ -2,7 +2,7 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { getCapabilities } from './util'
-import { loadImage } from './util'
+import { loadImage, configEnv } from './util'
 import { ensureModel } from './cache'
 
 function imgProcess(img: Mat) {
@@ -182,27 +182,7 @@ function processImage(
     }
   })
 }
-function configEnv(capabilities: {
-  webgpu: any
-  wasm?: boolean
-  simd: any
-  threads: any
-}) {
-  ort.env.wasm.wasmPaths =
-    'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
-  if (capabilities.webgpu) {
-    ort.env.wasm.numThreads = 1
-  } else {
-    if (capabilities.threads) {
-      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 4
-    }
-    if (capabilities.simd) {
-      ort.env.wasm.simd = true
-    }
-    ort.env.wasm.proxy = true
-  }
-  console.log('env', ort.env.wasm)
-}
+
 function postProcess(floatData: Float32Array, width: number, height: number) {
   const chwToHwcData = []
   const size = width * height
