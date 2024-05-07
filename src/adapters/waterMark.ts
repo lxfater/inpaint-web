@@ -2,7 +2,8 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
-import { getCapabilities, configEnv} from './util'
+import { getCapabilities} from './util'
+import type { configEnv } from './util'
 import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
