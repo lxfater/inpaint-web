@@ -3,7 +3,7 @@
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
 import { getCapabilities} from './util'
-import { loadImage as loadImage} from './util'
+import loadImage from './util'
 // import * as util from "./util";
 import type { modelType } from './cache'
 import 'core-js/stable'
