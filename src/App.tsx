@@ -115,6 +115,19 @@ function App() {
             className="mr-5 flex"
             onClick={() => {
               if (languageTag() === 'zh') {
+                setLanguageTag('sp')
+              } else {
+                setLanguageTag('zh')
+              }
+            }}
+          >
+            <p>{languageTag() === 'sp' ? '切换到中文' : 'sp'}</p>
+          </Button>
+
+          <Button
+            className="mr-5 flex"
+            onClick={() => {
+              if (languageTag() === 'zh') {
                 setLanguageTag('de')
               } else {
                 setLanguageTag('zh')
