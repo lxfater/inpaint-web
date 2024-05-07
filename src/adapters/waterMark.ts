@@ -3,7 +3,7 @@
 import cv, { Mat } from 'opencv-ts'
 import { ensureModel } from './cache'
 import { getCapabilities} from './util'
-import { configEnv } from './util'
+import { loadImage } from './util'
 import type { modelType } from './cache'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
@@ -17,7 +17,7 @@ import {
 
 const multi = 4
 const scal = 4
-
+/*
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -27,7 +27,7 @@ function loadImage(url: string): Promise<HTMLImageElement> {
     img.src = url
   })
 }
-
+*/
 // On decompose l'image source dans un tableau
 function imgProcess(img: Mat) {
   const channels = new cv.MatVector()
@@ -210,7 +210,7 @@ function processImage(
   })
 }
 
-/*
+
 function configEnv(capabilities: {
   webgpu: any
   wasm?: boolean
@@ -243,7 +243,7 @@ function configEnv(capabilities: {
   }
   console.log('env', ort.env.wasm)
 }
-*/
+
 function postProcess(floatData: Float32Array, width: number, height: number) {
   const chwToHwcData = []
   const size = width * height
