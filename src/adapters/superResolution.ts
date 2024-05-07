@@ -2,17 +2,9 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { getCapabilities } from './util'
+import { loadImage } from './util'
 import { ensureModel } from './cache'
 
-function loadImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.crossOrigin = 'Anonymous'
-    img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error(`Failed to load image from ${url}`))
-    img.src = url
-  })
-}
 function imgProcess(img: Mat) {
   const channels = new cv.MatVector()
   cv.split(img, channels) // 分割通道
