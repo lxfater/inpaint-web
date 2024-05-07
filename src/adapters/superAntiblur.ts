@@ -76,7 +76,7 @@ async function tileProc(
   const outGOffset = outImageW * outImageH
   const outBOffset = outImageW * outImageH * 2
 
-  const tileSize = 32
+  const tileSize = 64
   const tilePadding = 4
   const tileSizePre = tileSize - tilePadding * 2
 
