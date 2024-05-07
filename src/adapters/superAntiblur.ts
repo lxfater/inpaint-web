@@ -76,7 +76,7 @@ async function tileProc(
   const outGOffset = outImageW * outImageH
   const outBOffset = outImageW * outImageH * 2
 
-  const tileSize = 64
+  const tileSize = 32
   const tilePadding = 4
   const tileSizePre = tileSize - tilePadding * 2
 
@@ -270,7 +270,7 @@ export default async function superAntiBlur(
   if (!model) {
     const capabilities = await getCapabilities()
     configEnv(capabilities)
-    const modelBuffer = await ensureModel('superResolution')
+    const modelBuffer = await ensureModel('superPhi')
     model = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })
