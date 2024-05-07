@@ -15,6 +15,8 @@ import {
 } from "@petamoriken/float16";
 // import EnhancerWaterMark from 'watermark-enhancer'
 
+export default {...}
+
 const multi = 4
 const scal = 4
 /*
