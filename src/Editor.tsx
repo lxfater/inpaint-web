@@ -785,7 +785,7 @@ export default function Editor(props: EditorProps) {
           'flex-shrink-0',
           'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
           'flex items-center w-full max-w-4xl py-6 mb-4, justify-between',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-7',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-3',
         ].join(' ')}
       >
         {renders.length > 0 && (
