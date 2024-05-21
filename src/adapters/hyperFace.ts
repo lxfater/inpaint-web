@@ -63,7 +63,7 @@ async function tileProc(
   ]
   const outputTensor = new ort.Tensor(
     'float32',
-    new Float16Array(
+    new Float32Array(
       outputDims[0] * outputDims[1] * outputDims[2] * outputDims[3]
     ),
     outputDims
@@ -262,8 +262,8 @@ export default async function superFace(
   // temp = torch.tensor(np.ones((128,128,1)).astype(np.uint16).astype(np.int16), dtype=torch.float32, device="cpu")
   // TypeError: can't convert np.ndarray of type numpy.uint16. 
   // The only supported types are: float64, float32, float16, int64, int32, int16, int8, uint8, and bool.
-  const imageTersorData32 = new Float32Array(imageTersorData) // conversion 
-  const imageTensor = new ort.Tensor('float32', imageTersorData32, [
+  // const imageTersorData32 = new Float32Array(imageTersorData) // conversion 
+  const imageTensor = new ort.Tensor('float32', imageTersorData, [
     1,
     3,
     img.height,
