@@ -238,7 +238,7 @@ function imageDataToDataURL(imageData: ImageData) {
 
 // var def model
 let model: ArrayBuffer | null = null
-export default async function superAntiBlur(
+export default async function superFace(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
 ) {
