@@ -13,8 +13,8 @@ import {
   f16round,
 } from "@petamoriken/float16";
 
-const multi = 4
-const scal = 4
+const multi = 1
+const scal = 1
 
 // On decompose l'image source dans un tableau
 function imgProcess(img: Mat) {
@@ -76,7 +76,7 @@ async function tileProc(
   const outBOffset = outImageW * outImageH * 2
 
   const tileSize = 256
-  const tilePadding = 4
+  const tilePadding = 0
   const tileSizePre = tileSize - tilePadding * 2
 
   const tilesx = Math.ceil(inputDims[3] / tileSizePre)
