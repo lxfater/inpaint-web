@@ -62,7 +62,7 @@ async function tileProc(
     inputDims[3] * scal,
   ]
   const outputTensor = new ort.Tensor(
-    'float16',
+    'float32',
     new Float16Array(
       outputDims[0] * outputDims[1] * outputDims[2] * outputDims[3]
     ),
