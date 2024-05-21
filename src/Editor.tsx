@@ -832,6 +832,15 @@ export default function Editor(props: EditorProps) {
         {!showOriginal && (
           <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-red-500" />} onUp={onSuperResolution}>{m.upscale()}</Button>
         )}
+      </div>
+      <div
+        className={[
+          'flex-shrink-0',
+          'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
+          'flex items-center w-full max-w-4xl py-6 mb-4, justify-between',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-7',
+        ].join(' ')}
+      >
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-blue-500" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button>  
