@@ -52,7 +52,7 @@ function getModel(modelType: modelType) {
         // public/assets/super_resolution.onnx
         // url: 'https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx/resolve/main/cuda/cuda-int4-rtn-block-32/phi3-mini-128k-instruct-cuda-int4-rtn-block-32.onnx',
         name: 'model',
-        url: 'https://huggingface.co/saddam213/swin-ir-x4-onnx/resolve/main/Upscaler/model.onnx',  
+        url: 'https://huggingface.co/ssube/stable-diffusion-x4-upscaler-onnx/resolve/main/vae/model.onnx',  
         backupUrl:'',
       },
     ]
