@@ -835,6 +835,7 @@ export default function Editor(props: EditorProps) {
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-blue-500" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button>  
+        <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-blue-500" />} onUp={onHyperFace}>{m.hyperface()}</Button>  
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
