@@ -59,6 +59,22 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[0]
     return currentModel
   }
+  // name: input
+  // tensor: float32[1,3,256,256]
+  // name: output
+  // tensor: float32[1,3,256,256]
+  if (modelType === 'superFace') {
+    const modelList = [
+      {
+        name: 'GPEN-BFR-256',
+        url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/resolve/main/GPEN-BFR-256.onnx',  
+        // backupUrl:'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-256.fp16.onnx',
+        backupUrl:'',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
   throw new Error('wrong modelType')
 }
 
