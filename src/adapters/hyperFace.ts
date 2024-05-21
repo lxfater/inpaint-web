@@ -246,7 +246,8 @@ export default async function superFace(
   if (!model) {
     const capabilities = await getCapabilities()
     configEnv(capabilities)
-    const modelBuffer = await ensureModel('hyperFace')
+    // const modelBuffer = await ensureModel('hyperFace')
+    const modelBuffer = await ensureModel('superFace')
     model = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })
