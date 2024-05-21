@@ -132,7 +132,7 @@ async function tileProc(
       ])
       const r = await session.run({ 'input.1': tile })
       const results = {
-        output: r['1895'],
+        output: r['output'],
       }
       console.log(`pre dims:${results.output.dims}`)
 
