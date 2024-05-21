@@ -130,7 +130,7 @@ async function tileProc(
         tileSize,
         tileSize,
       ])
-      const r = await session.run({ 'input.1': tile })
+      const r = await session.run({ 'input': tile })
       const results = {
         output: r['output'],
       }
