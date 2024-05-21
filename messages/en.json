@@ -9,6 +9,7 @@
   "upscale": "4x-upscaling",
   "watermark": "4x-HD",
   "superantiblur": "4x-up anti Blur",
+  "superface": "Super Face",
   "download": "Download",
   "undo": "Undo",
   "inpaint_model_download_message": "Need to download a 30MB model file, please wait patiently...",
