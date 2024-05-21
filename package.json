@@ -18,6 +18,7 @@
     "react-use": "^17.3.1",
     "react-zoom-pan-pinch": "^3.3.0",
     "regenerator-runtime": "^0.14.1",
+    "tf": "^1.0.1",
     "vite": "^5.2.10",
     "vite-plugin-eslint": "^1.8.1"
   },
