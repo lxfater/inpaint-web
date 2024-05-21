@@ -62,7 +62,7 @@ export default function Button(props: ButtonProps) {
       }}
       tabIndex={-1}
       className={[
-        'inline-flex space-x-3 py-3 px-5 rounded-md cursor-pointer',
+        'inline-flex space-x-2 py-2 px-2 rounded-md cursor-pointer',
         background,
         className,
       ].join(' ')}
