@@ -12,6 +12,7 @@ import inpaint from './adapters/inpainting'
 import superResolution from './adapters/superResolution'
 import waterMark from './adapters/waterMark'
 import superAntiblur from './adapters/superAntiblur'
+import superAntiblur from './adapters/superFace'
 import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
@@ -494,6 +495,39 @@ export default function Editor(props: EditorProps) {
       setIsProcessingLoading(false)
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
+
+  // superFace
+  const onSuperFace = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('superFace_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await superFace(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('superFace_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('superFace', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
   // WaterMark
   const onWaterMark = useCallback(async () => {
     setIsProcessingLoading(true)
@@ -767,6 +801,7 @@ export default function Editor(props: EditorProps) {
         )}
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
         <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-blue-500" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
+        <Button icon={<PaperAirplaneIcon className="w-6 h-6 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button>  
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
