@@ -839,23 +839,23 @@ export default function Editor(props: EditorProps) {
         ].join(' ')}
       >
         {!showOriginal && (
-          <Button icon={<PaperAirplaneIcon className="w-5 h-5 text-red-500" />} onUp={onSuperResolution}>{m.upscale()}</Button>
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-red-500" />} onUp={onSuperResolution}>{m.upscale()}</Button>
          )}
         {!showOriginal && ( 
-          <Button icon={<PaperAirplaneIcon className="w-5 h-5 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
          )}
         {!showOriginal && (  
-          <Button icon={<PaperAirplaneIcon className="w-5 h-5 text-gray-500" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
          )}
         {!showOriginal && (
-          <Button icon={<PaperAirplaneIcon className="w-5 h-5 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button> 
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button> 
          )}
         {!showOriginal && (  
-          <Button icon={<PaperAirplaneIcon className="w-5 h-5 text-blue-500" />} onUp={onHyperFace}>{m.hyperface()}</Button> 
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onHyperFace}>{m.hyperface()}</Button> 
          )}
         <Button
           primary
-          icon={<DownloadIcon className="w-6 h-6" />}
+          icon={<DownloadIcon className="w-4 h-4" />}
           onClick={download}
         >
           {m.download()}
