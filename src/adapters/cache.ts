@@ -75,6 +75,19 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[0]
     return currentModel
   }
+  // https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-512.onnx
+  if (modelType === 'hyperFace') {
+    const modelList = [
+      {
+        name: 'GPEN-BFR-512',
+        url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-512.onnx',  
+        // backupUrl:'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-256.fp16.onnx',
+        backupUrl:'',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
   throw new Error('wrong modelType')
 }
 
