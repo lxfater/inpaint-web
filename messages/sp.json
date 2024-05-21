@@ -10,6 +10,7 @@
   "watermark": "HD 4x arriba",
   "superantiblur": "antiflou 4x-up",
   "superface": "Super Face",
+  "hyperface": "Super Face HD",
   "download": "Telecarga",
   "undo": "Anulador",
   "inpaint_model_download_message": "Telecarga de 30MB de archivo de modelo, sigue con paciencia...",
