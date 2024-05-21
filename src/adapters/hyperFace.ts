@@ -38,8 +38,8 @@ function imgProcess(img: Mat) {
   }
 
   channels.delete() // 清理内存 - Nettoyer la mémoire
-  const chwArray32 = new Float32Array(chwArray) // conversion 
-  return chwArray32 // 返回转换后的数据 - Renvoie les données converties
+  // const chwArray32 = new Float32Array(chwArray) // conversion 
+  return chwArray // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
   inputTensor: ort.Tensor,
@@ -62,8 +62,8 @@ async function tileProc(
     inputDims[3] * scal,
   ]
   const outputTensor = new ort.Tensor(
-    'float32',
-    new Float32Array(
+    'float16',
+    new Float16Array(
       outputDims[0] * outputDims[1] * outputDims[2] * outputDims[3]
     ),
     outputDims
@@ -124,7 +124,7 @@ async function tileProc(
         }
       }
 
-      const tile = new ort.Tensor('float32', tileData, [
+      const tile = new ort.Tensor('float16', tileData, [
         1,
         3,
         tileSize,
