@@ -12,7 +12,6 @@ import {
   getFloat16, setFloat16,
   f16round,
 } from "@petamoriken/float16";
-// import EnhancerWaterMark from 'watermark-enhancer'
 
 const multi = 4
 const scal = 4
