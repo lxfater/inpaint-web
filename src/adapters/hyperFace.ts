@@ -124,7 +124,7 @@ async function tileProc(
         }
       }
 
-      const tile = new ort.Tensor('float16', tileData, [
+      const tile = new ort.Tensor('float32', tileData, [
         1,
         3,
         tileSize,
