@@ -80,7 +80,7 @@ function getModel(modelType: modelType) {
     const modelList = [
       {
         name: 'GPEN-BFR-512',
-        url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-512.onnx',  
+        url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/resolve/main/GPEN-BFR-512.onnx?download=true',  
         // backupUrl:'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-256.fp16.onnx',
         backupUrl:'',
       },
