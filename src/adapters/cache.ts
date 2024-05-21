@@ -79,8 +79,10 @@ function getModel(modelType: modelType) {
   if (modelType === 'hyperFace') {
     const modelList = [
       {
-        name: 'GFPGANv1.2.fp16',
-        url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/resolve/main/GFPGANv1.2.fp16.onnx?download=true',  
+        // name: 'GFPGANv1.2.fp16',
+        // url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/resolve/main/GFPGANv1.2.fp16.onnx?download=true',  
+        name: 'model',
+        url: 'https://huggingface.co/stabilityai/sdxl-turbo/resolve/main/vae_decoder/model.onnx?download=true', 
         // backupUrl:'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-256.fp16.onnx',
         backupUrl:'',
       },
