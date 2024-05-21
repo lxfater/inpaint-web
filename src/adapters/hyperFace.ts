@@ -38,7 +38,6 @@ function imgProcess(img: Mat) {
   }
 
   channels.delete() // 清理内存 - Nettoyer la mémoire
-  // const chwArray32 = new Float32Array(chwArray) // conversion 
   return chwArray // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
@@ -76,7 +75,7 @@ async function tileProc(
   const outBOffset = outImageW * outImageH * 2
 
   const tileSize = 256
-  const tilePadding = 16 // 256 * 0.5  // 512 * 0.25
+  const tilePadding = 128 // 256 * 0.5  // 512 * 0.25
   const tileSizePre = tileSize - tilePadding * 2
 
   const tilesx = Math.ceil(inputDims[3] / tileSizePre)
