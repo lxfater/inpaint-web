@@ -22,6 +22,10 @@ https://github.com/lxfater/inpaint-web/assets/22794120/bcad4812-02ae-48bb-9e84-9
 
 https://github.com/lxfater/inpaint-web/assets/22794120/3a8d894f-9749-4685-b947-8b5f15c9cf38
 
+## Super-Face
+
+https://github.com/yangxy/GPEN
+
 ## Demo link
 
 Demo link:https://inpaintweb.lxfater.com/
@@ -35,6 +39,7 @@ Demo link:https://inpaintweb.lxfater.com/
 - [x] Intégrer le post-traitement dans le modèle
 - [x] Mise à l'échelle de l'image
 - [x] Prise en charge en français, allemand et espagnol
+- [x] Ajout de Super Face
 - [ ] Intégrez tout segment pour une sélection et une suppression rapides dans les images
 - [ ] Intégrer la diffusion stable pour le remplacement de l'image
 - [ ] Meilleure interface utilisateur
@@ -46,6 +51,7 @@ Demo link:https://inpaintweb.lxfater.com/
 - [x] Integrate Post-Processing into the Model
 - [x] Image-upscaling
 - [x] French, German, and Spanish support
+- [x] Add Super Face
 - [ ] Integrate Segment Anything for Quick Selection and Removal in Images
 - [ ] Integrate Stable Diffusion for Image Replacement
 - [ ] Better UI
@@ -57,6 +63,7 @@ Demo link:https://inpaintweb.lxfater.com/
 - [x] 后处理集成于模型中
 - [x] 超分辨率
 - [x] 支持法语、德语和西班牙语
+- [x] 添加了超级面孔
 - [ ] 接入 Segment Anything，实现快速选择和去除图像
 - [ ] 接入 stable diffusion，实现图像替换
 - [ ] 更好的界面
