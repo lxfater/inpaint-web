@@ -259,7 +259,7 @@ export default async function superFace(
       : await loadImage(URL.createObjectURL(imageFile))
 
   const imageTersorData = await processImage(img)
-  const imageTensor = new ort.Tensor('float16', imageTersorData, [
+  const imageTensor = new ort.Tensor('Uint16Array', imageTersorData, [
     1,
     3,
     img.height,
