@@ -15,7 +15,7 @@ import {
 // import EnhancerWaterMark from 'watermark-enhancer'
 
 const multi = 4
-const scal = 4
+const scal = 2
 
 // On decompose l'image source dans un tableau
 function imgProcess(img: Mat) {
@@ -131,9 +131,9 @@ async function tileProc(
         tileSize,
         tileSize,
       ])
-      const r = await session.run({ 'input.1': tile })
+      const r = await session.run({ 'input': tile })
       const results = {
-        output: r['1895'],
+        output: r['output'],
       }
       console.log(`pre dims:${results.output.dims}`)
 
@@ -222,29 +222,7 @@ function postProcess(floatData: Float32Array, width: number, height: number) {
   }
   return chwToHwcData
 }
-/*
-function addWaterMarki (canvas: canvas){
-// Paramètres du filigrane, le contenu du filigrane peut être obtenu de manière asynchrone
-  // 水印参数, 水印内容可异步获取
-  const p = EnhancerWaterMark(
-    {
-      width: canvas.width,
-      height: canvas.height,
-      rotate: '17',
-      content: 'Copyright',
-      // asyncContent: renderEffectContent,
-//    },
-//    {
-//      content: 'watermark loading...',
-//      color: 'black',
-//      background: 'white',
-    }
-  )(canvas) // Passer le composant qui doit être filigrané - 传入需要加上水印的组件
-  
-  return p
-  
-}
-*/
+
 function imageDataToDataURL(imageData: ImageData) {
   // 创建 canvas
   const canvas = document.createElement('canvas')
