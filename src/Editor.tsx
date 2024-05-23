@@ -879,7 +879,7 @@ export default function Editor(props: EditorProps) {
         ].join(' ')}
       >
         {!showOriginal && (
-          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onSuperResolution}>{m.upscale()}</Button>
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-red-500" />} onUp={onSuperResolution}>{m.upscale()}</Button>
          )}
         {!showOriginal && ( 
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
