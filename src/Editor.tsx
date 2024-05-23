@@ -862,6 +862,13 @@ export default function Editor(props: EditorProps) {
         >
           {m.original()}
         </Button>
+        <Button
+          primary
+          icon={<DownloadIcon className="w-4 h-4" />}
+          onClick={download}
+        >
+          {m.download()}
+        </Button>
       </div>
       <div
         className={[
@@ -889,13 +896,6 @@ export default function Editor(props: EditorProps) {
         {!showOriginal && (  
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-green-500" />} onUp={onOccluderFace}>{m.occluderface()}</Button> 
          )}
-        <Button
-          primary
-          icon={<DownloadIcon className="w-4 h-4" />}
-          onClick={download}
-        >
-          {m.download()}
-        </Button>
       </div>
     </div>
   )
