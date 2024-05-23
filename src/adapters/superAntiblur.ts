@@ -274,13 +274,13 @@ export default async function superAntiBlur(
   const outsTensor = result
   const chwToHwcData = postProcess(
     outsTensor.data,
-    img.width * multi,
-    img.height * multi
+    img.width * scal,
+    img.height * scal
   )
   const imageData = new ImageData(
     new Uint8ClampedArray(chwToHwcData),
-    img.width * multi,
-    img.height * multi
+    img.width * scal,
+    img.height * scal
   )
   console.log(imageData, 'imageData')
 
