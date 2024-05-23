@@ -96,7 +96,7 @@ function getModel(modelType: modelType) {
     const modelList = [
       {
         name: 'face_occluder',
-        url: 'https://huggingface.co/Rookiehan/facefusion/blob/main/face_occluder.onnx?download=true', 
+        url: 'https://huggingface.co/Rookiehan/facefusion/resolve/main/face_occluder.onnx?download=true', 
         // backupUrl:'https://huggingface.co/uwg/upscaler/resolve/main/Face_Restore/FaceFusion/occluder.onnx?download=true',
         backupUrl:'',
       },
