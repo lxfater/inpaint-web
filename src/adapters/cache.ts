@@ -90,6 +90,20 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[0]
     return currentModel
   }
+  // https://huggingface.co/Rookiehan/facefusion/blob/main/face_occluder.onnx
+  // https://huggingface.co/uwg/upscaler/tree/main/Face_Restore/FaceFusion
+  if (modelType === 'occluderFace') {
+    const modelList = [
+      {
+        name: 'face_occluder',
+        url: 'https://huggingface.co/Rookiehan/facefusion/blob/main/face_occluder.onnx?download=true', 
+        // backupUrl:'https://huggingface.co/uwg/upscaler/resolve/main/Face_Restore/FaceFusion/occluder.onnx?download=true',
+        backupUrl:'',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
   throw new Error('wrong modelType')
 }
 
