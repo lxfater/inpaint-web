@@ -11,6 +11,7 @@
   "superantiblur": "4x-up antiblur",
   "superface": "Super Face",
   "hyperface": "Super Face HD",
+  "occluderface": "Occluder Face Beta",
   "download": "Herunterladen",
   "undo": "Rückgängig machen",
   "inpaint_model_download_message": "30 MB große Modelldatei wird heruntergeladen, bitte warten…",
