@@ -12,9 +12,10 @@ import {
   getFloat16, setFloat16,
   f16round,
 } from "@petamoriken/float16";
-// import EnhancerWaterMark from 'watermark-enhancer'
 
+// Multi thread max
 const multi = 4
+// Upscale format
 const scal = 2
 
 // On decompose l'image source dans un tableau
@@ -76,7 +77,7 @@ async function tileProc(
   const outGOffset = outImageW * outImageH
   const outBOffset = outImageW * outImageH * 2
 
-  const tileSize = 64
+  const tileSize = 128 // 64
   const tilePadding = 4
   const tileSizePre = tileSize - tilePadding * 2
 
