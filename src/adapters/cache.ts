@@ -37,8 +37,8 @@ function getModel(modelType: modelType) {
     if (modelType === 'mediumResolution') {
     const modelList = [
       {
-        name: 'realesrgan-x4',
-        url: 'https://github.com/N3oRay/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx',
+        name: '2xHFA2kAVCSRFormer_light_16_onnxsim_fp32',
+        url: '/models/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx',
         backupUrl:
           'https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx',
       },
