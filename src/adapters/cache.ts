@@ -91,12 +91,29 @@ function getModel(modelType: modelType) {
     return currentModel
   }
   // https://huggingface.co/Rookiehan/facefusion/blob/main/face_occluder.onnx
+  /* 
+  in_face:0
+  name: in_face:0
+  tensor: float32[unk__359,256,256,3]
+  out_mask:0
+  name: out_mask:0
+  tensor: float32[unk__360,256,256,1]
+  */
   // https://huggingface.co/uwg/upscaler/tree/main/Face_Restore/FaceFusion
+  /*
+  input
+  name: input
+  tensor: float32[batch_size,3,?,?]
+  output
+  name: output
+  tensor: float32[batch_size,1,?,?]
+  */
   if (modelType === 'occluderFace') {
     const modelList = [
       {
-        name: 'face_occluder',
-        url: 'https://huggingface.co/Rookiehan/facefusion/resolve/main/face_occluder.onnx?download=true', 
+        name: 'occluder',
+        url: 'https://huggingface.co/uwg/upscaler/resolve/main/Face_Restore/FaceFusion/occluder.onnx?download=true', 
+        // url: 'https://huggingface.co/Rookiehan/facefusion/resolve/main/face_occluder.onnx?download=true', 
         // backupUrl:'https://huggingface.co/uwg/upscaler/resolve/main/Face_Restore/FaceFusion/occluder.onnx?download=true',
         backupUrl:'',
       },
