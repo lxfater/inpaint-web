@@ -561,6 +561,38 @@ export default function Editor(props: EditorProps) {
       setIsProcessingLoading(false)
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
+  // occluderFace
+  const onOccluderFace = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('occluderFace_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await occluderFace(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('occluderFace_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('occluderFace', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
   // WaterMark
   const onWaterMark = useCallback(async () => {
     setIsProcessingLoading(true)
@@ -835,7 +867,7 @@ export default function Editor(props: EditorProps) {
           'flex-shrink-0',
           'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
           'flex items-center w-full max-w-4xl py-6 mb-4, justify-between',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-3',
         ].join(' ')}
       >
         {!showOriginal && (
@@ -852,6 +884,9 @@ export default function Editor(props: EditorProps) {
          )}
         {!showOriginal && (  
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onHyperFace}>{m.hyperface()}</Button> 
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-green-500" />} onUp={onOccluderFace}>{m.occluderface()}</Button> 
          )}
         <Button
           primary
