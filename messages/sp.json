@@ -11,6 +11,7 @@
   "superantiblur": "antiflou 4x-up",
   "superface": "Super Face",
   "hyperface": "Super Face HD",
+  "occluderface": "Occluder Face Beta",
   "download": "Telecarga",
   "undo": "Anulador",
   "inpaint_model_download_message": "Telecarga de 30MB de archivo de modelo, sigue con paciencia...",
