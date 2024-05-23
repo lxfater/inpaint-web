@@ -8,7 +8,7 @@
   "original": "Original",
   "upscale": "4x-upscaling",
   "watermark": "4x-up HD",
-  "superantiblur": "4x-up antiflou",
+  "superantiblur": "2x-up antiflou",
   "superface": "Super Face",
   "hyperface": "Super Face HD",
   "occluderface": "Occluder Face Beta",
