@@ -14,9 +14,10 @@ import {
 } from "@petamoriken/float16";
 // import EnhancerWaterMark from 'watermark-enhancer'
 
-
+// Multi thread
 const multi = 4
-const scal = 4
+// Upscal 2x
+const scal = 2
 
 // On decompose l'image source dans un tableau
 function imgProcess(img: Mat) {
@@ -27,7 +28,7 @@ function imgProcess(img: Mat) {
   const H = img.rows // 图像高度 - hauteur de l'image
   const W = img.cols // 图像宽度 - Largeur de l'image
   // Créer un nouveau tableau pour stocker les données converties
-  const chwArray = new Float16Array(C * H * W) // 创建新的数组来存储转换后的数据 
+  const chwArray = new Float32Array(C * H * W) // 创建新的数组来存储转换后的数据 
 
   for (let c = 0; c < C; c++) {
     const channelData = channels.get(c).data // 获取单个通道的数据 - Obtenez des données à partir d’un seul canal
@@ -40,8 +41,8 @@ function imgProcess(img: Mat) {
   }
 
   channels.delete() // 清理内存 - Nettoyer la mémoire
-  const chwArray32 = new Float32Array(chwArray) // conversion 
-  return chwArray32 // 返回转换后的数据 - Renvoie les données converties
+  // const chwArray32 = new Float32Array(chwArray) // conversion 16 to 32
+  return chwArray // 返回转换后的数据 - Renvoie les données converties
 }
 async function tileProc(
   inputTensor: ort.Tensor,
@@ -132,9 +133,9 @@ async function tileProc(
         tileSize,
         tileSize,
       ])
-      const r = await session.run({ 'input.1': tile })
+      const r = await session.run({ 'input': tile })
       const results = {
-        output: r['1895'],
+        output: r['output'],
       }
       console.log(`pre dims:${results.output.dims}`)
 
@@ -271,7 +272,7 @@ export default async function waterMark(
   if (!model) {
     const capabilities = await getCapabilities()
     configEnv(capabilities)
-    const modelBuffer = await ensureModel('superResolution')
+    const modelBuffer = await ensureModel('hightResolution')
     model = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })
@@ -297,13 +298,13 @@ export default async function waterMark(
   const outsTensor = result
   const chwToHwcData = postProcess(
     outsTensor.data,
-    img.width * multi,
-    img.height * multi
+    img.width * scal,
+    img.height * scal
   )
   const imageData = new ImageData(
     new Uint8ClampedArray(chwToHwcData),
-    img.width * multi,
-    img.height * multi
+    img.width * scal,
+    img.height * scal
   )
   console.log(imageData, 'imageData')
 
