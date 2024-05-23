@@ -33,14 +33,27 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[2]
     return currentModel
   }
-  // https://github.com/N3oRay/models/blob/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx
+  // mediumResolution - https://github.com/Phhofm/models/blob/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx
     if (modelType === 'mediumResolution') {
     const modelList = [
       {
         name: '2xHFA2kAVCSRFormer_light_16_onnxsim_fp32',
         url: '/models/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx',
         backupUrl:
-          'https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx',
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // hight -- https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx
+    if (modelType === 'hightResolution') {
+    const modelList = [
+      {
+        name: '2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx',
+        url: '/models/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx',
+        backupUrl:
+          '',
       },
     ]
     const currentModel = modelList[0]
@@ -72,10 +85,8 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[0]
     return currentModel
   }
-  // name: input
-  // tensor: float32[1,3,256,256]
-  // name: output
-  // tensor: float32[1,3,256,256]
+  // name: input  - tensor: float32[1,3,256,256]
+  // name: output - tensor: float32[1,3,256,256]
   if (modelType === 'superFace') {
     const modelList = [
       {
