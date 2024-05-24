@@ -62,6 +62,37 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[0]
     return currentModel
   }
+  // GoodPerf -- 2xEvangelion_omnisr_fp32_opset17.onnx
+  /*
+  Name: 2xEvangelion_omnisr
+License: CC BY 4.0
+Google Drive
+Release Date: 08.02.2024 (dd/mm/yy)
+Author: Philip Hofmann
+Network: OmniSR
+Scale: 2
+Purpose: 2x upscaler for evangelion episodes
+Iterations: 218'000
+epoch: 198
+batch_size: 12-32
+HR_size: 128-256
+Dataset: "Upscale Archive Evangelion DVD's" by pwnsweet
+Number of train images: 3174
+OTF Training: No
+Pretrained_Model_G: 2xHFA2kOmniSR
+*/
+  if (modelType === 'speedResolution') {
+    const modelList = [
+      {
+        name: '2xEvangelion_omnisr_fp32_opset17.onnx',
+        url: '/models/2xEvangelion_omnisr_fp32_opset17.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
   // hight -- https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx
     if (modelType === 'hightResolution') {
     const modelList = [
