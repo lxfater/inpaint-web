@@ -14,6 +14,7 @@ import waterMark from './adapters/waterMark'
 import superAntiblur from './adapters/superAntiblur'
 import superFace from './adapters/superFace'
 import hyperFace from './adapters/hyperFace'
+import superAnim from './adapters/superAnim'
 import occluderFace from './adapters/occluderFace'
 import Button from './components/Button'
 import Slider from './components/Slider'
@@ -498,6 +499,39 @@ export default function Editor(props: EditorProps) {
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
 
+  // superAnim
+  const onSuperAnim = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('superAnim_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await superAnim(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('superAnim_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('superAnim', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])   
+
   // superFace
   const onSuperFace = useCallback(async () => {
     setIsProcessingLoading(true)
@@ -892,6 +926,9 @@ export default function Editor(props: EditorProps) {
          )}
         {!showOriginal && (  
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onHyperFace}>{m.hyperface()}</Button> 
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onSuperAnim}>{m.superanim()}</Button> 
          )}
         {!showOriginal && (  
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-green-500" />} onUp={onOccluderFace}>{m.occluderface()}</Button> 
