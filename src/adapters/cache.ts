@@ -181,6 +181,24 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     const currentModel = modelList[0]
     return currentModel
   }
+  /*
+  Add 2x.StarSample.V1.0.-.FP32.OPSET17.onnx
+  https://openmodeldb.info/models/2x-MLP-StarSample-V1-0
+  Github Release
+  Showcase: https://slow.pics/s/1ixqCSjy
+  */
+  if (modelType === 'superanim') {
+    const modelList = [
+      {
+        name: '2x.StarSample.V1.0.-.FP32.OPSET17',
+        url: '/models/2x.StarSample.V1.0.-.FP32.OPSET17.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
   throw new Error('wrong modelType')
 }
 
