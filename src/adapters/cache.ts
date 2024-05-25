@@ -106,6 +106,21 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     const currentModel = modelList[0]
     return currentModel
   }
+  // parser face
+  // https://huggingface.co/Rookiehan/facefusion/resolve/main/face_parser.onnx?download=true
+  if (modelType === 'parserface') {
+    const modelList = [
+      {
+        name: 'face_parser.onnx',
+        url: 'https://huggingface.co/Rookiehan/facefusion/resolve/main/face_parser.onnx?download=true',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // super resolution 4x
   if (modelType === 'superResolution') {
     const modelList = [
       {
