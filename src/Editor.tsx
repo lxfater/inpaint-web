@@ -16,6 +16,7 @@ import superFace from './adapters/superFace'
 import hyperFace from './adapters/hyperFace'
 import superAnim from './adapters/superAnim'
 import occluderFace from './adapters/occluderFace'
+import parserFace from './adapters/parserFace'
 import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
@@ -628,6 +629,38 @@ export default function Editor(props: EditorProps) {
       setIsProcessingLoading(false)
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
+  // parserFace
+  const onParserFace = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('parserFace_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await parserFace(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('parserFace_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('parserFace', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders]) 
   // WaterMark
   const onWaterMark = useCallback(async () => {
     setIsProcessingLoading(true)
@@ -931,6 +964,9 @@ export default function Editor(props: EditorProps) {
          )}
         {!showOriginal && (  
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-green-500" />} onUp={onOccluderFace}>{m.occluderface()}</Button> 
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-green-500" />} onUp={onParserFace}>{m.parserface()}</Button> 
          )}
       </div>
     </div>
