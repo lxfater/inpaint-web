@@ -818,8 +818,7 @@ export default function Editor(props: EditorProps) {
           {isInpaintingLoading && (
             <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
               <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
-                <p>正在处理中，请耐心等待。。。</p>
-                <p>It is being processed, please be patient...</p>
+                <p>{m.waitmessage()}</p>  
                 <Progress percent={generateProgress} />
               </div>
             </div>
