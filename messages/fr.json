@@ -15,6 +15,7 @@
   "occluderface": "Occluder Face Beta",
   "download": "Telechargement",
   "undo": "Annuler",
+  "waitmessage": "Le traitement est en cours, soyez patient...",
   "inpaint_model_download_message": "Telechargement de 30MB de fichier model, veuillez patienter ...",
   "upscaleing_model_download_message": "Telechargement de 70MB fichier model, veuillez patienter..."
 }
