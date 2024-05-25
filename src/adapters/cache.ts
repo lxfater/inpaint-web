@@ -111,7 +111,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
   if (modelType === 'parserface') {
     const modelList = [
       {
-        name: 'face_parser.onnx',
+        name: 'face_parser',
         url: 'https://huggingface.co/Rookiehan/facefusion/resolve/main/face_parser.onnx?download=true',
         backupUrl:
           '',
