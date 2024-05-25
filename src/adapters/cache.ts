@@ -114,7 +114,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
         name: 'face_parser',
         url: 'https://huggingface.co/Rookiehan/facefusion/resolve/main/face_parser.onnx?download=true',
         backupUrl:
-          '',
+          'https://github.com/facefusion/facefusion-assets/releases/download/models/face_parser.onnx',
       },
     ]
     const currentModel = modelList[0]
