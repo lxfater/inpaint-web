@@ -15,6 +15,7 @@
   "occluderface": "Occluder Face Beta",
   "download": "Herunterladen",
   "undo": "Rückgängig machen",
+  "waitmessage": "Es wird bearbeitet, bitte haben Sie etwas Geduld...",
   "inpaint_model_download_message": "30 MB große Modelldatei wird heruntergeladen, bitte warten…",
   "upscaleing_model_download_message": "70 MB große Modelldatei wird heruntergeladen, bitte warten …"
 }
