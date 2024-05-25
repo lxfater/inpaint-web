@@ -29,6 +29,9 @@ https://github.com/yangxy/GPEN
 2xHFA2kAVCSRFormer_light_16 :
 https://github.com/Phhofm/models
 
+Ref & Info :
+https://github.com/facefusion/facefusion-assets
+
 ## Demo link
 
 Demo link:https://inpaintweb.lxfater.com/
