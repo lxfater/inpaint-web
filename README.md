@@ -23,9 +23,10 @@ https://github.com/lxfater/inpaint-web/assets/22794120/bcad4812-02ae-48bb-9e84-9
 https://github.com/lxfater/inpaint-web/assets/22794120/3a8d894f-9749-4685-b947-8b5f15c9cf38
 
 ## Models
+
 Super-Face :
 https://github.com/yangxy/GPEN
-2xHFA2kAVCSRFormer_light_16 : 
+2xHFA2kAVCSRFormer_light_16 :
 https://github.com/Phhofm/models
 
 ## Demo link
