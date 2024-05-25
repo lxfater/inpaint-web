@@ -190,6 +190,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
       {
         name: 'occluder',
         url: 'https://huggingface.co/bluefoxcreation/Face-Occluder-ONNX/resolve/main/occluder.onnx?download=true',
+        // https://github.com/facefusion/facefusion-assets/releases/download/models/face_occluder.onnx
         backupUrl:'',
       },
     ]
