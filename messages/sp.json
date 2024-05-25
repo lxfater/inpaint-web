@@ -15,6 +15,7 @@
   "occluderface": "Occluder Face Beta",
   "download": "Telecarga",
   "undo": "Anulador",
+  "waitmessage": "Se está procesando, por favor tenga paciencia...",
   "inpaint_model_download_message": "Telecarga de 30MB de archivo de modelo, sigue con paciencia...",
   "upscaleing_model_download_message": "Telecarga del modelo de archivo de 70 MB, sigue con paciencia..."
 }
