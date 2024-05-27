@@ -149,6 +149,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
   }
   // name: input  - tensor: float32[1,3,256,256]
   // name: output - tensor: float32[1,3,256,256]
+  // https://huggingface.co/Rookiehan/facefusion/tree/main
   if (modelType === 'superFace') {
     const modelList = [
       {
