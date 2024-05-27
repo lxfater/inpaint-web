@@ -93,6 +93,19 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     const currentModel = modelList[0]
     return currentModel
   }
+  // Real 4x -> 256 px to 1024 px
+  if (modelType === 'realResolution') {
+    const modelList = [
+      {
+        name: '4xLSDIRCompactN3_fp32',
+        url: '/models/4xLSDIRCompactN3_fp32.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
   // Anti blur -> 256 px to 1024 px
   if (modelType === 'antiblurResolution') {
     const modelList = [
