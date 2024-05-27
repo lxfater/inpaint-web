@@ -94,12 +94,11 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     return currentModel
   }
   // Anti blur -> 256 px to 1024 px
-  // Description: The original 4xLSDIRCompact a bit more trained, cannot handle degradations but should keep most details in comparison to C3 and R3.
   if (modelType === 'antiblurResolution') {
     const modelList = [
       {
-        name: '4xLSDIRCompactN3_fp32',
-        url: '/models/4xLSDIRCompactN3_fp32.onnx',
+        name: '4xLSDIRCompactR3_fp32',
+        url: '/models/4xLSDIRCompactR3_fp32.onnx',
         backupUrl:
           '',
       },
