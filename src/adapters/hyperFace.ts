@@ -13,7 +13,7 @@ import {
   f16round,
 } from "@petamoriken/float16";
 
-const multi = 1
+const multi = 4
 const scal = 1
 
 // On decompose l'image source dans un tableau
@@ -277,13 +277,13 @@ export default async function superFace(
   const outsTensor = result
   const chwToHwcData = postProcess(
     outsTensor.data,
-    img.width * multi,
-    img.height * multi
+    img.width * scal,
+    img.height * scal
   )
   const imageData = new ImageData(
     new Uint8ClampedArray(chwToHwcData),
-    img.width * multi,
-    img.height * multi
+    img.width * scal,
+    img.height * scal
   )
   console.log(imageData, 'imageData')
 
