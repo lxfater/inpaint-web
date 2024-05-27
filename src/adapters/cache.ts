@@ -154,8 +154,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
       {
         name: 'GPEN-BFR-256',
         url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/resolve/main/GPEN-BFR-256.onnx',  
-        // backupUrl:'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-256.fp16.onnx',
-        backupUrl:'',
+        backupUrl:'https://huggingface.co/Rookiehan/facefusion/resolve/main/gpen_bfr_256.onnx?download=true',
       },
     ]
     const currentModel = modelList[0]
