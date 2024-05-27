@@ -94,7 +94,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     return currentModel
   }
   // Real 4x -> 256 px to 1024 px
-  if (modelType === 'realResolution') {
+  if (modelType === 'superReal') {
     const modelList = [
       {
         name: '4xLSDIRCompactN3_fp32',
