@@ -14,7 +14,7 @@ import {
 } from "@petamoriken/float16";
 
 const multi = 4
-const scal = 1
+const scal = 4
 
 // On decompose l'image source dans un tableau
 function imgProcess(img: Mat) {
@@ -75,8 +75,8 @@ async function tileProc(
   const outGOffset = outImageW * outImageH
   const outBOffset = outImageW * outImageH * 2
 
-  const tileSize = 256
-  const tilePadding = 64 // 256 * 025
+  const tileSize = 512
+  const tilePadding = 128 // 256 * 025
   const tileSizePre = tileSize - tilePadding * 2
 
   const tilesx = Math.ceil(inputDims[3] / tileSizePre)
@@ -246,7 +246,7 @@ export default async function superFace(
   if (!model) {
     const capabilities = await getCapabilities()
     configEnv(capabilities)
-    const modelBuffer = await ensureModel('superFace')
+    const modelBuffer = await ensureModel('antiblurResolution')
     model = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: [capabilities.webgpu ? 'webgpu' : 'wasm'],
     })
