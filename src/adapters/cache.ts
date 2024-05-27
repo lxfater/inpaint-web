@@ -98,8 +98,8 @@ Pretrained_Model_G: 2xHFA2kOmniSR
   if (modelType === 'antiblurResolution') {
     const modelList = [
       {
-        name: '4xLSDIRCompactN3',
-        url: '/models/4xLSDIRCompactN3.onnx',
+        name: '4xLSDIRCompactN3_fp32',
+        url: '/models/4xLSDIRCompactN3_fp32.onnx',
         backupUrl:
           '',
       },
