@@ -9,7 +9,7 @@
   "upscale": "4x-upscaling",
   "watermark": "2x-up HD",
   "superantiblur": "2x-up antiflou",
-  "superface": "Super Face",
+  "superface": "4x-antiflou",
   "hyperface": "Super Face HD",
   "superanim": "2x - HD Anim",
   "occluderface": "Occluder Face Beta",
