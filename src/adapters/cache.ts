@@ -93,7 +93,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     const currentModel = modelList[0]
     return currentModel
   }
-  // Anti blur
+  // Anti blur -> 256 px to 1024 px
   // Description: The original 4xLSDIRCompact a bit more trained, cannot handle degradations but should keep most details in comparison to C3 and R3.
   if (modelType === 'antiblurResolution') {
     const modelList = [
@@ -135,7 +135,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     const currentModel = modelList[0]
     return currentModel
   }
-  // super resolution 4x
+  // super resolution 4x -> 64 px to 256 px
   if (modelType === 'superResolution') {
     const modelList = [
       {
@@ -162,8 +162,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     const currentModel = modelList[0]
     return currentModel
   }
-  // name: input  - tensor: float32[1,3,256,256]
-  // name: output - tensor: float32[1,3,256,256]
+  // name: input  - tensor: float32[1,3,256,256] -> name: output - tensor: float32[1,3,256,256]
   // https://huggingface.co/Rookiehan/facefusion/tree/main
   if (modelType === 'superFace') {
     const modelList = [
@@ -193,12 +192,10 @@ Pretrained_Model_G: 2xHFA2kOmniSR
   }
   // https://huggingface.co/Rookiehan/facefusion/blob/main/face_occluder.onnx
   /* https://huggingface.co/uwg/upscaler/tree/main/Face_Restore/FaceFusion
-  in_face:0 - name: in_face:0 tensor: float32[unk__359,256,256,3]
-  out_mask:0 - name: out_mask:0 tensor: float32[unk__360,256,256,1]
+  in_face:0 - name: in_face:0 tensor: float32[unk__359,256,256,3] -> out_mask:0 - name: out_mask:0 tensor: float32[unk__360,256,256,1]
 
   https://huggingface.co/bluefoxcreation/Face-Occluder-ONNX
-  input - name: input - tensor: float32[batch_size,3,?,?]
-  output - name: output - tensor: float32[batch_size,1,?,?]
+  input - name: input - tensor: float32[batch_size,3,?,?] -> output - name: output - tensor: float32[batch_size,1,?,?]
   */
   if (modelType === 'occluderFace') {
     const modelList = [
