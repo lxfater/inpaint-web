@@ -1,3 +1,77 @@
+ *The following are not models I had trained, but rather interpolations I had created, they are available on my [repo](https://github.com/phhofm/models) and can be tried out locally with chaiNNer:*  
+    4xLSDIRplus (4xLSDIRplusC + 4xLSDIRplusR)
+    4xLSDIRCompact3 (4xLSDIRCompactC3 + 4xLSDIRCompactR3)  
+    4xLSDIRCompact2 (4xLSDIRCompactC2 + 4xLSDIRCompactR2)  
+    4xInt-Ultracri (UltraSharp + Remacri)  
+    4xInt-Superscri (Superscale + Remacri)  
+    4xInt-Siacri(Siax + Remacri)  
+    4xInt-RemDF2K (Remacri + RealSR_DF2K_JPEG)  
+    4xInt-RemArt (Remacri + VolArt)  
+    4xInt-RemAnime (Remacri + AnimeSharp)  
+    4xInt-RemacRestore (Remacri + UltraMix_Restore)  
+    4xInt-AnimeArt (AnimeSharp + VolArt)  
+    2xInt-LD-AnimeJaNai (LD-Anime + AnimeJaNai)  
+    """)
+---------------------------------------------------------------
+
+4xLSDIRCompactC3
+
+Name: 4xLSDIRCompactC3
+License: CC BY 4.0
+Model Architecture: SRVGG
+Scale: 4
+Purpose: Upscale jpg compressed photos to x4 their size
+Iterations: 230’000
+batch_size: Variable(1-20)
+HR_size: 256
+Dataset: LSDIR
+Dataset_size: 8000-84991 hr& lr
+OTF Training No
+Pretrained_Model_G: 4xLSDIRCompact
+Description: Able to handle JPG compression (30-100).
+Total Training Time: 33+ hours
+
+
+
+4xLSDIRCompactN3
+
+Name: 4xLSDIRCompactN3
+License: CC BY 4.0
+Model Architecture: SRVGG
+Scale: 4
+Purpose: Upscale good quality input photos to x4 their size
+Iterations: 185'000
+batch_size: Variable(1-10)
+HR_size: 256
+Dataset: LSDIR
+Dataset_size: 84991 hr + 84991 lr
+OTF Training No
+Pretrained_Model_G: 4x_Compact_Pretrain.pth
+Description: The original 4xLSDIRCompact a bit more trained, cannot handle degradations but should keep most details in comparison to C3 and R3.
+Total Training Time: 32+ hours
+
+
+
+4xLSDIRCompactR3
+
+Name: 4xLSDIRCompactR3
+License: CC BY 4.0
+Model Architecture: SRVGG
+Scale: 4
+Purpose: Upscale (degraded) photos to x4 their size
+Iterations: 192’500
+batch_size: Variable(1-45)
+HR_size: 256
+Dataset: LSDIR
+Dataset_size: 10000-84991 hr& lr
+OTF Training Yes
+Pretrained_Model_G: 4xLSDIRCompact.pth
+Description: Trained on synthetic data, meant to handle more degradations. Can handle blur, noise and compression.
+Total Training Time: 86+ hours
+
+---------------------------------------
+
+
 Origine File 
 https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx
 https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx
