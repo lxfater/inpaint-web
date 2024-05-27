@@ -947,14 +947,14 @@ export default function Editor(props: EditorProps) {
         {!showOriginal && (
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-red-500" />} onUp={onSuperResolution}>{m.upscale()}</Button>
          )}
+        {!showOriginal && (
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button> 
+         )}
         {!showOriginal && ( 
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
          )}
         {!showOriginal && (  
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
-         )}
-        {!showOriginal && (
-          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button> 
          )}
         {!showOriginal && (  
           <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onHyperFace}>{m.hyperface()}</Button> 
