@@ -84,7 +84,7 @@ Pretrained_Model_G: 2xHFA2kOmniSR
   if (modelType === 'speedResolution') {
     const modelList = [
       {
-        name: '2xEvangelion_omnisr_fp32_opset17.onnx',
+        name: '2xEvangelion_omnisr_fp32_opset17',
         url: '/models/2xEvangelion_omnisr_fp32_opset17.onnx',
         backupUrl:
           '',
@@ -93,11 +93,26 @@ Pretrained_Model_G: 2xHFA2kOmniSR
     const currentModel = modelList[0]
     return currentModel
   }
+  // Anti blur
+  // Description: The original 4xLSDIRCompact a bit more trained, cannot handle degradations but should keep most details in comparison to C3 and R3.
+  if (modelType === 'antiblurResolution') {
+    const modelList = [
+      {
+        name: '4xLSDIRCompactN3',
+        url: '/models/4xLSDIRCompactN3.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  
   // hight -- https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx
     if (modelType === 'hightResolution') {
     const modelList = [
       {
-        name: '2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx',
+        name: '2xHFA2kAVCSRFormer_light_64_onnxsim_fp32',
         url: '/models/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx',
         backupUrl:
           '',
