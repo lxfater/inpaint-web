@@ -47,7 +47,7 @@ export const getCapabilities = async () => {
     threads: await threads(),
   }
 }
-const version = '1.16.3'
+const version = '1.16.3' // 2024  - 1.18.0
 export const getTagSrc = async () => {
   const prefix = `https://cdn.jsdelivr.net/npm/onnxruntime-web@${version}/dist/`
   const capablilities = await getCapabilities()
