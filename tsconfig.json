@@ -7,6 +7,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -14,8 +16,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
-    "jsx": "react-jsx",
-    "types": ["vite/client", "vite-plugin-svgr/client"]
+    "jsx": "react-jsx"
+    // "types": ["vite/client", "vite-plugin-svgr/client"]
   },
   "include": ["src"]
 }

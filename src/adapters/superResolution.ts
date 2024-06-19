@@ -2,17 +2,12 @@
 /* eslint-disable no-plusplus */
 import cv, { Mat } from 'opencv-ts'
 import { getCapabilities } from './util'
+import { loadImage, configEnv } from './util'
 import { ensureModel } from './cache'
 
-function loadImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.crossOrigin = 'Anonymous'
-    img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error(`Failed to load image from ${url}`))
-    img.src = url
-  })
-}
+const multi = 4 
+const scal = 4
+
 function imgProcess(img: Mat) {
   const channels = new cv.MatVector()
   cv.split(img, channels) // 分割通道
@@ -52,8 +47,8 @@ async function tileProc(
   const outputDims = [
     inputDims[0],
     inputDims[1],
-    inputDims[2] * 4,
-    inputDims[3] * 4,
+    inputDims[2] * scal,
+    inputDims[3] * scal,
   ]
   const outputTensor = new ort.Tensor(
     'float32',
@@ -130,10 +125,10 @@ async function tileProc(
       }
       console.log(`pre dims:${results.output.dims}`)
 
-      const outTileW = tileW * 4
-      const outTileH = tileH * 4
-      const outTileSize = tileSize * 4
-      const outTileSizePre = tileSizePre * 4
+      const outTileW = tileW * scal
+      const outTileH = tileH * scal
+      const outTileSize = tileSize * scal
+      const outTileSizePre = tileSizePre * scal
 
       const outTileROffset = 0
       const outTileGOffset = outTileSize * outTileSize
@@ -145,8 +140,8 @@ async function tileProc(
           const xim = i * outTileSizePre + x
           const yim = j * outTileSizePre + y
           const idx = xim + yim * outImageW
-          const xt = x + tilePadding * 4
-          const yt = y + tilePadding * 4
+          const xt = x + tilePadding * scal
+          const yt = y + tilePadding * scal
           outputTensor.data[idx + outROffset] =
             results.output.data[xt + yt * outTileSize + outTileROffset]
           outputTensor.data[idx + outGOffset] =
@@ -190,27 +185,7 @@ function processImage(
     }
   })
 }
-function configEnv(capabilities: {
-  webgpu: any
-  wasm?: boolean
-  simd: any
-  threads: any
-}) {
-  ort.env.wasm.wasmPaths =
-    'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.3/dist/'
-  if (capabilities.webgpu) {
-    ort.env.wasm.numThreads = 1
-  } else {
-    if (capabilities.threads) {
-      ort.env.wasm.numThreads = navigator.hardwareConcurrency ?? 4
-    }
-    if (capabilities.simd) {
-      ort.env.wasm.simd = true
-    }
-    ort.env.wasm.proxy = true
-  }
-  console.log('env', ort.env.wasm)
-}
+
 function postProcess(floatData: Float32Array, width: number, height: number) {
   const chwToHwcData = []
   const size = width * height
@@ -281,13 +256,13 @@ export default async function superResolution(
   const outsTensor = result
   const chwToHwcData = postProcess(
     outsTensor.data,
-    img.width * 4,
-    img.height * 4
+    img.width * scal,
+    img.height * scal
   )
   const imageData = new ImageData(
     new Uint8ClampedArray(chwToHwcData),
-    img.width * 4,
-    img.height * 4
+    img.width * scal,
+    img.height * scal
   )
   console.log(imageData, 'imageData')
   const url = imageDataToDataURL(imageData)
