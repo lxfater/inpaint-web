@@ -186,11 +186,12 @@ function processImage(
       const src = cv.imread(img)
       // eslint-disable-next-line camelcase
       const src_rgb = new cv.Mat()
-      // 将图像从RGBA转换为RGB - Convertir l'image de RGBA en RVB
+      // 将图像从RGBA转换为RGB - Convertir l'image de RGBA en RGB
       cv.cvtColor(src, src_rgb, cv.COLOR_RGBA2RGB)
       if (canvasId) {
         cv.imshow(canvasId, src_rgb)
       }
+      // Assuming imgProcess is defined elsewhere
       resolve(imgProcess(src_rgb))
 
       src.delete()
