@@ -11,7 +11,7 @@ export type modelType =
   | 'occluderFace'
   | 'superFace'
   | 'superResolution'
-  | 'superPhi
+  | 'superPhi'
   | 'superanim'
 
 localforage.config({
