@@ -91,3 +91,21 @@ Model: https://github.com/Picsart-AI-Research/MI-GAN
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=lxfater/inpaint-web&type=Date)](https://star-history.com/#lxfater/inpaint-web&Date)
+
+
+## Other Projects by the Author (作者的其他项目)
+
+### 中文
+
+查看我的其他项目：
+
+- [Demoget](https://www.demoget.com/zh)：免费的自动放大，鼠标轨迹优化的录屏软件。
+- [tinyeraser](https://www.tinyeraser.com/zh)：免费，批量，快速，一键换背景。
+
+### English
+
+Check out my other projects:
+
+- [Demoget](https://www.demoget.com/en): Free screen recording software with auto-zoom and mouse trajectory optimization.
+- [tinyeraser](https://www.tinyeraser.com/en): Free, batch, fast, one-click background replacement.
+
