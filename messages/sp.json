@@ -1,0 +1,23 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "drop_zone": "Clic o deposer glisser",
+  "try_it_images": "Ensayador cela",
+  "feedback": "A propósito de inpaint",
+  "start_new": "Comenzar nuevo",
+  "bruch_size": "Tamaño del pincel",
+  "original": "Original",
+  "upscale": "ampliación 4x",
+  "superreal": "4x-RealHD",
+  "watermark": "HD 2x arriba",
+  "superantiblur": "antiflujo 2x",
+  "superface": "antiflujo 4x",
+  "hyperface": "Super Cara",
+  "superanim": "2x - HD Anim",
+  "occluderface": "Cara del Occluder",
+  "parserface": "Cara del analizador",
+  "download": "Telecarga",
+  "undo": "Anulador",
+  "waitmessage": "Se está procesando, por favor tenga paciencia...",
+  "inpaint_model_download_message": "Telecarga de 30MB de archivo de modelo, sigue con paciencia...",
+  "upscaleing_model_download_message": "Telecarga del modelo de archivo de 70 MB, sigue con paciencia..."
+}

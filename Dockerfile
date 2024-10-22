@@ -8,6 +8,8 @@ WORKDIR /usr/src/app
 COPY . ./
 
 # Now we run NPM install, which includes dev dependencies
+RUN npm update
+RUN npm upgrade
 RUN npm install
 
 FROM alpine:latest as production

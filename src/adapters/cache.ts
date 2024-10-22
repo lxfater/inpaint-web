@@ -1,6 +1,18 @@
 import localforage from 'localforage'
-
-export type modelType = 'inpaint' | 'superResolution'
+export type modelType =
+  | 'inpaint'
+  | 'mediumResolution'
+  | 'speedResolution'
+  | 'superReal'
+  | 'antiblurResolution'
+  | 'hightResolution'
+  | 'parserface'
+  | 'hyperFace'
+  | 'occluderFace'
+  | 'superFace'
+  | 'superResolution'
+  | 'superPhi'
+  | 'superanim'
 
 localforage.config({
   name: 'modelCache',
@@ -33,6 +45,121 @@ function getModel(modelType: modelType) {
     const currentModel = modelList[2]
     return currentModel
   }
+  /*
+  2xHFA2kAVCSRFormer_light
+
+  Name: 2xHFA2kAVCSRFormer_light
+  License: CC BY 4.0
+  Network: SRFormer_light
+  Scale: 2
+  Purpose: 2x anime upscaling model that handles AVC (h264) compression
+  Iterations: 140000
+  batch_size: 2-4
+  HR_size: 128-192
+  Dataset: HFA2k_h264
+  Number of train images: 2568
+  OTF Training: No
+  Pretrained_Model_G: SRFormerLight_SRx2_DIV2K.pth
+    */
+  // mediumResolution - https://github.com/Phhofm/models/blob/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx
+    if (modelType === 'mediumResolution') {
+    const modelList = [
+      {
+        name: '2xHFA2kAVCSRFormer_light_16_onnxsim_fp32',
+        url: '/models/2xHFA2kAVCSRFormer_light_16_onnxsim_fp32.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // GoodPerf -- 2xEvangelion_omnisr_fp32_opset17.onnx
+  /*
+  Name: 2xEvangelion_omnisr
+License: CC BY 4.0
+Google Drive
+Release Date: 08.02.2024 (dd/mm/yy)
+Author: Philip Hofmann
+Network: OmniSR
+Scale: 2
+Purpose: 2x upscaler for evangelion episodes
+Iterations: 218'000
+epoch: 198
+batch_size: 12-32
+HR_size: 128-256
+Dataset: "Upscale Archive Evangelion DVD's" by pwnsweet
+Number of train images: 3174
+OTF Training: No
+Pretrained_Model_G: 2xHFA2kOmniSR
+*/
+  if (modelType === 'speedResolution') {
+    const modelList = [
+      {
+        name: '2xEvangelion_omnisr_fp32_opset17',
+        url: '/models/2xEvangelion_omnisr_fp32_opset17.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // Real 4x -> 256 px to 1024 px
+  if (modelType === 'superReal') {
+    const modelList = [
+      {
+        name: '4xLSDIRCompactN3_fp32',
+        url: '/models/4xLSDIRCompactN3_fp32.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // Anti blur -> 256 px to 1024 px
+  if (modelType === 'antiblurResolution') {
+    const modelList = [
+      {
+        name: '4xLSDIRCompactR3_fp32',
+        url: '/models/4xLSDIRCompactR3_fp32.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  
+  // hight -- https://github.com/Phhofm/models/raw/main/2xHFA2kAVCSRFormer_light/onnx/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx
+    if (modelType === 'hightResolution') {
+    const modelList = [
+      {
+        name: '2xHFA2kAVCSRFormer_light_64_onnxsim_fp32',
+        url: '/models/2xHFA2kAVCSRFormer_light_64_onnxsim_fp32.onnx',
+        backupUrl:
+          '',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // parser face
+  // https://huggingface.co/Rookiehan/facefusion/resolve/main/face_parser.onnx?download=true
+  if (modelType === 'parserface') {
+    const modelList = [
+      {
+        name: 'face_parser',
+        url: 'https://huggingface.co/Rookiehan/facefusion/resolve/main/face_parser.onnx?download=true',
+        backupUrl:
+          'https://github.com/facefusion/facefusion-assets/releases/download/models/face_parser.onnx',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // super resolution 4x -> 64 px to 256 px
   if (modelType === 'superResolution') {
     const modelList = [
       {
@@ -40,6 +167,85 @@ function getModel(modelType: modelType) {
         url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
         backupUrl:
           'https://worker-share-proxy-01f5.lxfater.workers.dev/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  if (modelType === 'superPhi') {
+    const modelList = [
+      {
+        // name: 'phi3-mini-128k-instruct-cuda-int4-rtn-block-32',
+        // public/assets/super_resolution.onnx
+        // url: 'https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx/resolve/main/cuda/cuda-int4-rtn-block-32/phi3-mini-128k-instruct-cuda-int4-rtn-block-32.onnx',
+        name: 'model',
+        url: 'https://huggingface.co/ssube/stable-diffusion-x4-upscaler-onnx/resolve/main/vae/model.onnx',  
+        backupUrl:'',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // name: input  - tensor: float32[1,3,256,256] -> name: output - tensor: float32[1,3,256,256]
+  // https://huggingface.co/Rookiehan/facefusion/tree/main
+  if (modelType === 'superFace') {
+    const modelList = [
+      {
+        name: 'GPEN-BFR-256',
+        url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/resolve/main/GPEN-BFR-256.onnx',  
+        backupUrl:'https://huggingface.co/Rookiehan/facefusion/resolve/main/gpen_bfr_256.onnx?download=true',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-512.onnx
+  if (modelType === 'hyperFace') {
+    const modelList = [
+      {
+        // name: 'GFPGANv1.2.fp16',
+        // url: 'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/resolve/main/GFPGANv1.2.fp16.onnx?download=true',  
+        name: 'model',
+        url: 'https://huggingface.co/stabilityai/sdxl-turbo/resolve/main/vae_decoder/model.onnx?download=true', 
+        // backupUrl:'https://huggingface.co/netrunner-exe/Face-Upscalers-onnx/blob/main/GPEN-BFR-256.fp16.onnx',
+        backupUrl:'',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  // https://huggingface.co/Rookiehan/facefusion/blob/main/face_occluder.onnx
+  /* https://huggingface.co/uwg/upscaler/tree/main/Face_Restore/FaceFusion
+  in_face:0 - name: in_face:0 tensor: float32[unk__359,256,256,3] -> out_mask:0 - name: out_mask:0 tensor: float32[unk__360,256,256,1]
+
+  https://huggingface.co/bluefoxcreation/Face-Occluder-ONNX
+  input - name: input - tensor: float32[batch_size,3,?,?] -> output - name: output - tensor: float32[batch_size,1,?,?]
+  */
+  if (modelType === 'occluderFace') {
+    const modelList = [
+      {
+        name: 'occluder',
+        url: 'https://huggingface.co/bluefoxcreation/Face-Occluder-ONNX/resolve/main/occluder.onnx?download=true',
+        // https://github.com/facefusion/facefusion-assets/releases/download/models/face_occluder.onnx
+        backupUrl:'',
+      },
+    ]
+    const currentModel = modelList[0]
+    return currentModel
+  }
+  /*
+  Add 2x.StarSample.V1.0.-.FP32.OPSET17.onnx
+  https://openmodeldb.info/models/2x-MLP-StarSample-V1-0
+  Github Release
+  Showcase: https://slow.pics/s/1ixqCSjy
+  */
+  if (modelType === 'superanim') {
+    const modelList = [
+      {
+        name: '2x.StarSample.V1.0.-.FP32.OPSET17',
+        url: '/models/2x.StarSample.V1.0.-.FP32.OPSET17.onnx',
+        backupUrl:
+          '',
       },
     ]
     const currentModel = modelList[0]
