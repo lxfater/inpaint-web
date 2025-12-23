@@ -68,7 +68,7 @@ Demo link:https://inpaintweb.lxfater.com/
 
 <div align="left">
     <span>联系我之前说明来意，我创业了，时间很宝贵。</span>
-    <img src="https://raw.githubusercontent.com/lxfater/inpaint-web/main/media/wechat.jpg" style="width: 200px; display: inline-block;">
+    <img src="https://tinyeraserblog.lxfater.com/G7yayw4aMAgN_Zs.jpeg" style="width: 200px; display: inline-block;">
 </div>
 
 ### English Content
