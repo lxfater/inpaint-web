@@ -67,7 +67,7 @@ Demo link:https://inpaintweb.lxfater.com/
 ### Wechat
 
 <div align="left">
-    <span>联系我之前说明来意，我创业了，时间很宝贵。</span>
+    <p>联系我之前说明来意，我创业了，时间很宝贵。</p>
     <img src="https://tinyeraserblog.lxfater.com/G7yayw4aMAgN_Zs.jpeg" style="width: 200px; display: inline-block;">
 </div>
 
