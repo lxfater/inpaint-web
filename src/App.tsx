@@ -19,9 +19,30 @@ import {
 
 function App() {
   const [file, setFile] = useState<File>()
-  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('zh')
+  // test in array value of navlanguage
+  const userLangNav = navigator.language || navigator.language;
+  console.log("userLang nav:")
+  console.log(userLangNav)
+  const tabsSet = new Set(['en', 'zh', 'fr', 'sp', 'de'])
+  const isLangTabstrue = (keyInput: string): boolean => tabsSet.has(keyInput)
+  function isLangTabs (keyInput: string): keyInput is TabTypes {
+    if( ['en', 'zh', 'fr', 'sp', 'de'].includes(keyInput)) {
+      return keyInput
+    } else {
+      return 'zh'
+    }
+ }
+  
+  const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh' | 'fr' | 'sp' | 'de'>(
+    isLangTabs(userLangNav)
+  )
+   
+  const [name, setName] = useState('Anonymous');
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
+  console.log(stateLanguageTag)
+  
+
 
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
@@ -76,6 +97,46 @@ function App() {
           >
             <p>{languageTag() === 'en' ? '切换到中文' : 'en'}</p>
           </Button>
+
+          <Button
+            className="mr-5 flex"
+            onClick={() => {
+              if (languageTag() === 'zh') {
+                setLanguageTag('fr')
+              } else {
+                setLanguageTag('zh')
+              }
+            }}
+          >
+            <p>{languageTag() === 'fr' ? '切换到中文' : 'fr'}</p>
+          </Button>
+
+          <Button
+            className="mr-5 flex"
+            onClick={() => {
+              if (languageTag() === 'zh') {
+                setLanguageTag('sp')
+              } else {
+                setLanguageTag('zh')
+              }
+            }}
+          >
+            <p>{languageTag() === 'sp' ? '切换到中文' : 'sp'}</p>
+          </Button>
+
+          <Button
+            className="mr-5 flex"
+            onClick={() => {
+              if (languageTag() === 'zh') {
+                setLanguageTag('de')
+              } else {
+                setLanguageTag('zh')
+              }
+            }}
+          >
+            <p>{languageTag() === 'de' ? '切换到中文' : 'de'}</p>
+          </Button>
+
           <Button
             className="w-38 flex sm:visible"
             icon={<InformationCircleIcon className="w-6 h-6" />}
@@ -113,7 +174,7 @@ function App() {
               <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
                 <span className="text-gray-500">{m.try_it_images()}</span>
                 <div className="flex space-x-2 sm:space-x-4 px-4">
-                  {['bag', 'dog', 'car', 'bird', 'jacket', 'shoe', 'paris'].map(
+                  {['bag', 'dog', 'car', 'bird', 'cyber', 'jacket', 'shoe', 'paris', 'cyber2'].map(
                     image => (
                       <div
                         key={image}

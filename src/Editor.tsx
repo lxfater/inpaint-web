@@ -1,10 +1,23 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
+import { DownloadIcon, EyeIcon, ViewBoardsIcon, SearchIcon,
+    PlusCircleIcon,
+    UserGroupIcon,
+    HeartIcon,
+    PaperAirplaneIcon,
+    MenuIcon } from '@heroicons/react/outline'
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
 import superResolution from './adapters/superResolution'
+import waterMark from './adapters/waterMark'
+import superAntiblur from './adapters/superAntiblur'
+import superFace from './adapters/superFace'
+import superReal from './adapters/superReal'
+import hyperFace from './adapters/hyperFace'
+import superAnim from './adapters/superAnim'
+import occluderFace from './adapters/occluderFace'
+import parserFace from './adapters/parserFace'
 import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
@@ -45,6 +58,7 @@ function drawLines(
 }
 
 const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
+
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
@@ -454,6 +468,266 @@ export default function Editor(props: EditorProps) {
     }
   }, [])
 
+  // superAntiblur
+  const onSuperAntiBlur = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('superAntiblur_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await superAntiblur(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('superAntiblur_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('superAntiblur', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
+
+  // superReal
+  const onSuperReal = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('superReal_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await superReal(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('superReal_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('superReal', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
+
+  // superAnim
+  const onSuperAnim = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('superAnim_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await superAnim(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('superAnim_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('superAnim', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])   
+
+  // superFace
+  const onSuperFace = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('superFace_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await superFace(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('superFace_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('superFace', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
+  // hyperFace
+  const onHyperFace = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('hyperFace_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await hyperFace(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('hyperFace_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('hyperFace', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
+  // occluderFace
+  const onOccluderFace = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('occluderFace_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await occluderFace(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('occluderFace_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('occluderFace', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])  
+  // parserFace
+  const onParserFace = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('parserFace_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await parserFace(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('parserFace_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('parserFace', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders]) 
+  // WaterMark
+  const onWaterMark = useCallback(async () => {
+    setIsProcessingLoading(true)
+    try {
+      // 运行
+      const start = Date.now()
+      console.log('waterMark_start')
+      // each time based on the last result, the first is the original
+      const newFile = renders.at(-1) ?? file
+      const res = await waterMark(newFile, setGenerateProgress)
+      if (!res) {
+        throw new Error('empty response')
+      }
+      // TODO: fix the render if it failed loading
+      const newRender = new Image()
+      newRender.dataset.id = Date.now().toString()
+      await loadImage(newRender, res)
+      renders.push(newRender)
+      lines.push({ pts: [], src: '' } as Line)
+      setRenders([...renders])
+      setLines([...lines])
+      console.log('waterMark_processed', {
+        duration: Date.now() - start,
+      })
+
+      // 替换当前图片
+    } catch (error) {
+      console.error('waterMark', error)
+    } finally {
+      setIsProcessingLoading(false)
+    }
+  }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
+  // Supper fonction
   const onSuperResolution = useCallback(async () => {
     if (!(await modelExists('superResolution'))) {
       setDownloaded(false)
@@ -490,7 +764,6 @@ export default function Editor(props: EditorProps) {
       setIsProcessingLoading(false)
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
-
   return (
     <div
       className={[
@@ -612,8 +885,7 @@ export default function Editor(props: EditorProps) {
           {isInpaintingLoading && (
             <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
               <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
-                <p>正在处理中，请耐心等待。。。</p>
-                <p>It is being processed, please be patient...</p>
+                <p>{m.waitmessage()}</p>  
                 <Progress percent={generateProgress} />
               </div>
             </div>
@@ -646,7 +918,7 @@ export default function Editor(props: EditorProps) {
           'flex-shrink-0',
           'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
           'flex items-center w-full max-w-4xl py-6 mb-4, justify-between',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-3',
         ].join(' ')}
       >
         {renders.length > 0 && (
@@ -690,17 +962,49 @@ export default function Editor(props: EditorProps) {
         >
           {m.original()}
         </Button>
-        {!showOriginal && (
-          <Button onUp={onSuperResolution}>{m.upscale()}</Button>
-        )}
-
         <Button
           primary
-          icon={<DownloadIcon className="w-6 h-6" />}
+          icon={<DownloadIcon className="w-4 h-4" />}
           onClick={download}
         >
           {m.download()}
         </Button>
+      </div>
+      <div
+        className={[
+          'flex-shrink-0',
+          'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
+          'flex items-center w-full max-w-6xl py-6 mb-4, justify-between',
+          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-3',
+        ].join(' ')}
+      >
+        {!showOriginal && (
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-red-500" />} onUp={onSuperResolution}>{m.upscale()}</Button>
+         )}
+        {!showOriginal && (
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onSuperReal}>{m.superreal()}</Button> 
+         )}
+        {!showOriginal && (
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onSuperFace}>{m.superface()}</Button> 
+         )}
+        {!showOriginal && ( 
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onWaterMark}>{m.watermark()}</Button>
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-gray-500" />} onUp={onSuperAntiBlur}>{m.superantiblur()}</Button>
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onHyperFace}>{m.hyperface()}</Button> 
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-blue-500" />} onUp={onSuperAnim}>{m.superanim()}</Button> 
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-green-500" />} onUp={onOccluderFace}>{m.occluderface()}</Button> 
+         )}
+        {!showOriginal && (  
+          <Button icon={<PaperAirplaneIcon className="w-4 h-4 text-green-500" />} onUp={onParserFace}>{m.parserface()}</Button> 
+         )}
       </div>
     </div>
   )

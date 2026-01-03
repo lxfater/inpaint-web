@@ -1,0 +1,23 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "drop_zone": "Cliquer ou glisser deposer",
+  "try_it_images": "Essayer cela",
+  "feedback": "A propos de inpaint",
+  "start_new": "Demarrer nouveau",
+  "bruch_size": "Taille du pinceau",
+  "original": "Original",
+  "upscale": "4x-upscaling",
+  "superreal": "4x-RealHD",
+  "watermark": "2x-up HD",
+  "superantiblur": "2x-up antiflou",
+  "superface": "4x-antiflou",
+  "hyperface": "Super visage",
+  "superanim": "2x - HD Anim",
+  "occluderface": "Occluder visage",
+  "parserface": "Analyseur-visage",
+  "download": "Telechargement",
+  "undo": "Annuler",
+  "waitmessage": "Le traitement est en cours, soyez patient...",
+  "inpaint_model_download_message": "Telechargement de 30MB de fichier model, veuillez patienter ...",
+  "upscaleing_model_download_message": "Telechargement de 70MB fichier model, veuillez patienter..."
+}

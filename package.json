@@ -5,17 +5,22 @@
   "dependencies": {
     "@heroicons/react": "^1.0.4",
     "@inlang/paraglide-js-adapter-vite": "^1.0.2",
+    "@petamoriken/float16": "^3.8.6",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "core-js": "^3.37.0",
+    "eslint": "^8.0.0",
+    "eslint-config-react-app": "^7.0.1",
+    "i18n": "^0.15.1",
     "localforage": "^1.10.0",
     "opencv-ts": "^1.3.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-use": "^17.3.1",
     "react-zoom-pan-pinch": "^3.3.0",
-    "vite": "^5.0.2",
-    "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-svgr": "^4.2.0",
-    "vite-tsconfig-paths": "^4.2.1"
+    "regenerator-runtime": "^0.14.1",
+    "tf": "^1.0.1",
+    "vite": "^5.2.10",
+    "vite-plugin-eslint": "^1.8.1"
   },
   "scripts": {
     "start": "vite --host",
@@ -33,6 +38,7 @@
       "echo '统一格式化完成🌸'"
     ]
   },
+  "lint-fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -55,14 +61,13 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^18.0.0",
-    "@types/react": "^17.0.30",
+    "@types/react": "^17.0.80",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@vitest/coverage-v8": "^0.34.6",
     "autoprefixer": "^10.4.16",
     "cross-env": "7.x",
-    "delay-cli": "^1.1.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "delay-cli": "^2.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -75,11 +80,10 @@
     "npm-run-all": "4.x",
     "postcss": "^8.4.31",
     "postcss-cli": "8.x",
-    "postcss-preset-env": "6.x",
+    "postcss-preset-env": "^9.5.6",
     "prettier": "^2.4.1",
     "tailwind-scrollbar": "^2.0.0",
     "tailwindcss": "^3.3.6",
-    "typescript": "4.x",
     "vitest": "^0.34.6"
   }
 }

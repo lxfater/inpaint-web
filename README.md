@@ -1,8 +1,12 @@
 ![Inpaint-web](./media/cover.png)
+
 <div align="center">
   
 # Inpaint-web
 
+Un outil gratuit et open-source d’inpainting et de mise à l’échelle d’images alimenté par webgpu et wasm sur le navigateur.
+Cet AI permet de modifier une image via une interface Web. En utilisant les ressources du poste Client.
+Compatible mobile, pc et tablette. Cette solution exploite directement le CPU et le GPU depuis un navigateur.
 
 A free and open-source inpainting & image-upscaling tool powered by webgpu and wasm on the browser.
 
@@ -18,11 +22,33 @@ https://github.com/lxfater/inpaint-web/assets/22794120/bcad4812-02ae-48bb-9e84-9
 
 https://github.com/lxfater/inpaint-web/assets/22794120/3a8d894f-9749-4685-b947-8b5f15c9cf38
 
+## Models
+
+Super-Face :
+https://github.com/yangxy/GPEN
+2xHFA2kAVCSRFormer_light_16 :
+https://github.com/Phhofm/models
+
+Ref & Info :
+https://github.com/facefusion/facefusion-assets
+
 ## Demo link
 
 Demo link:https://inpaintweb.lxfater.com/
 
 ## Project Roadmap
+
+### fr
+
+- [x] Historique des modifications d'images
+- [x] Optimiser le modèle
+- [x] Intégrer le post-traitement dans le modèle
+- [x] Mise à l'échelle de l'image
+- [x] Prise en charge en français, allemand et espagnol
+- [x] Ajout de Super Face
+- [ ] Intégrez tout segment pour une sélection et une suppression rapides dans les images
+- [ ] Intégrer la diffusion stable pour le remplacement de l'image
+- [ ] Meilleure interface utilisateur
 
 ### en
 
@@ -30,6 +56,8 @@ Demo link:https://inpaintweb.lxfater.com/
 - [x] Optimize Model
 - [x] Integrate Post-Processing into the Model
 - [x] Image-upscaling
+- [x] French, German, and Spanish support
+- [x] Add Super Face
 - [ ] Integrate Segment Anything for Quick Selection and Removal in Images
 - [ ] Integrate Stable Diffusion for Image Replacement
 - [ ] Better UI
@@ -40,9 +68,16 @@ Demo link:https://inpaintweb.lxfater.com/
 - [x] 优化模型
 - [x] 后处理集成于模型中
 - [x] 超分辨率
+- [x] 支持法语、德语和西班牙语
+- [x] 添加了超级面孔
 - [ ] 接入 Segment Anything，实现快速选择和去除图像
 - [ ] 接入 stable diffusion，实现图像替换
 - [ ] 更好的界面
+
+## Requis Git & NPM
+
+`sudo apt install git-all`
+`sudo apt install npm`
 
 ## Setup
 
@@ -51,6 +86,8 @@ Demo link:https://inpaintweb.lxfater.com/
 ## Development
 
 `npm run start`
+
+Now you should have Inpaint running locally and should be able to visit http://localhost:5173 or http://127.0.0.1:5173
 
 ## Contributors
 
@@ -70,6 +107,11 @@ Demo link:https://inpaintweb.lxfater.com/
     <p>联系我之前说明来意，我创业了，时间很宝贵。</p>
     <img src="https://tinyeraserblog.lxfater.com/G7yayw4aMAgN_Zs.jpeg" style="width: 200px; display: inline-block;">
 </div>
+
+### Contenu en Francais
+
+Pour les mises à jour et les discussions en Francais, suivez-nous sur Instagram
+[![Instagram Follow N3oray](https://raw.githubusercontent.com/N3oRay/inpaint-web/main/media/instagram-s.png)](https://www.instagram.com/n3oray/)
 
 ### English Content
 

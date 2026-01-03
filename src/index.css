@@ -1,3 +1,75 @@
+/* Import Tailwind CSS base styles */
 @tailwind base;
+
+/* Import Tailwind CSS component styles */
 @tailwind components;
+
+/* Import Tailwind CSS utility styles */
 @tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    @apply text-gray-900 bg-white;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold mb-2;
+  }
+
+  a {
+    @apply text-blue-600 hover:text-blue-800;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded font-semibold text-sm shadow-sm transition-colors duration-150;
+  }
+
+  .btn-primary {
+    @apply bg-blue-500 text-white hover:bg-blue-600;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+}
+
+/* Custom utility styles */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .rotate-15 {
+    transform: rotate(15deg);
+  }
+
+  .transition-fast {
+    transition-duration: 150ms;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .card {
+    @apply p-4;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none;
+  }
+}
