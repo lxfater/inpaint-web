@@ -10,8 +10,16 @@ COPY . ./
 # Now we run NPM install, which includes dev dependencies
 RUN npm install
 
+# ------
+
+# Making last build
 FROM alpine:latest as production
+
 RUN apk --no-cache add nodejs ca-certificates
+
+# Working directory for final docker image
 WORKDIR /root/
+
 COPY --from=builder /usr/src/app ./
+
 CMD [ "node", "node_modules/vite/bin/vite.js", "--host" ]
